@@ -16,7 +16,7 @@ export default function rolling(bot, msg) {
      * "{This} message {is}"
      * [ [ "{This}", "This" ], [ "{is}", "is"] ]
      */
-    let replacements = [];
+    const replacements = [];
     for (const roll_ of rolls) {
         let sum = 0;
         const roll = roll_[1];

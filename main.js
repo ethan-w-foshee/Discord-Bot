@@ -1,7 +1,6 @@
 import * as discordeno from "https://deno.land/x/discordeno@16.0.1/mod.ts";
-import { UserFlags } from "https://deno.land/x/discordeno@16.0.1/mod.ts";
 import rolling from "./commands/roll.js"
-import { hAndh , botId} from "./ids/ids.js";
+import { botId } from "./ids/ids.js";
 
 const bot = discordeno.createBot({
 	intents: discordeno.Intents.Guilds | discordeno.Intents.GuildMessages | discordeno.Intents.MessageContent,
