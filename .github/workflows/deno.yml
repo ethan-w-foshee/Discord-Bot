@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v3
       - name: SSH Key Creation
         run: |
-          echo "${{ DISCORD_USER_SSH_KEY}}" > .key
+          echo "${{ secrets.DISCORD_USER_SSH_KEY}}" > .key
           chmod 0600 .key
           ssh-keyscan -H ${{ secrets.DISCORD_HOST }} >> ./.hosts
           chmod 0600 ./.hosts
