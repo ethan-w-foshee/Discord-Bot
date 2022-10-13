@@ -1,8 +1,6 @@
 import * as discordeno from "https://deno.land/x/discordeno@16.0.1/mod.ts";
 
-export default function rolling(bot, msg) {
-    const cont = msg.content;
-
+export function parseRoll(message) {
     /* Parses and resends message after correcting for
      * embedded rolls and variable outcome statements.
      * Example Statement:
@@ -57,7 +55,15 @@ export default function rolling(bot, msg) {
             }
         }
     }
-    if (replacements.length>0) {
+    return replacements;
+}
+
+export default function rolling(bot, msg) {
+    const cont = msg.content;
+
+    const rolls = parseRoll(cont);
+    
+    if (rolls.length>0) {
 	discordeno.sendMessage(bot, msg.channelId, {
             content: replacements.toString()
 	});
