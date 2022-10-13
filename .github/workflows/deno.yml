@@ -32,7 +32,11 @@ jobs:
       - name: Setup repo
         uses: actions/checkout@v3
       - name: SSH Key Creation
-        run: echo ${{ secrets.DISCORD_USER_SSH_KEY }} > .key
-      - name: Update Code Deployment
-        run: scp -i .key -r * ${{ secrets.DISCORD_USER }}@${{ secrets.DISCORD_HOST }}:~/bot/
+        run: |
+          echo "${{ DISCORD_USER_SSH_KEY}}" > .key
+          chmod 0600 .key
+          ssh-keyscan -H ${{ secrets.DISCORD_HOST }} >> ./.hosts
+          chmod 0600 ./.hosts
+      - name: Upload Code for Deployment
+        run: scp -o UserKnownHostsFile=./.hosts -i .key -r * ${{ secrets.DISCORD_USER }}@${{ secrets.DISCORD_HOST }}:~/bot/
       # TODO: Restart bot upon code update
