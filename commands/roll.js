@@ -8,7 +8,7 @@ export function parseRoll(message) {
      *               ^-- Roll subtitution
      * "#{1d20>=20?You ran away!:You tripped}"
      */
-    const rolls = cont.matchAll(/\{([^}]+)}/g);
+    const rolls = message.matchAll(/\{([^}]+)}/g);
     /* Parses message and returns contents of brackets in
      * the following form:
      * "{This} message {is}"
