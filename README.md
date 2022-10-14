@@ -1,3 +1,4 @@
+[![StarBot - Test](https://github.com/its-bens-fault/Discord-Bot/actions/workflows/deno.yml/badge.svg)](https://github.com/its-bens-fault/Discord-Bot/actions/workflows/deno.yml)
 The point of this Discord Bot is many, many reasons.
 
 The bot may be run simply with:
