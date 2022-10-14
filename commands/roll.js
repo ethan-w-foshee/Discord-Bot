@@ -68,33 +68,30 @@ export function parseRoll(message) {
 	    response = response.trim()
         }
         replacements.push([ sum, response ]);
-	console.log(replacements);
     }
     return replacements;
 }
 
-function formatRoll(rolls) {
+export function formatRoll(rolls) {
     let sep = '';
     let ret = '';
-    for (const roll in rolls) {
+    for (const roll of rolls) {
 	ret += sep;
 	if (roll[1]) {
 	    ret += roll[1]
 	}else {
 	    ret += roll[0].toString()
 	}
-	sep = ', '
+	if (sep=='')
+	    sep = ', ';
     }
     return ret
 }
 
 export default function rolling(bot, msg) {
     const cont = msg.content;
-
     const rolls = parseRoll(cont);
-
     const output = formatRoll(rolls);
-
     if (output!='') {
 	discordeno.sendMessage(bot, msg.channelId, {
             content: output

@@ -1,14 +1,21 @@
 import { assert } from "https://deno.land/std@0.159.0/testing/asserts.ts";
-import { parseRoll } from "./commands/roll.js";
+import { parseRoll, formatRoll } from "./commands/roll.js";
 
-Deno.test("Command Test (roll.js)", () => {
-    const roll = parseRoll("{1d20}")[0][0];
-    assert( (roll>=1) && (roll<=20) )
-});
-
-Deno.test("Command Test (roll.js)x2", () => {
-    const roll = parseRoll("{1d1>=1?This is a test: This should not run}")[0][1]
-    const rollNot = parseRoll("{1d1>=2?This is a test: This should not run}")[0][1]
-    assert( roll=="This is a test" )
-    assert( rollNot=="This should not run" )
+Deno.test("Command Test (roll.js)", async (t) => {
+    await t.step("Rolling", () => {
+	const input = "{1d20 1d10 1d5}"
+	const roll = parseRoll(input)[0][0];
+	console.log(input+" -> "+roll)
+	assert( (roll>=3) && (roll<=35) );
+    });
+    await t.step("Conditional", () => {
+	const condition = parseRoll("{1d1>=1?This is a test: This should not run}")
+	assert( condition[0][1]=="This is a test" );
+    });
+    await t.step("Formatting", () => {
+	const condition = parseRoll("{1d20} {1d1>=1?This is a test: This should not run}")
+	const output = formatRoll(condition)
+	console.log(output)
+	assert(output)
+    });
 });
