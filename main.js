@@ -10,11 +10,7 @@ const bot = discordeno.createBot({
 			console.log("Successfully connected to gateway");
 		},
 		messageCreate(bot, msg) {
-			if (msg.authorId == botId || msg == " ") {
-				console.log("This is my own message.")
-			} else {
-				rolling(bot, msg)
-			}
+		    rolling(bot, msg)
 		}
 	}
 });

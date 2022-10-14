@@ -65,7 +65,7 @@ export default function rolling(bot, msg) {
     
     if (rolls.length>0) {
 	discordeno.sendMessage(bot, msg.channelId, {
-            content: replacements.toString()
+            content: rolls.toString()
 	});
     }
 }
