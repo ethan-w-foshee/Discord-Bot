@@ -11,6 +11,11 @@ const bot = discordeno.createBot({
 		},
 		messageCreate(bot, msg) {
 		    rolling(bot, msg)
+		    if (msg.content == "###ping") {
+			discordeno.sendMessage(bot, msg.channelId, {
+			    content: "pong"
+			});
+		    }
 		}
 	}
 });
