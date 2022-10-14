@@ -21,7 +21,7 @@ export function parseRoll(message) {
         const comparisons = /(>|<|=)(=)?/;
         const comparator = roll.search(comparisons);
         const dice = comparator == -1 ?
-            roll : roll.substring(0, comparator);
+              roll : roll.substring(0, comparator);
         const dies = dice.split(' ');
         for (const die of dies) {
             const nums = die.split('d')
@@ -35,37 +35,69 @@ export function parseRoll(message) {
                 }
             }
         }
-        replacements.push(sum);
-        /* if a compararison is made */
+	let response = undefined;
         if (comparator != -1) {
-            console.log("TODO: Verify Comparison Format")
-            const symbol = roll.match(comparisons);
+            const symbol = roll.match(comparisons)[0];
+	    const rhs = roll.substring(comparator+symbol.length);
+	    const num = parseInt(rhs);
+	    let truth = false;
             switch (symbol) {
-                case '>':
-                    break;
-                case '>=':
-                    break;
-                case '<':
-                    break;
-                case '<=':
-                    break;
-                case '=':
-                case '==':
-                    break;
+            case '>':
+		truth = sum > num;
+                break;
+            case '>=':
+		truth = sum >= num;
+                break;
+            case '<':
+		truth = sum < num;
+                break;
+            case '<=':
+		truth = sum <= num;
+                break;
+            case '=':
+            case '==':
+		truth = sum == num;
+                break;
             }
+	    if (truth) {
+		response = rhs.match(/\?.*:/)[0];
+		response = response.substring(1,response.length-1)
+	    }else {
+		response = rhs.match(/:.*$/)[0].substring(1)
+	    }
+	    response = response.trim()
         }
+        replacements.push([ sum, response ]);
+	console.log(replacements);
     }
     return replacements;
+}
+
+function formatRoll(rolls) {
+    let sep = '';
+    let ret = '';
+    for (const roll in rolls) {
+	ret += sep;
+	if (roll[1]) {
+	    ret += roll[1]
+	}else {
+	    ret += roll[0].toString()
+	}
+	sep = ', '
+    }
+    return ret
 }
 
 export default function rolling(bot, msg) {
     const cont = msg.content;
 
     const rolls = parseRoll(cont);
-    
-    if (rolls.length>0) {
+
+    const output = formatRoll(rolls);
+
+    if (output!='') {
 	discordeno.sendMessage(bot, msg.channelId, {
-            content: rolls.toString()
+            content: output
 	});
     }
 }
