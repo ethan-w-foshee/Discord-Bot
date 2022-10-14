@@ -78,7 +78,7 @@ export function formatRoll(rolls) {
     for (const roll of rolls) {
 	ret += sep;
 	if (roll[1]) {
-	    ret += roll[1]
+	    ret += '('+roll[0]+') '+roll[1]
 	}else {
 	    ret += roll[0].toString()
 	}
