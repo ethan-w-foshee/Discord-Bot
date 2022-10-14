@@ -37,6 +37,10 @@ jobs:
           chmod 0600 .key
           ssh-keyscan -H ${{ secrets.DISCORD_HOST }} >> ./.hosts
           chmod 0600 ./.hosts
+      - name: Stop StarBot
+        run: ssh -o UserKnownHostsFile=./.hosts -i .key ${{ secrets.DISCORD_USER }}@${{ secrets.DISCORD_HOST }} "systemctl --user stop StarBot"
       - name: Upload Code for Deployment
         run: scp -o UserKnownHostsFile=./.hosts -i .key -r * ${{ secrets.DISCORD_USER }}@${{ secrets.DISCORD_HOST }}:~/bot/
+      - name: Start StarBot
+        run: ssh -o UserKnownHostsFile=./.hosts -i .key ${{ secrets.DISCORD_USER }}@${{ secrets.DISCORD_HOST }} "systemctl --user start StarBot"
       # TODO: Restart bot upon code update
