@@ -26,6 +26,7 @@ jobs:
       - name: Run tests
         run: deno test -A --unstable
   deployment:
+    if: github.action == 'push'
     runs-on: self-hosted
     needs: test
     steps:
