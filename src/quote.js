@@ -16,7 +16,7 @@ export default async function createQuote(author, message) {
 	"quote": "${message}"
     }`;
     
-    let quote = await fetch(host + path, {
+    const quote = await fetch(host + path, {
 	method: "POST",
 	headers: {
 	    "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export default async function createQuote(author, message) {
 	.then((response) => response.json())
 	.then((body) => body['imageUrls']);
 
-    let imageUrl = imageUrls['medium'];
+    const imageUrl = imageUrls['medium'];
     console.log("Created quote image at: "+imageUrl);
 
     // Return generated image
