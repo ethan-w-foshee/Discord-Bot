@@ -1,3 +1,5 @@
+// Enables dice rolling from inline commands in a message
+
 import * as discordeno from "https://deno.land/x/discordeno@16.0.1/mod.ts";
 
 export function parseRoll(message) {
