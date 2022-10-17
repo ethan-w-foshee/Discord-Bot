@@ -1,22 +1,14 @@
-import * as discordeno from "https://deno.land/x/discordeno@16.0.1/mod.ts";
-import rolling from "./commands/roll.js"
+// This file responsible for coordinating all other files and actually starting the bot
 
-const bot = discordeno.createBot({
-	intents: discordeno.Intents.Guilds | discordeno.Intents.GuildMessages | discordeno.Intents.MessageContent,
-	token: Deno.env.get("DISCORD_TOKEN"),
-	events: {
-		ready() {
-			console.log("Successfully connected to gateway");
-		},
-		messageCreate(bot, msg) {
-		    rolling(bot, msg)
-		    if (msg.content == "###ping") {
-			discordeno.sendMessage(bot, msg.channelId, {
-			    content: "pong"
-			});
-		    }
-		}
-	}
-});
+import { startBot, upsertGlobalApplicationCommands } from "https://deno.land/x/discordeno@16.0.1/mod.ts"; // discordeno
+import { bot } from "./bot.js" // bot instance
 
-await discordeno.startBot(bot);
+// Commands
+import "./src/applicationCommands/quote-commands.js";
+
+// Update all commands (which were added to bot.commands by other modules)
+upsertGlobalApplicationCommands(bot, bot.commands);
+
+// Start the bot
+await startBot(bot);
+
