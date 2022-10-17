@@ -4,7 +4,7 @@ import { startBot, upsertGlobalApplicationCommands } from "https://deno.land/x/d
 import { bot } from "./bot.js" // bot instance
 
 // Commands
-import * as quote from "./commands/quote.js"
+import "./commands/quote.js"
 
 // Update all commands (which were added to bot.commands by other modules)
 upsertGlobalApplicationCommands(bot, bot.commands);

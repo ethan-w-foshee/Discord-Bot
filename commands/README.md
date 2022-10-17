@@ -33,7 +33,7 @@ export default bot.commands.push(
 After this declaration, you need to import this into the actual bot. In `/main.js`, add a line:
 
 ```deno
-import * as <feature name> from "./commands/<filename>"
+import "./commands/<filename>"
 
 ```
 
