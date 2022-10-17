@@ -1,5 +1,6 @@
 import { assert } from "https://deno.land/std@0.159.0/testing/asserts.ts";
-import { parseRoll, formatRoll } from "./commands/roll.js";
+import { parseRoll, formatRoll } from "./src/roll.js";
+import { createQuote } from "./src/quote.js";
 
 Deno.test("Command Test (roll.js)", async (t) => {
     await t.step("Rolling", () => {
@@ -17,5 +18,10 @@ Deno.test("Command Test (roll.js)", async (t) => {
 	const output = formatRoll(condition)
 	console.log(output)
 	assert(output)
+    });
+    await t.step("Quote generation", () => {
+	const quoteImage = createQuote("author", "quote");
+	console.log(quoteImage);
+	assert(quoteImage.match(/https:\/\/.*\.jpg$/))
     });
 });
