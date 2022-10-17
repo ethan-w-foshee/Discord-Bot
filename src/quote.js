@@ -10,6 +10,8 @@ export async function getNameFromUser(bot, guildId, userId) {
 
 export async function createQuote(author, message) {
 
+    let response;
+
     // author = Html5Entities.encode(author);
     // message = Html5Entities.encode(message);
     
@@ -22,34 +24,33 @@ export async function createQuote(author, message) {
 	"author": "${author}",
 	"quote": "${message}"
     }`;
-    
-    const quote = await fetch(host + path, {
+
+    response = await fetch(host + path, {
 	method: "POST",
 	headers: {
 	    "Content-Type": "application/json",
 	},
 	body
-    })
-	.then((response) => response.json());
+    }).then((val) => val.json());
+    const quote = response;
+	//.then((response) => response.json());
 
     console.log("Created quote at: "+quote['url']);
     const quoteId = quote['quoteId'];
 
     // Choose a random template
     path = 'api/v1/templates';
-    const templates = await fetch(host + path)
-	.then((response) => response.json())
-	.then((body) => body['data']);
+    response = await fetch(host + path).then((val) => val.json());
+    let templates = response['data'];
 
     const index = Math.floor(Math.random() * templates.length);
     console.log("Chose template from: "+templates[index]['url']);
     const templateId = templates[index]['templateId'];
 
     // Apply the template to the quote
-    path = `api/v1/quotes/${quoteId}?templateId=${templateId}`
-    const imageUrls = await fetch(host + path)
-	.then((response) => response.json())
-	.then((body) => body['imageUrls']);
+    path = `api/v1/quotes/${quoteId}?templateId=${templateId}`;
+    response = await fetch(host + path).then((val) => val.json());
+    const imageUrls = response['imageUrls'];
 
     const imageUrl = imageUrls['medium'];
     console.log("Created quote image at: "+imageUrl);

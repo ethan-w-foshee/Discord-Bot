@@ -19,9 +19,8 @@ Deno.test("Command Test (roll.js)", async (t) => {
 	console.log(output)
 	assert(output)
     });
-    await t.step("Quote generation", () => {
-	const quoteImage = createQuote("author", "quote");
-	console.log(quoteImage);
-	assert(quoteImage.match(/https:\/\/.*\.jpg$/))
+    await t.step("Quote generation", async () => {
+	const quoteImage = await createQuote("author", "quote");
+	assert(quoteImage.match(/https:\/\/.*\.jpg$/));
     });
 });
