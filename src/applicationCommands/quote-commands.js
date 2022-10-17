@@ -1,5 +1,5 @@
 import * as discordeno from "https://deno.land/x/discordeno@16.0.1/mod.ts";
-import { bot } from "../bot.js";
+import { bot } from "../../bot.js";
 
 // Add the commands to the bot
 export default bot.commands.push(

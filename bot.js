@@ -1,7 +1,7 @@
 import * as discordeno from "https://deno.land/x/discordeno@16.0.1/mod.ts";
 
-import rolling from "./src/roll.js"
-import { createQuote, getNameFromUser } from "./src/quote.js"
+import rolling from "./src/util/roll.js"
+import { createQuote, getNameFromUser } from "./src/util/quote.js"
 
 function ackInteraction(interaction) {
     discordeno.sendInteractionResponse(bot, interaction.id, interaction.token, {

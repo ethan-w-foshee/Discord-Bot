@@ -1,6 +1,6 @@
 import { assert } from "https://deno.land/std@0.159.0/testing/asserts.ts";
-import { parseRoll, formatRoll } from "./src/roll.js";
-import { createQuote } from "./src/quote.js";
+import { parseRoll, formatRoll } from "./src/util/roll.js";
+import { createQuote } from "./src/util/quote.js";
 
 Deno.test("Command Test (roll.js)", async (t) => {
     await t.step("Rolling", () => {
