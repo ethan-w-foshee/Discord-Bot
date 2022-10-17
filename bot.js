@@ -16,6 +16,7 @@ export const bot = discordeno.createBot({
 	    }
 	},
 	interactionCreate(bot, interaction) {
+	    
 	    console.log(interaction);
 	}
     }
