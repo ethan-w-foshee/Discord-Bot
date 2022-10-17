@@ -2,7 +2,7 @@
 // This uses a public(?) API that I "reverse engineered" from quozio.com
 
 import * as discordeno from "https://deno.land/x/discordeno@16.0.1/mod.ts";
-import { bot } from "../main.js";
+import { bot } from "../bot.js";
 
 // Add the commands to the bot
 bot.commands.push(

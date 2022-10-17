@@ -4,3 +4,4 @@ flake.lock
 .vscode
 botId.js
 SECRET
+*~

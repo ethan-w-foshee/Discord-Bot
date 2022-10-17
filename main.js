@@ -1,30 +1,15 @@
-import * as discordeno from "https://deno.land/x/discordeno@16.0.1/mod.ts";
+// This file responsible for coordinating all other files and actually starting the bot
+
+import { startBot, upsertGlobalApplicationCommands } from "https://deno.land/x/discordeno@16.0.1/mod.ts"; // discordeno
+import { bot } from "./bot.js" // bot instance
+
+// Commands
 import rolling from "./commands/roll.js"
-//import createQuote from "./commands/quote.js"
+import createQuote from "./commands/quote.js"
 
-const bot = discordeno.createBot({
-    intents: discordeno.Intents.Guilds | discordeno.Intents.GuildMessages | discordeno.Intents.MessageContent,
-    token: Deno.env.get("DISCORD_TOKEN"),
-    events: {
-	ready() {
-	    console.log("Successfully connected to gateway");
-	},
-	messageCreate(bot, msg) {
-	    rolling(bot, msg)
-	    if (msg.content == "###ping") {
-		discordeno.sendMessage(bot, msg.channelId, {
-		    content: "pong"
-		});
-	    }
-	},
-	interactionCreate(bot, interaction) {
-	    console.log(interaction);
-	}
-    }
-});
+// Update all commands (which were added to bot.commands by other modules)
+upsertGlobalApplicationCommands(bot, bot.commands);
 
-bot.commands = []
-
-discordeno.upsertGlobalApplicationCommands(bot, bot.commands);
-await discordeno.startBot(bot);
+// Start the bot
+await startBot(bot);
 
