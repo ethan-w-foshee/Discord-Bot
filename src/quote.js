@@ -4,7 +4,7 @@
 import { getMember } from "https://deno.land/x/discordeno@16.0.1/mod.ts";
 
 export async function getNameFromUser(bot, guildId, userId) {
-    let userObject = await getMember(bot, guildId, userId);
+    const userObject = await getMember(bot, guildId, userId);
     return userObject.nick ? userObject.nick : userObject.user.username;
 }
 
