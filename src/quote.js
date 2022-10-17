@@ -41,7 +41,7 @@ export async function createQuote(author, message) {
     // Choose a random template
     path = 'api/v1/templates';
     response = await fetch(host + path).then((val) => val.json());
-    let templates = response['data'];
+    const templates = response['data'];
 
     const index = Math.floor(Math.random() * templates.length);
     console.log("Chose template from: "+templates[index]['url']);
