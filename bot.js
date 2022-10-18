@@ -1,9 +1,7 @@
 import { Intents, InteractionResponseTypes, createBot,
 	 editOriginalInteractionResponse,
 	 sendInteractionResponse, sendMessage } from "./deps.js";
-
-import rolling from "./src/util/roll.js"
-import { createQuote, getNameFromUser } from "./src/util/quote.js"
+import { enableCommandsPlugin } from "./src/lib/commands.js"
 
 function ackInteraction(interaction) {
     sendInteractionResponse(bot, interaction.id, interaction.token, {
@@ -11,7 +9,7 @@ function ackInteraction(interaction) {
     });
 }
 
-export const bot = createBot({
+const _bot = createBot({
     intents: Intents.Guilds | Intents.GuildMessages | Intents.MessageContent,
     token: Deno.env.get("DISCORD_TOKEN"),
     events: {
@@ -94,5 +92,3 @@ export const bot = createBot({
     }
 });
 
-// Add an array to allow other modules to add commands
-bot.commands = []
