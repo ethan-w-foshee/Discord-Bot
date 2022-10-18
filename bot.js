@@ -55,11 +55,12 @@ export const bot = createBot({
 		// Ack the command
 		ackInteraction(interaction);
 
-		// This could be improved in the future so it's not grabbing the values from "options" positionally. But I don't want to search through the list, so this is what we've got.
-		
+		// Get options
+		const options = interaction.data.options;
+
 		// This needs to be a promise so that we can resolve the user's name if it's an @ THEN run the createQuote function
 		const getAuthorName = new Promise(function(resolve) {
-		    const inval = interaction.data.options[1].value; // raw input
+		    const inval = options.filter(option => option.name == "author")[0].value; // The value of the first match of any option entry whose "name" property is author. I.e. grab the value of the "author" parameter
 		    if (inval.match(/^<@.*>$/)) { // If it's an @
 			console.log("at");
 			const userId = inval.slice(2, inval.length - 1); // Remove encapsulation, just get Id
@@ -69,7 +70,7 @@ export const bot = createBot({
 			resolve(inval);
 		    }
 		})
-		const quoteContent = interaction.data.options[0].value; // Just take this
+		const quoteContent = options.filter(option => option.name == "quote")[0].value;
 
 		// Once authorName is resolved, continue
 		getAuthorName.then((authorName) => {
