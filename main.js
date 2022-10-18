@@ -1,6 +1,5 @@
 // This file responsible for coordinating all other files and actually starting the bot
-
-import { startBot, upsertGlobalApplicationCommands } from "https://deno.land/x/discordeno@16.0.1/mod.ts"; // discordeno
+import { startBot, upsertGlobalApplicationCommands } from "./deps.js";
 import { bot } from "./bot.js" // bot instance
 
 // Commands
@@ -11,4 +10,3 @@ upsertGlobalApplicationCommands(bot, bot.commands);
 
 // Start the bot
 await startBot(bot);
-

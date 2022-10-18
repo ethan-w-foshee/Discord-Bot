@@ -1,6 +1,6 @@
 // Enables dice rolling from inline commands in a message
 
-import * as discordeno from "https://deno.land/x/discordeno@16.0.1/mod.ts";
+import { sendMessage } from "../../deps.js";
 
 export function parseRoll(message) {
     /* Parses and resends message after correcting for
@@ -95,7 +95,7 @@ export default function rolling(bot, msg) {
     const rolls = parseRoll(cont);
     const output = formatRoll(rolls);
     if (output!='') {
-	discordeno.sendMessage(bot, msg.channelId, {
+	sendMessage(bot, msg.channelId, {
             content: output
 	});
     }

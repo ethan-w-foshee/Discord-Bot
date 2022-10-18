@@ -1,7 +1,7 @@
 // Create an inspriational quote either based on a slash command or somebody else's message
 // This uses a public(?) API that I "reverse engineered" from quozio.com
 
-import { getMember } from "https://deno.land/x/discordeno@16.0.1/mod.ts";
+import { getMember } from "../../deps.js";
 
 export async function getNameFromUser(bot, guildId, userId) {
     const userObject = await getMember(bot, guildId, userId);

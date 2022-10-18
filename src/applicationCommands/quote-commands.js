@@ -1,4 +1,6 @@
-import * as discordeno from "https://deno.land/x/discordeno@16.0.1/mod.ts";
+import { ApplicationCommandOptionTypes,
+	 ApplicationCommandTypes } from "../../deps.js";
+
 import { bot } from "../../bot.js";
 
 // Add the commands to the bot
@@ -10,15 +12,15 @@ export default bot.commands.push(
 	options: [{
 	    name: "author",
 	    description: "who originally said the quote",
-	    type: discordeno.ApplicationCommandOptionTypes.String,
+	    type: ApplicationCommandOptionTypes.String,
 	    required: true,
 	},{
 	    name: "quote",
 	    description: "the quote text",
-	    type: discordeno.ApplicationCommandOptionTypes.String,
+	    type: ApplicationCommandOptionTypes.String,
 	    required: true
 	}],
-	type: discordeno.ApplicationCommandTypes.ChatInput
+	type: ApplicationCommandTypes.ChatInput
     },
     // Message command
     {
@@ -27,14 +29,14 @@ export default bot.commands.push(
 	options: [{
 	    name: "author",
 	    description: "who originally said the quote",
-	    type: discordeno.ApplicationCommandOptionTypes.String,
+	    type: ApplicationCommandOptionTypes.String,
 	    required: true,
 	},{
 	    name: "quote",
 	    description: "the quote text",
-	    type: discordeno.ApplicationCommandOptionTypes.String,
+	    type: ApplicationCommandOptionTypes.String,
 	    required: true
 	}],
-	type: discordeno.ApplicationCommandTypes.Message
+	type: ApplicationCommandTypes.Message
     }
 );

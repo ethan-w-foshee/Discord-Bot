@@ -1,16 +1,18 @@
-import * as discordeno from "https://deno.land/x/discordeno@16.0.1/mod.ts";
+import { Intents, InteractionResponseTypes, createBot,
+	 editOriginalInteractionResponse,
+	 sendInteractionResponse, sendMessage } from "./deps.js";
 
 import rolling from "./src/util/roll.js"
 import { createQuote, getNameFromUser } from "./src/util/quote.js"
 
 function ackInteraction(interaction) {
-    discordeno.sendInteractionResponse(bot, interaction.id, interaction.token, {
-	type: discordeno.InteractionResponseTypes.DeferredChannelMessageWithSource,
+    sendInteractionResponse(bot, interaction.id, interaction.token, {
+	type: InteractionResponseTypes.DeferredChannelMessageWithSource,
     });
 }
 
-export const bot = discordeno.createBot({
-    intents: discordeno.Intents.Guilds | discordeno.Intents.GuildMessages | discordeno.Intents.MessageContent,
+export const bot = createBot({
+    intents: Intents.Guilds | Intents.GuildMessages | Intents.MessageContent,
     token: Deno.env.get("DISCORD_TOKEN"),
     events: {
 	ready() {
@@ -19,7 +21,7 @@ export const bot = discordeno.createBot({
 	messageCreate(bot, msg) {
 	    rolling(bot, msg)
 	    if (msg.content == "###ping") {
-		discordeno.sendMessage(bot, msg.channelId, {
+		sendMessage(bot, msg.channelId, {
 		    content: "pong"
 		});
 	    }
@@ -39,7 +41,7 @@ export const bot = discordeno.createBot({
 
 		    // Create quote, THEN edit the original ack with the image
 		    createQuote(authorName, quoteContent)
-			.then((image) => discordeno.editOriginalInteractionResponse(
+			.then((image) => editOriginalInteractionResponse(
 			    bot,
 			    interaction.token,
 			    {
@@ -73,7 +75,7 @@ export const bot = discordeno.createBot({
 		getAuthorName.then((authorName) => {
 		    // Create quote, THEN edit the original ack with the image
 		    createQuote(authorName, quoteContent)
-			.then((image) => discordeno.editOriginalInteractionResponse(
+			.then((image) => editOriginalInteractionResponse(
 			    bot,
 			    interaction.token,
 			    {content: image}
