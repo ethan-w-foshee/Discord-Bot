@@ -10,6 +10,9 @@ export async function getNameFromUser(bot, guildId, userId) {
 
 export async function createQuote(author, message) {
 
+    author = author.replaceAll(`"`, `\\"`);
+    message = message.replaceAll(`"`, `\\"`);
+    
     let response;
 
     // author = Html5Entities.encode(author);
