@@ -10,41 +10,28 @@ export async function getNameFromUser(bot, guildId, userId) {
 
 export async function createQuote(author, message) {
 
-    author = author.replaceAll(`"`, `\\"`);
-    message = message.replaceAll(`"`, `\\"`);
-    
-    let response;
-
-    // author = Html5Entities.encode(author);
-    // message = Html5Entities.encode(message);
-    
     const host = 'https://quozio.com/';
     let path = '';
 
     // Submit quote
     path = 'api/v1/quotes';
-    const body = `{
-	"author": "${author}",
-	"quote": "${message}"
-    }`;
+    const body = JSON.stringify({
+	author: author,
+	quote: message
+    });
 
-    response = await fetch(host + path, {
+    const quote = await fetch(host + path, {
 	method: "POST",
-	headers: {
-	    "Content-Type": "application/json",
-	},
+	headers: { "Content-Type": "application/json" },
 	body
     }).then((val) => val.json());
-    const quote = response;
-	//.then((response) => response.json());
 
     console.log("Created quote at: "+quote['url']);
     const quoteId = quote['quoteId'];
 
     // Choose a random template
     path = 'api/v1/templates';
-    response = await fetch(host + path).then((val) => val.json());
-    const templates = response['data'];
+    const templates = await fetch(host + path).then((val) => val.json()).then((val) => val['data']);
 
     const index = Math.floor(Math.random() * templates.length);
     console.log("Chose template from: "+templates[index]['url']);
@@ -52,10 +39,7 @@ export async function createQuote(author, message) {
 
     // Apply the template to the quote
     path = `api/v1/quotes/${quoteId}?templateId=${templateId}`;
-    response = await fetch(host + path).then((val) => val.json());
-    const imageUrls = response['imageUrls'];
-
-    const imageUrl = imageUrls['medium'];
+    const imageUrl = await fetch(host + path).then((val) => val.json()).then((val) => val['imageUrls']['medium']);
     console.log("Created quote image at: "+imageUrl);
 
     // Return generated image
