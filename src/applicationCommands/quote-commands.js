@@ -10,15 +10,15 @@ export default bot.commands.push(
 	description: "Create a very inspirational quote",
 	name: "quote",
 	options: [{
-	    name: "author",
-	    description: "who originally said the quote",
-	    type: ApplicationCommandOptionTypes.String,
-	    required: true,
-	},{
 	    name: "quote",
 	    description: "the quote text",
 	    type: ApplicationCommandOptionTypes.String,
 	    required: true
+	},{
+	    name: "author",
+	    description: "who originally said the quote",
+	    type: ApplicationCommandOptionTypes.String,
+	    required: true,
 	}],
 	type: ApplicationCommandTypes.ChatInput
     },

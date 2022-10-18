@@ -22,9 +22,7 @@ export async function createQuote(author, message) {
 
     const quote = await fetch(host + path, {
 	method: "POST",
-	headers: {
-	    "Content-Type": "application/json",
-	},
+	headers: { "Content-Type": "application/json" },
 	body
     }).then((val) => val.json());
 

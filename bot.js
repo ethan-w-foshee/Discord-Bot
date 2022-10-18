@@ -44,9 +44,7 @@ export const bot = createBot({
 			.then((image) => editOriginalInteractionResponse(
 			    bot,
 			    interaction.token,
-			    {
-				content: image
-			    }
+			    { content: image }
 			));
 
 		});
