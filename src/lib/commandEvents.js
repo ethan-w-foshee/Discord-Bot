@@ -1,4 +1,4 @@
-export Events = [
+export const Events = [
     "automodActionExecution",
     "automodRuleCreate",
     "automodRuleDelete",
