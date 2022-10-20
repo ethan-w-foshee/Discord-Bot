@@ -17,8 +17,8 @@ function rolling(bot, msg) {
 }
 
 addBotCommand(bot, {
-    event: "messageCreate",
-    name: "Convert message to rolls",
+    type: "content",
+    name: "Convert message to rolls",    
     actions: [
 	rolling
     ]
