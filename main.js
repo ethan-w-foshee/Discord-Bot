@@ -1,12 +1,14 @@
 // This file responsible for coordinating all other files and actually starting the bot
-import { startBot, upsertGlobalApplicationCommands } from "./deps.js";
-import { bot } from "./bot.js" // bot instance
+import { startBot } from "./deps.js";
+import { bot } from "./bot.js"; // bot instance
+import { updateBotCommands } from "./src/lib/commands.js";
 
 // Commands
-import "./src/applicationCommands/quote-commands.js";
+import "./src/commands/quote-commands.js";
+import "./src/commands/roll.js";
+import "./src/commands/ping.js";
 
-// Update all commands (which were added to bot.commands by other modules)
-upsertGlobalApplicationCommands(bot, bot.commands);
+updateBotCommands(bot)
 
 // Start the bot
 await startBot(bot);

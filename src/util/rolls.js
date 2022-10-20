@@ -1,7 +1,3 @@
-// Enables dice rolling from inline commands in a message
-
-import { sendMessage } from "../../deps.js";
-
 export function parseRoll(message) {
     /* Parses and resends message after correcting for
      * embedded rolls and variable outcome statements.
@@ -88,15 +84,4 @@ export function formatRoll(rolls) {
 	    sep = ', ';
     }
     return ret
-}
-
-export default function rolling(bot, msg) {
-    const cont = msg.content;
-    const rolls = parseRoll(cont);
-    const output = formatRoll(rolls);
-    if (output!='') {
-	sendMessage(bot, msg.channelId, {
-            content: output
-	});
-    }
 }
