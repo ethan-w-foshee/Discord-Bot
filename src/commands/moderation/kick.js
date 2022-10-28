@@ -22,7 +22,7 @@ function kickSlash(bot, interaction) {
             userId: user,
             reason: reason
             }
-        )
+        );
     editOriginalInteractionResponse(bot,
         interaction.token,
             {
