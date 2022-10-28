@@ -9,7 +9,7 @@ import "./src/commands/roll.js";
 import "./src/commands/ping.js";
 import "./src/commands/moderation/kick.js"
 
-updateBotCommands(bot)
+updateBotCommands(bot);
 
 // Start the bot
 await startBot(bot);

@@ -7,5 +7,5 @@ The bot may be run simply with:
 DISCORD_TOKEN="TOKEN HERE" deno run -A main.js
 ```
 
-Created by Ethan Foshee on October 7th, 2022
-Collabs are (as of October 7th, 2022) David C and Ben R
+Created by Ethan Foshee on October 7th, 2022 Collabs are (as of October
+7th, 2022) David C and Ben R
