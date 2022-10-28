@@ -14,6 +14,7 @@ export function enableCommandsPlugin(bot) {
 	    const commands = bot.commands.filter((comm) => {
 		return comm.event == e;
 	    });
+	    console.log(commands);
 	    for (const command of commands) {
 		if (Array.isArray(command.actions)) {
 		    if (
@@ -22,7 +23,7 @@ export function enableCommandsPlugin(bot) {
 		    ) {
 			for (const action of command.actions) {
 			    if (typeof (action) == "function") {
-				bot.logger.debug(`Running command ${command.name}`);
+				bot.logger.debug(`Running command ${command.name}`,"botCommandPlugin");
 				action(...args);
 			    }
 			}
@@ -69,7 +70,8 @@ const builtinCommandTypes = {
 
 export function addBotCommand(bot, command) {
     const com = command;
-    if (com.name) {
+    if (com.name == undefined) {
+	bot.logger.error(`Commands must have names: ${JSON.stringify(command)}`);
 	return null;
     }
     if (com.type in builtinCommandTypes) {
@@ -86,8 +88,7 @@ export function addBotCommand(bot, command) {
     if (com.type != ApplicationCommandTypes.ChatInput) {
 	delete com.options;
 	delete com.description;
-	delete com.descriptionLocalizations;
-	
+	delete com.descriptionLocalizations;	
     }
     // Command format validated, generate UUID for command
     com.uuid = crypto.randomUUID();
