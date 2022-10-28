@@ -35,7 +35,7 @@ function kickSlash(bot, interaction) {
 addBotCommand(bot, {
     type: "slash",
     // default_member_permissions: "0x2",
-    name: "sKick",
+    name: "skick",
     description: "Get rid of someone, anyone (within reason), temporarily.",
     options: [{
         name: "user",
