@@ -5,3 +5,5 @@ flake.lock
 botId.js
 SECRET
 *~
+logs
+db
