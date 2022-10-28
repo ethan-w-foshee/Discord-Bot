@@ -14,7 +14,6 @@ export function enableCommandsPlugin(bot) {
 	    const commands = bot.commands.filter((comm) => {
 		return comm.event == e;
 	    });
-	    console.log(commands);
 	    for (const command of commands) {
 		if (Array.isArray(command.actions)) {
 		    if (
@@ -30,7 +29,7 @@ export function enableCommandsPlugin(bot) {
 		    }
 		} else {
 		    /* Will soon be replaced by proper logging */
-		    console.log("Should be unreachable");
+		    logger.error("Should be unreachable");
 		}
 	    }
 	};
@@ -71,7 +70,7 @@ const builtinCommandTypes = {
 export function addBotCommand(bot, command) {
     const com = command;
     if (com.name == undefined) {
-	bot.logger.error(`Commands must have names: ${JSON.stringify(command)}`);
+	bot.logger.error(`Commands must have names: ${JSON.stringify(command)}`,"botCommandPlugin");
 	return null;
     }
     if (com.type in builtinCommandTypes) {
@@ -93,6 +92,7 @@ export function addBotCommand(bot, command) {
     // Command format validated, generate UUID for command
     com.uuid = crypto.randomUUID();
     bot.commands.push(com);
+    bot.logger.debug(`Added command to bot: ${JSON.stringify(command)}`,"botCommandPlugin",command.name)
     return com;
 }
 

@@ -7,7 +7,6 @@ import { updateBotCommands } from "./src/lib/commands.js";
 import "./src/commands/quote-commands.js";
 import "./src/commands/roll.js";
 import "./src/commands/ping.js";
-import "./src/commands/modal.js";
 
 updateBotCommands(bot);
 

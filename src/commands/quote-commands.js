@@ -51,7 +51,7 @@ addBotCommand(bot, {
 		 * parameter */
         if (inval.match(/^<@.*>$/)) {
           /* If it's an @ */
-          console.log("at");
+            logger.debug("at", "quote");
           const userId = inval.slice(2, inval.length - 1);
           /* Remove encapsulation, just
 		     * get Id */

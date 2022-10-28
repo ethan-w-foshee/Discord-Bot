@@ -2,6 +2,7 @@
 // This uses a public(?) API that I "reverse engineered" from quozio.com
 
 import { getMember } from "../../deps.js";
+import { logger } from "../../logger.js";
 
 export async function getNameFromUser(bot, guildId, userId) {
   const userObject = await getMember(bot, guildId, userId);
@@ -25,7 +26,7 @@ export async function createQuote(author, message) {
     body,
   }).then((val) => val.json());
 
-  console.log("Created quote at: " + quote["url"]);
+    logger.debug("Created quote at: " + quote["url"],"quote");
   const quoteId = quote["quoteId"];
 
   // Choose a random template
@@ -35,7 +36,7 @@ export async function createQuote(author, message) {
   ) => val["data"]);
 
   const index = Math.floor(Math.random() * templates.length);
-  console.log("Chose template from: " + templates[index]["url"]);
+    logger.debug("Chose template from: " + templates[index]["url"], "quote");
   const templateId = templates[index]["templateId"];
 
   // Apply the template to the quote
@@ -43,7 +44,7 @@ export async function createQuote(author, message) {
   const imageUrl = await fetch(host + path).then((val) => val.json()).then((
     val,
   ) => val["imageUrls"]["medium"]);
-  console.log("Created quote image at: " + imageUrl);
+    logger.debug("Created quote image at: " + imageUrl, "quote");
 
   // Return generated image
   return imageUrl;

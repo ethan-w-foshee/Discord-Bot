@@ -13,8 +13,9 @@ bot.logger = logger;
 enableCommandsPlugin(bot);
 
 addBotCommand(bot, {
-  event: "ready",
-  actions: [function (bot) {
-    bot.logger.info("Connected to gateway! Bot online!");
-  }],
+    name: "ready",
+    event: "ready",
+    actions: [function (bot) {
+	bot.logger.info("Connected to gateway! Bot online!");
+    }],
 });
