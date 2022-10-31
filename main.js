@@ -3,10 +3,10 @@ import { startBot, walkSync } from "./deps.js";
 import { bot } from "./bot.js"; // bot instance
 
 // Import all commands in commands directory
-for (const file of walkSync("/app/src/commands")) {
+for (const file of walkSync("/src/commands")) {
     if (file.isFile)
 	if (file.name.endsWith(".js"))
-	    import("./"+file.path);
+	    import("/"+file.path);
 }
 
 // Start the bot
