@@ -31,6 +31,7 @@ export async function mcstatusEmbed(server) {
 		title: result.hostname,
 		color: 43520,
 		description: motd,
+		thumbnail: { url: "https://api.mcsrvstat.us/icon/" + server },
 		fields: [
 		    {name: "IP", value: result.ip, inline: true},
 		    {name: "Port", value: result.port, inline: true},
