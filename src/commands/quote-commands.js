@@ -8,7 +8,7 @@ import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
 import { createQuote, getNameFromUser } from "../util/quote.js";
 
-function ackInteraction(interaction) {
+export function ackInteraction(interaction) {
   sendInteractionResponse(bot, interaction.id, interaction.token, {
     type: InteractionResponseTypes.DeferredChannelMessageWithSource,
   });

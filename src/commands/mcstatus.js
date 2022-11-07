@@ -1,16 +1,15 @@
 import {
   ApplicationCommandOptionTypes,
   editOriginalInteractionResponse,
-  InteractionResponseTypes,
-  sendInteractionResponse,
 } from "../../deps.js";
 import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
 import { ackInteraction } from "./quote-commands.js";
+import { mcstatusEmbed } from "../util/mcstatusEmbed.js";
 
-addBotcommand(bot, {
+addBotCommand(bot, {
     description: "Query a minecraft server for general info",
-    name: "mcserver",
+    name: "mcstatus",
     options: [{
 	name: "hostname",
 	description: "Server IP or hostname",
@@ -30,18 +29,17 @@ addBotcommand(bot, {
 	    /* Get options */
 	    const options = interaction.data.options;
 
-	    console.log(options);
-	    
 	    const serverName = options.filter((option) =>
 		option.name == "hostname")[0].value;
-	    const serverPort = options.filter((option) =>
-		option.name == "port")[0].value;
-
-	    console.log(serverPort);
-
-	    const host = "https://api.mcsrvstat.us/2/" + serverName + ":" + serverPort;
-	    const result = await fetch(host).then((val) => val.json())
-	    console.log(result);
+	    
+	    mcstatusEmbed(serverName)
+		.then((result) =>
+		    editOriginalInteractionResponse(
+			bot,
+			interaction.token,
+			{ embeds: [ result ] }
+		    )
+		);
 	}
     ]
 });
