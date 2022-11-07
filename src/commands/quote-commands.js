@@ -7,12 +7,7 @@ import {
 import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
 import { createQuote, getNameFromUser } from "../util/quote.js";
-
-export function ackInteraction(interaction) {
-  sendInteractionResponse(bot, interaction.id, interaction.token, {
-    type: InteractionResponseTypes.DeferredChannelMessageWithSource,
-  });
-}
+import ackInteraction from  "../util/ackInteraction.js";
 
 addBotCommand(bot, {
   description: "Create a very inspirational quote",

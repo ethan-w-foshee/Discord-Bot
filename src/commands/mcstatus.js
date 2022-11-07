@@ -4,8 +4,8 @@ import {
 } from "../../deps.js";
 import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
-import { ackInteraction } from "./quote-commands.js";
 import { mcstatusEmbed } from "../util/mcstatusEmbed.js";
+import ackInteraction from "../util/ackInteraction.js";
 
 addBotCommand(bot, {
     description: "Query a minecraft server for general info",
