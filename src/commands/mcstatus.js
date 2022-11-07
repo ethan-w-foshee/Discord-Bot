@@ -15,11 +15,6 @@ addBotCommand(bot, {
 	description: "Server IP or hostname",
 	type: ApplicationCommandOptionTypes.String,
 	required: true
-    }, {
-	name: "port",
-	description: "Port that the server is listening on",
-	type: ApplicationCommandOptionTypes.Number,
-	required: false
     }],
     type: "slash",
     actions: [
