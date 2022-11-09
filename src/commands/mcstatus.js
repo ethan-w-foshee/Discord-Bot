@@ -23,10 +23,10 @@ addBotCommand(bot, {
 
 	    /* Get options */
 	    const options = interaction.data.options;
-
 	    const serverName = options.filter((option) =>
 		option.name == "hostname")[0].value;
 
+	    /* Get an embed from the function and then edit the original response with it */
 	    mcstatusEmbed(serverName)
 		.then((result) =>
 		    editOriginalInteractionResponse(
