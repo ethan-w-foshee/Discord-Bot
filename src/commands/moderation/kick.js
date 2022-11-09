@@ -1,35 +1,18 @@
 import { bot } from "../../../bot.js";
 import { addBotCommand } from "../../lib/commands.js";
-import { editOriginalInteractionResponse,
-	 sendInteractionResponse,
-	 InteractionResponseTypes,
-	 ApplicationCommandOptionTypes,
+import { ApplicationCommandOptionTypes,
 	 kickMember } from "../../../deps.js";
+import ackInteraction from "../../util/ackInteraction.js";
 
 
 function kickSlash(bot, interaction) {
-    sendInteractionResponse(bot, interaction.id, interaction.token, {
-        type: InteractionResponseTypes.DeferredChannelMessageWithSource
-    });
-    
     const options = interaction.data.options
-    guild = interaction.guildId
-    user = options.filter(option => option.User == "User")[0].value
-    reason = options.filter(option => option.Reason == "Reason")[0].value
-    kickMember(
-        {
-            bot: bot,
-            guildId: guild,
-            userId: user,
-            reason: reason
-        }
-    );
-    editOriginalInteractionResponse(bot,
-				    interaction.token,
-				    {
-					content:`User ${user} kicked for ${reason}.`
-				    }
-				   );
+    const guild = interaction.guildId
+    const user = options.filter(option => option.name == "user")[0].value
+    const reason = options.filter(option => option.name == "reason")[0].value
+    kickMember(bot, guild, user, reason);
+
+    ackInteraction(interaction, "message", {}, { content:`User <@${user}> kicked for reason: \`${reason}.\`` });
 }
 
 addBotCommand(bot, {

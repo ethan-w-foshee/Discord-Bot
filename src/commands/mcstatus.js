@@ -19,14 +19,14 @@ addBotCommand(bot, {
     type: "slash",
     actions: [
 	function (bot, interaction) {
-	    ackInteraction(interaction);
+	    ackInteraction(interaction, "thinking", {ephemeral: true});
 
 	    /* Get options */
 	    const options = interaction.data.options;
-
 	    const serverName = options.filter((option) =>
 		option.name == "hostname")[0].value;
-	    
+
+	    /* Get an embed from the function and then edit the original response with it */
 	    mcstatusEmbed(serverName)
 		.then((result) =>
 		    editOriginalInteractionResponse(
