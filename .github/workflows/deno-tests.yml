@@ -2,6 +2,9 @@
 name: Run Deno tests
 on:
   push:
+    ignore-branches:
+      - main
+      - dev
   pull_request:
     branches:
       - main
