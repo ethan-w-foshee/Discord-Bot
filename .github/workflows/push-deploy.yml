@@ -8,7 +8,7 @@ on:
 
 jobs:
   pre-deploy-test:
-    uses: ./.githubworkflows/deno-tests.yml
+    uses: ./.github/workflows/deno-tests.yml
   
   deploy-dev:
     if: ${{ github.ref == 'refs/heads/dev' }}
