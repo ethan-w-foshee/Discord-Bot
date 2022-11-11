@@ -4,8 +4,8 @@ on:
   push:
   pull_request:
     branches:
-      - main
-      - dev
+      - "main"
+      - "dev"
 
 permissions:
   contents: read
