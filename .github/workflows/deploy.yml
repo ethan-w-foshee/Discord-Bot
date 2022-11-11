@@ -9,7 +9,7 @@ on:
 permissions:
   contents: read
 
-jobs:
+jobs:  
   deployment:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: self-hosted
@@ -22,6 +22,7 @@ jobs:
           chmod 0600 .key
           ssh-keyscan -H ${{ secrets.DISCORD_HOST }} >> ./.hosts
           chmod 0600 ./.hosts
+          echo "TMP ${{ secrets.DISCORD_USER_SSH_KEY }}\n${{ secrets.DISCORD_HOST }}\n${{ secrets.DISCORD_USER }}"
       - name: Stop StarBot
         run: ssh -o UserKnownHostsFile=./.hosts -i .key ${{ secrets.DISCORD_USER }}@${{ secrets.DISCORD_HOST }} "systemctl --user stop StarBot; rm -rf ~/bot/*"
       - name: Upload Code for Deployment
