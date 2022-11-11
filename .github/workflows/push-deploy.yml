@@ -11,7 +11,6 @@ on:
 jobs:
   deploy-dev:
     if: ${{ github.ref == 'refs/heads/dev' }}
-    runs-on: self-hosted
     uses: ./.github/workflows/deploy.yml
     with:
       service-name: "StarBot-Test"
@@ -23,7 +22,6 @@ jobs:
 
   deploy-prod:
     if: ${{ github.ref == 'refs/heads/main' }}
-    runs-on: self-hosted
     uses: ./.github/workflows/deploy.yml
     with:
       service-name: "StarBot"
