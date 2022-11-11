@@ -1,10 +1,21 @@
 ---
-name: Deploy to prod
+name: Template for deploying to a server
 on:
-  workflow_run:
-    workflows: ["Run Deno tests"]
-    types: ["completed"]
-    branches: ["main"]
+  workflow_call:
+    inputs:
+      service-name:
+        required: true
+        type: string
+      inst-path:
+        required: true
+        type: string
+    secrets:
+      ssh-key:
+        required: true
+      hostname:
+        required: true
+      username:
+        required: true
   
 permissions:
   contents: read
@@ -18,13 +29,13 @@ jobs:
         uses: actions/checkout@v3
       - name: SSH Key Creation
         run: |
-          echo "${{ secrets.DISCORD_USER_SSH_KEY}}" > .key
+          echo "${{ secrets.ssh-key}}" > .key
           chmod 0600 .key
-          ssh-keyscan -H ${{ secrets.DISCORD_HOST }} >> ./.hosts
+          ssh-keyscan -H ${{ secrets.hostname }} >> ./.hosts
           chmod 0600 ./.hosts
-      - name: Stop StarBot
-        run: ssh -o UserKnownHostsFile=./.hosts -i .key ${{ secrets.DISCORD_USER }}@${{ secrets.DISCORD_HOST }} "systemctl --user stop StarBot; rm -rf ~/bot/*"
+      - name: Stop Bot service
+        run: ssh -o UserKnownHostsFile=./.hosts -i .key ${{ secrets.username }}@${{ secrets.hostname }} "systemctl --user stop ${{ inputs.service-name }}; rm -rf ${{ inputs.inst-path }}/*"
       - name: Upload Code for Deployment
-        run: scp -o UserKnownHostsFile=./.hosts -i .key -r * ${{ secrets.DISCORD_USER }}@${{ secrets.DISCORD_HOST }}:~/bot/
-      - name: Start StarBot
-        run: ssh -o UserKnownHostsFile=./.hosts -i .key ${{ secrets.DISCORD_USER }}@${{ secrets.DISCORD_HOST }} "systemctl --user start StarBot"
+        run: scp -o UserKnownHostsFile=./.hosts -i .key -r * ${{ secrets.username }}@${{ secrets.hostname }}:${{ inputs.inst-path }}/
+      - name: Start Bot service
+        run: ssh -o UserKnownHostsFile=./.hosts -i .key ${{ secrets.username }}@${{ secrets.hostname }} "systemctl --user start ${{ inputs.service-name }}"

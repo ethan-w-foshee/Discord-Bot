@@ -1,0 +1,34 @@
+---
+name: Deploy to server based on branch
+on:
+  workflow_run:
+    workflows: ["Run Deno tests"]
+    types: ["completed"]
+    branches:
+      - main
+      - dev
+
+jobs:
+  deploy-dev:
+    if: ${{ github.ref == 'refs/heads/dev' }}
+    runs-on: self-hosted
+    uses: its-bens-fault/Discord-Bot/blob/main/.github/workflows/deploy.yml@main
+    with:
+      service-name: "StarBot-Test"
+      inst-path: "bot-test"
+    secrets:
+      username: ${{ secrets.DISCORD_USER }}
+      hostname: ${{ secrets.DISCORD_HOST }}
+      ssh-key: ${{ secrets.DISCORD_USER_SSH_KEY }}
+
+    deploy-prod:
+      if: ${{ github.ref == 'refs/heads/main' }}
+      runs-on: self-hosted
+      uses: its-bens-fault/Discord-Bot/blob/main/.github/workflows/deploy.yml@main
+      with:
+        service-name: "StarBot"
+        inst-path: "bot"
+      secrets:
+        username: ${{ secrets.DISCORD_USER }}
+        hostname: ${{ secrets.DISCORD_HOST }}
+        ssh-key: ${{ secrets.DISCORD_USER_SSH_KEY }}
