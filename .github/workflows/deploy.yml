@@ -3,6 +3,10 @@ name: Deploy to prod
 on:
   push:
     branches: ["main"]
+  workflow_run:
+    workflows: ["Deno lint and run tests"]
+    types:
+      - completed
 
 permissions:
   contents: read
@@ -10,7 +14,6 @@ permissions:
 jobs:
   deployment:
     runs-on: self-hosted
-    needs: test
     steps:
       - name: Setup repo
         uses: actions/checkout@v3
