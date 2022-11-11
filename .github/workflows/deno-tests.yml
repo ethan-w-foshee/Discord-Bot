@@ -3,7 +3,7 @@ name: Run Deno tests
 on:
   workflow_call:
   push:
-    ignore-branches:
+    branches-ignore:
       - main
       - dev
   pull_request:
