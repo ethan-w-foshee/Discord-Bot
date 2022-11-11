@@ -21,14 +21,14 @@ jobs:
       hostname: ${{ secrets.DISCORD_HOST }}
       ssh-key: ${{ secrets.DISCORD_USER_SSH_KEY }}
 
-    deploy-prod:
-      if: ${{ github.ref == 'refs/heads/main' }}
-      runs-on: self-hosted
-      uses: ./.github/workflows/deploy.yml
-      with:
-        service-name: "StarBot"
-        inst-path: "bot"
-      secrets:
-        username: ${{ secrets.DISCORD_USER }}
-        hostname: ${{ secrets.DISCORD_HOST }}
-        ssh-key: ${{ secrets.DISCORD_USER_SSH_KEY }}
+  deploy-prod:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: self-hosted
+    uses: ./.github/workflows/deploy.yml
+    with:
+      service-name: "StarBot"
+      inst-path: "bot"
+    secrets:
+      username: ${{ secrets.DISCORD_USER }}
+      hostname: ${{ secrets.DISCORD_HOST }}
+      ssh-key: ${{ secrets.DISCORD_USER_SSH_KEY }}
