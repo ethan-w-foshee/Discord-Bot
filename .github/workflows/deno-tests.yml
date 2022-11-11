@@ -24,4 +24,4 @@ jobs:
       - name: Run linter
         run: deno lint
       - name: Run tests
-        run: deno test -allow-env --allow-read --allow-write --allow-net --unstable
+        run: deno test --allow-env --allow-read --allow-write --allow-net --unstable
