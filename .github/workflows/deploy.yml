@@ -3,17 +3,15 @@ name: Deploy to prod
 on:
   workflow_run:
     workflows: ["Run Deno tests"]
-    types:
-      - completed
-    branches:
-      - main
+    types: ["completed"]
+    branches: ["main"]
   
 permissions:
   contents: read
 
 jobs:
   deployment:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}    
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: self-hosted
     steps:
       - name: Setup repo
@@ -30,3 +28,5 @@ jobs:
         run: scp -o UserKnownHostsFile=./.hosts -i .key -r * ${{ secrets.DISCORD_USER }}@${{ secrets.DISCORD_HOST }}:~/bot/
       - name: Start StarBot
         run: ssh -o UserKnownHostsFile=./.hosts -i .key ${{ secrets.DISCORD_USER }}@${{ secrets.DISCORD_HOST }} "systemctl --user start StarBot"
+
+        

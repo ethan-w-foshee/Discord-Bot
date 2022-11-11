@@ -3,11 +3,10 @@ name: Run Deno tests
 on:
   workflow_run:
     workflows: ["Deno lint"]
-    types:
-      - completed
+    types: ["completed"]
     branches:
-      - main
-      - dev
+      - "main"
+      - "dev"
 
 permissions:
   contents: read
