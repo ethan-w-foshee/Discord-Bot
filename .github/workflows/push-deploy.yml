@@ -10,23 +10,33 @@ on:
 
 jobs:
   deploy-dev:
-    if: ${{ github.ref == 'refs/heads/dev' }}
-    uses: ./.github/workflows/deploy.yml
-    with:
-      service-name: "StarBot-Test"
-      inst-path: "bot-test"
-    secrets:
-      username: ${{ secrets.DISCORD_USER }}
-      hostname: ${{ secrets.DISCORD_HOST }}
-      ssh-key: ${{ secrets.DISCORD_USER_SSH_KEY }}
+    if: ${{ github.ref == 'refs/heads/dev' && github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: $
+      - run: git branch
+      - uses: ./.github/workflows/deploy.yml
+        with:
+          service-name: "StarBot-Test"
+          inst-path: "bot-test"
+        secrets:
+          username: ${{ secrets.DISCORD_USER }}
+          hostname: ${{ secrets.DISCORD_HOST }}
+          ssh-key: ${{ secrets.DISCORD_USER_SSH_KEY }}
 
   deploy-prod:
-    if: ${{ github.ref == 'refs/heads/main' }}
-    uses: ./.github/workflows/deploy.yml
-    with:
-      service-name: "StarBot"
-      inst-path: "bot"
-    secrets:
-      username: ${{ secrets.DISCORD_USER }}
-      hostname: ${{ secrets.DISCORD_HOST }}
-      ssh-key: ${{ secrets.DISCORD_USER_SSH_KEY }}
+    if: ${{ github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: $
+      - run: git branch
+      - uses: ./.github/workflows/deploy.yml
+        with:
+          service-name: "StarBot"
+          inst-path: "bot"
+        secrets:
+          username: ${{ secrets.DISCORD_USER }}
+          hostname: ${{ secrets.DISCORD_HOST }}
+          ssh-key: ${{ secrets.DISCORD_USER_SSH_KEY }}
