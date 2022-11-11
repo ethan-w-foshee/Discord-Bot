@@ -1,19 +1,32 @@
 --- 
 name: Run Deno tests
 on:
-  workflow_run:
-    workflows: ["Deno lint"]
-    types: ["completed"]
+  push:
+  pull_request:
     branches:
-      - "main"
-      - "dev"
+      - main
+      - dev
 
 permissions:
   contents: read
 
 jobs:
+  lint:
+    runs-on: self-hosted
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v3
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - name: Run linter
+        run: deno lint
+
   test:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # If push to master OR pull_request
+    if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/master' ) || github.event_name == 'pull_request' }}
+    needs: lint
     runs-on: self-hosted
     steps:
       - name: Setup repo
