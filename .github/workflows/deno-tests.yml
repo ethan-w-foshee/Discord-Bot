@@ -1,6 +1,7 @@
 --- 
 name: Run Deno tests
 on:
+  workflow_call:
   push:
     ignore-branches:
       - main
