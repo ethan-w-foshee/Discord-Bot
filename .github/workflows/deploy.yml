@@ -1,5 +1,5 @@
 ---
-name: Template for deploying to a server
+name: Deployment
 on:
   workflow_call:
     inputs:
