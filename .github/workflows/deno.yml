@@ -1,7 +1,6 @@
-name: Discordeno
+--- 
+name: Discordeno test
 on:
-  push:
-    branches: ["main"]
   pull_request:
     branches: ["main"]
 
@@ -25,6 +24,17 @@ jobs:
         run: deno lint
       - name: Run tests
         run: deno test -A --unstable
+
+---
+name: Deploy to prod
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
   deployment:
     if: github.event_name == 'push'
     runs-on: self-hosted
@@ -44,4 +54,3 @@ jobs:
         run: scp -o UserKnownHostsFile=./.hosts -i .key -r * ${{ secrets.DISCORD_USER }}@${{ secrets.DISCORD_HOST }}:~/bot/
       - name: Start StarBot
         run: ssh -o UserKnownHostsFile=./.hosts -i .key ${{ secrets.DISCORD_USER }}@${{ secrets.DISCORD_HOST }} "systemctl --user start StarBot"
-      # TODO: Restart bot upon code update
