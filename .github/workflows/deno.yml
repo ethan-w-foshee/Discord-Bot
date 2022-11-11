@@ -36,7 +36,6 @@ permissions:
 
 jobs:
   deployment:
-    if: github.event_name == 'push'
     runs-on: self-hosted
     needs: test
     steps:
