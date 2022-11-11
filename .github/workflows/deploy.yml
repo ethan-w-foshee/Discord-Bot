@@ -1,12 +1,11 @@
 ---
 name: Deploy to prod
 on:
-  push:
-    branches: ["main"]
   workflow_run:
     workflows: ["Deno lint and run tests"]
     types:
       - completed
+    branches: ["main"]
 
 permissions:
   contents: read
