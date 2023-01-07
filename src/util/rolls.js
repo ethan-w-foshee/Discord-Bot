@@ -59,11 +59,11 @@ export function parseRoll(message) {
 	    if (truth) {
 		response = rhs.match(/\?.*:/);
 		if (response != null)
-		    response = response[0].substring(1, response.length - 1);
+		    response = response[0].substr(1, response[0].length - 2);
 	    } else {
 		response = rhs.match(/:.*$/);
 		if (response != null)
-		    response = response[0].substring(1);
+		    response = response[0].substr(1);
 	    }
 	    if (response != null)
 		response = response.trim();
