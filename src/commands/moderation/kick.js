@@ -2,8 +2,6 @@ import { bot } from "../../../bot.js";
 import { addBotCommand } from "../../lib/commands.js";
 import { ApplicationCommandOptionTypes,
 	 kickMember } from "../../../deps.js";
-import ackInteraction from "../../util/ackInteraction.js";
-
 
 function kickSlash(bot, interaction) {
     const options = interaction.data.options

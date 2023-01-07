@@ -6,20 +6,20 @@ import { sendMessage } from "../../deps.js";
 import { formatRoll, parseRoll } from "../util/rolls.js";
 
 function rolling(bot, msg) {
-  const cont = msg.content;
-  const rolls = parseRoll(cont);
-  const output = formatRoll(rolls);
-  if (output != "") {
-    sendMessage(bot, msg.channelId, {
-      content: output,
-    });
-  }
+    const cont = msg.content;
+    const rolls = parseRoll(cont);
+    const output = formatRoll(rolls);
+    if (output != "" && !isNaN(output)) {
+	sendMessage(bot, msg.channelId, {
+	    content: output,
+	});
+    }
 }
 
 addBotCommand(bot, {
-  type: "content",
-  name: "Convert message to rolls",
-  actions: [
-    rolling,
-  ],
+    type: "content",
+    name: "Convert message to rolls",
+    actions: [
+	rolling,
+    ],
 });

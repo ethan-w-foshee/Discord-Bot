@@ -1,10 +1,12 @@
 import { logger } from "../../logger.js";
-import { db } from "../../sql.js";
+// import { db } from "../../sql.js";
+
+// Lots left TODO here, wheeee
 
 const LOGTAG = "SSImage";
 
 class SSImageBase {
-    constructor(width=1, height=1, x=0, y=0) {
+    constructor(width=1, height=1, _x=0, _y=0) {
 	this.type = undefined;
 	this.render = undefined;
 	this.relative = false;
@@ -21,7 +23,7 @@ class SSImageBase {
     }
 }
 
-class SSImageURL extends SSImageBase {
+class _SSImageURL extends SSImageBase {
     constructor(baseURL, width, height, x, y) {
 	super(width, height, x, y)
 	this.type = 'url';
@@ -30,7 +32,7 @@ class SSImageURL extends SSImageBase {
     }
 }
 
-class SSImageText extends SSImageBase {
+class _SSImageText extends SSImageBase {
     constructor(text, width, height, x, y) {
 	super(width, height, x, y)
 	this.type = 'text';
@@ -39,7 +41,7 @@ class SSImageText extends SSImageBase {
     }
 }
 
-class SSImage extends SSImageBase {
+class _SSImage extends SSImageBase {
     constructor(width, height) {
 	super(width, height)
 	this.images = [];
@@ -48,8 +50,8 @@ class SSImage extends SSImageBase {
 	return this.images;
     }
 }
-
-class SSImageDB {
+/*
+class _SSImageDB {
     constructor() {
 	db.execute(`
 CREATE TABLE IF NOT EXISTS image_urls(
@@ -79,4 +81,4 @@ CREATE TABLE IF NOT EXISTS images(
     addImage(image) {
 
     }
-}
+}*/

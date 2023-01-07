@@ -17,6 +17,7 @@ export async function renderD2(code) {
     /* The code being submitted is
      * small, no need to worry about
      * streams */
+    console.log(code)
     await d2.stdin.write(enc.encode(code));
     await d2.stdin.close();
     const svg = await d2.output();
