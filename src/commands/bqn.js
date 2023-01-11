@@ -22,7 +22,7 @@ function diagram(bot, msg) {
 	
 	runBQN(code).then( (res) => {
 	    sendMessage(bot, msg.channelId, {
-		content: res,
+		content: `\`\`\`${res}\`\`\``,
 	    });
 	});
     }
