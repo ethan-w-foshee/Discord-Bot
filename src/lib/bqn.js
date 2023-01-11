@@ -1,5 +1,6 @@
 export async function runBQN(code) {
     const enc = new TextEncoder();
+    const dec = new TextDecoder();
 
     const bqn = Deno.run({
 	cmd: ["cbqn"],
@@ -18,5 +19,5 @@ export async function runBQN(code) {
     const output = await bqn.output();
     await bqn.close();
 
-    return output;
+    return dec.decode(output);
 }
