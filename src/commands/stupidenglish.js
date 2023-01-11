@@ -1,6 +1,7 @@
 import { ApplicationCommandOptionTypes} from "../../deps.js";
 import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
+import { stupidify } from "../util/stupidenglish.js";
 import ackInteraction from "../util/ackInteraction.js";
 
 addBotCommand(bot, {
@@ -22,9 +23,7 @@ addBotCommand(bot, {
 		option.name == "content"
 	    )[0].value;
 
-	    const corrected = inval.replace(/[g-l]/ig, '')
-
-	    ackInteraction(interaction, "message", '' , {content: corrected})
+	    ackInteraction(interaction, "message", '' , {content: stupidify(inval)})
 	}
     ]
 });

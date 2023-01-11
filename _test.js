@@ -1,6 +1,7 @@
 import { assert } from "https://deno.land/std@0.159.0/testing/asserts.ts";
 import { formatRoll, parseRoll } from "./src/util/rolls.js";
 import { createQuote } from "./src/util/quote.js";
+import { stupidify } from "./src/util/stupidenglish.js"
 
 Deno.test("Command Test (roll.js)", async (t) => {
   await t.step("Rolling", () => {
@@ -28,4 +29,11 @@ Deno.test("Command test (quote.js)", async (t) => {
     const quoteImage = await createQuote("author", "quote");
     assert(quoteImage.match(/https:\/\/.*\.jpg$/));
   });
+});
+
+Deno.test("Command test (stupidenglish.js)", async (t) => {
+    await t.step("Message conversion", () => {
+	const converted = stupidify("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	assert(converted == "abcdefmnopqrstuvwxyzABCDEFMNOPQRSTUVWXYZ")
+    });
 });
