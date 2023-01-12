@@ -14,6 +14,7 @@ function diagram(bot, msg) {
     const code = cont.match(codeRegex);
     if (code != null) {
 	const url = `https://starbot.syzygial.cc/d2?code=${encode(code[1])}`;
+
 	sendMessage(bot, msg.channelId, {
 	    content: url,
 	});
