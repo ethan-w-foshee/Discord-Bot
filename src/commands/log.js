@@ -43,11 +43,14 @@ function logGet(bot, interaction) {
     let page = 1;
     if (interaction.data) {
 	const action = interaction.data.custom_id;
-	page = parseInt(action.charAt(action.length-1));
-	if (action.startsWith("log_prev"))
-	    page -=1;
-	else if (action.startsWith("log_next"))
-	    page +=1;
+	console.log(action);
+	if (action) {
+	    page = parseInt(action.charAt(action.length-1));
+	    if (action.startsWith("log_prev"))
+		page -=1;
+	    else if (action.startsWith("log_next"))
+		page +=1;
+	}
     }
 
     const rows = bot.logger.db.query(`SELECT level,date,msg FROM logs ORDER BY date DESC LIMIT 10 OFFSET ${(page-1)*10}`);
