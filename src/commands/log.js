@@ -38,7 +38,8 @@ function makeComponents(page) {
 
 function logGet(bot, interaction) {
     let page = 1;
-    if (interaction.data) {
+    console.log(interaction.data);
+    if (interaction.data != undefined) {
 	const action = interaction.data.custom_id;
 	console.log(action);
 	if (action) {
