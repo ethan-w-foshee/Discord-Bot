@@ -1,9 +1,8 @@
 import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
+import ackInteraction from "../util/ackInteraction.js";
 import {
     editOriginalInteractionResponse,
-    InteractionResponseTypes,
-    sendInteractionResponse,
 } from "../../deps.js";
 
 function makeComponents(page) {
@@ -37,9 +36,6 @@ function makeComponents(page) {
 }
 
 function logGet(bot, interaction) {
-    sendInteractionResponse(bot, interaction.id, interaction.token, {
-	type: InteractionResponseTypes.DeferredChannelMessageWithSource,
-    })
     let page = 1;
     if (interaction.data) {
 	const action = interaction.data.custom_id;
@@ -51,6 +47,9 @@ function logGet(bot, interaction) {
 	    else if (action.startsWith("log_next"))
 		page +=1;
 	}
+	ackInteraction(bot.interaction, "deferred");
+    }else {
+	ackInteraction(bot.interaction, "thinking");
     }
 
     const rows = bot.logger.db.query(`SELECT level,date,msg FROM logs ORDER BY date DESC LIMIT 10 OFFSET ${(page-1)*10}`);
