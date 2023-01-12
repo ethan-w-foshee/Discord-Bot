@@ -47,9 +47,9 @@ function logGet(bot, interaction) {
 	    else if (action.startsWith("log_next"))
 		page +=1;
 	}
-	ackInteraction(bot.interaction, "deferred");
+	ackInteraction(interaction, "deferred");
     }else {
-	ackInteraction(bot.interaction, "thinking");
+	ackInteraction(interaction, "thinking");
     }
 
     const rows = bot.logger.db.query(`SELECT level,date,msg FROM logs ORDER BY date DESC LIMIT 10 OFFSET ${(page-1)*10}`);
