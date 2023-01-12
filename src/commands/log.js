@@ -38,17 +38,13 @@ function makeComponents(page) {
 
 function logGet(bot, interaction) {
     let page = 1;
-    console.log(interaction.data);
-    if (interaction.data != undefined) {
-	const action = interaction.data.custom_id;
-	console.log(action);
-	if (action) {
-	    page = parseInt(action.charAt(action.length-1));
-	    if (action.startsWith("log_prev"))
-		page -=1;
-	    else if (action.startsWith("log_next"))
-		page +=1;
-	}
+    if (interaction.data.customId) {
+	const action = interaction.data.customId;
+	page = parseInt(action.charAt(action.length-1));
+	if (action.startsWith("log_prev"))
+	    page -=1;
+	else if (action.startsWith("log_next"))
+	    page +=1;
 	sendInteractionResponse(bot, interaction.id, interaction.token, {
 	    type: InteractionResponseTypes.DeferredUpdateMessage,
 	})
