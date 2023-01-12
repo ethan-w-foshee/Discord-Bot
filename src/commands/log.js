@@ -70,6 +70,7 @@ function logGet(bot, interaction) {
 ${msg}
 \`\`\`
 `,
+	customId: `${page}`,
 	components: makeComponents(page)
     });
 }
