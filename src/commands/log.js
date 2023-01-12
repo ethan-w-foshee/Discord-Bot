@@ -57,7 +57,6 @@ function logGet(bot, interaction) {
 	date = `${date.getFullYear()} ${date.getMonth()+1} ${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
 	msg += `\u001b[3${Math.floor(row[0]/10)}m${date} ${row[2].slice(0,50)}\n`;
     }
-
     
     editOriginalInteractionResponse(bot, interaction.token, {
 	content: `Log Preview
