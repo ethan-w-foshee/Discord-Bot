@@ -33,7 +33,7 @@ jobs:
           ssh-keyscan -H ${{ secrets.hostname }} >> ./.hosts
           chmod 0600 ./.hosts
       - name: Stop Bot service
-        run: ssh -o UserKnownHostsFile=./.hosts -i .key ${{ secrets.username }}@${{ secrets.hostname }} "systemctl --user stop ${{ inputs.service-name }}
+        run: ssh -o UserKnownHostsFile=./.hosts -i .key ${{ secrets.username }}@${{ secrets.hostname }} "systemctl --user stop ${{ inputs.service-name }}"
       - name: Upload Code for Deployment
         run: rsync -ar --delete -e "ssh -o UserKnownHostsFile=./.hosts -i .key" * ${{ secrets.username }}@${{ secrets.hostname }}:${{ inputs.inst-path }}/
       - name: Start Bot service
