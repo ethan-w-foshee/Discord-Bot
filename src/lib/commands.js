@@ -29,7 +29,7 @@ export function enableCommandsPlugin(bot) {
 		    }
 		} else {
 		    /* Will soon be replaced by proper logging */
-		    logger.error("Should be unreachable");
+		    bot.logger.error("Should be unreachable");
 		}
 	    }
 	};
