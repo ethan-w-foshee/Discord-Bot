@@ -32,6 +32,7 @@
         type = "app";
         program = "${starBot}/bin/starbot";
       };
+      packages.default = starBot;
       packages.image = pkgs.dockerTools.buildImage {
         name = "starbot";
         tag = "latest";

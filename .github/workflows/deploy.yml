@@ -26,6 +26,16 @@ jobs:
     steps:
       - name: Setup repo
         uses: actions/checkout@v3
+      - name: Cache Container
+        id: image-cache
+        uses: actions/cache@v3
+        with:
+          path: result
+          key: starbot_container-${{ hashFiles('flake.*') }}
+      - name: Build Container
+        if: steps.image-cache.outputs.cache-hit != 'true'
+        uses: cachix/install-nix-action@v18
+        run: nix build .#image
       - name: SSH Key Creation
         run: |
           echo "${{ secrets.ssh-key}}" > .key
@@ -34,7 +44,7 @@ jobs:
           chmod 0600 ./.hosts
       - name: Stop Bot service
         run: ssh -o UserKnownHostsFile=./.hosts -i .key ${{ secrets.username }}@${{ secrets.hostname }} "systemctl --user stop ${{ inputs.service-name }}"
-      - name: Upload Code for Deployment
+      - name: Upload Code and Image for Deployment
         run: rsync -ar --delete -e "ssh -o UserKnownHostsFile=./.hosts -i .key" * ${{ secrets.username }}@${{ secrets.hostname }}:${{ inputs.inst-path }}/
       - name: Start Bot service
         run: ssh -o UserKnownHostsFile=./.hosts -i .key ${{ secrets.username }}@${{ secrets.hostname }} "systemctl --user start ${{ inputs.service-name }}"

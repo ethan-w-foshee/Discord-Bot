@@ -9,7 +9,7 @@ on:
 jobs:
   pre-deploy-test:
     uses: ./.github/workflows/deno-tests.yml
-  
+
   deploy-dev:
     if: ${{ github.ref == 'refs/heads/dev' }}
     needs: pre-deploy-test
@@ -33,5 +33,3 @@ jobs:
       username: ${{ secrets.DISCORD_USER }}
       hostname: ${{ secrets.DISCORD_HOST }}
       ssh-key: ${{ secrets.DISCORD_USER_SSH_KEY }}
-
-      
