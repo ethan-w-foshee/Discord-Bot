@@ -8,13 +8,11 @@ import { formatRoll, parseRoll } from "../util/rolls.js";
 function rolling(bot, msg) {
     const cont = msg.content;
     const rolls = parseRoll(cont);
-    const output = formatRoll(rolls);
+    const output = `${formatRoll(rolls)}`;
     bot.logger.debug(`Rolled: ${output}`,"Rolling");
-    if (output != "" && !isNaN(output)) {
-	sendMessage(bot, msg.channelId, {
-	    content: output,
-	});
-    }
+    sendMessage(bot, msg.channelId, {
+	content: output,
+    });
 }
 
 addBotCommand(bot, {
