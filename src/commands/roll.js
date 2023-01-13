@@ -20,6 +20,9 @@ function rolling(bot, msg) {
 addBotCommand(bot, {
     type: "content",
     name: "Convert message to rolls",
+    runIf: (_bot, msg) => {
+	return (msg.content.match(/\{([^}]+)}/)) != null
+    },
     actions: [
 	rolling,
     ],
