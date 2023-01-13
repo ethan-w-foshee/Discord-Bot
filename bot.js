@@ -1,7 +1,8 @@
-import { createBot, Intents } from "./deps.js";
+import { createBot, Intents,
+	 editBotStatus, PresenceStatus,
+	 ActivityTypes} from "./deps.js";
 import { addBotCommand, enableCommandsPlugin,
-	 updateBotCommands, editBotStatus,
-         PresenceStatus, ActivityTypes } from "./src/lib/commands.js";
+	 updateBotCommands } from "./src/lib/commands.js";
 import { logger } from "./logger.js";
 
 export const bot = createBot({
