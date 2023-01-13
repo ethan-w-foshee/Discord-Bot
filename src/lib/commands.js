@@ -38,6 +38,7 @@ export function enableCommandsPlugin(bot) {
 
 function filterApplicationCommand(_bot, interaction) {
     if (interaction.type == InteractionTypes.ApplicationCommand) {
+	console.log(interaction)
 	if (interaction.data.name == this.name) {
 	    return true;
 	}
@@ -92,6 +93,14 @@ export function addBotCommand(bot, command) {
     // Command format validated, generate UUID for command
     com.uuid = crypto.randomUUID();
     bot.commands.push(com);
+    // if (com.type == ApplicationCommandTypes.ChatInput || com.type == ApplicationCommandTypes.Message) {
+	// For Modals and Buttons etc.
+	// const webHook = {
+	    // event: "webhooksUpdate",
+	    // name: com.name,
+	    // type: "Create Webhook for Interactions"
+	// }
+    // }
     bot.logger.debug(`Added command to bot: ${JSON.stringify(command)}`,"botCommandPlugin",command.name)
     return com;
 }
