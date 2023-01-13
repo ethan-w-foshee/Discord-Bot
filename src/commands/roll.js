@@ -9,10 +9,12 @@ function rolling(bot, msg) {
     const cont = msg.content;
     const rolls = parseRoll(cont);
     const output = `${formatRoll(rolls)}`;
-    bot.logger.debug(`Rolled: ${output}`,"Rolling");
-    sendMessage(bot, msg.channelId, {
-	content: output,
-    });
+    if (output != '') {
+	bot.logger.debug(`Rolled: ${output}`,"Rolling");
+	sendMessage(bot, msg.channelId, {
+	    content: output,
+	});
+    }
 }
 
 addBotCommand(bot, {
