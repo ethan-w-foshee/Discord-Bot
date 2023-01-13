@@ -3,7 +3,8 @@ import { addBotCommand, enableCommandsPlugin, updateBotCommands } from "./src/li
 import { logger } from "./logger.js";
 
 export const bot = createBot({
-  intents: Intents.Guilds | Intents.GuildMessages | Intents.MessageContent,
+    intents: Intents.Guilds | Intents.GuildMessages | Intents.MessageContent
+	| Intents.GuildMessageReactions | Intents.GuildWebhooks | Intents.DirectMessages,
   token: Deno.env.get("DISCORD_TOKEN"),
   events: {},
 });
