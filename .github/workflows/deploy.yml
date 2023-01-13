@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Setup repo
         uses: actions/checkout@v3
+      - name: Install Nix
+        uses: cachix/install-nix-action@v18
       - name: Cache Container
         id: image-cache
         uses: actions/cache@v3
@@ -34,7 +36,6 @@ jobs:
           key: starbot_container-${{ hashFiles('flake.*') }}
       - name: Build Container
         if: steps.image-cache.outputs.cache-hit != 'true'
-        uses: cachix/install-nix-action@v18
         run: nix build .#image
       - name: SSH Key Creation
         run: |
