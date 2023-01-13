@@ -1,7 +1,8 @@
 import { Events } from "./commandEvents.js";
 import {
     ApplicationCommandTypes,
-    InteractionTypes,
+    // InteractionTypes, TODO: Use InteractionTypes to index actions
+    // for easier component response organization
     upsertGlobalApplicationCommands,
 } from "../../deps.js";
 
