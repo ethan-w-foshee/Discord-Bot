@@ -38,8 +38,6 @@ function makeComponents(page) {
 
 function logGet(bot, interaction) {
     let page = 1;
-    console.log(interaction);
-    console.log(interaction.data);
     if (interaction.data.customId) {
 	const action = interaction.data.customId;
 	page = parseInt(action.charAt(action.length-1));

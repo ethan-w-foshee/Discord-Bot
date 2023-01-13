@@ -38,6 +38,7 @@ export function enableCommandsPlugin(bot) {
 }
 
 function filterApplicationCommand(_bot, interaction) {
+    console.log(interaction)
     return interaction.data.name == this.name;
 }
 
