@@ -37,13 +37,7 @@ export function enableCommandsPlugin(bot) {
 }
 
 function filterApplicationCommand(_bot, interaction) {
-    if (interaction.type == InteractionTypes.ApplicationCommand) {
-	console.log(interaction)
-	if (interaction.data.name == this.name) {
-	    return true;
-	}
-    }
-    return false;
+    return interaction.data.name == this.name;
 }
 
 const builtinCommandTypes = {
