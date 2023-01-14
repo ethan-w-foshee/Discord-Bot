@@ -34,7 +34,12 @@ jobs:
           key: starbot_container-${{ hashFiles('flake.*') }}
       - name: Build Container
         if: steps.image-cache.outputs.cache-hit != 'true'
-        run: nix build .#image
+        run: |
+          podman run -v ./:/wd -w /wd nixos/nix sh -c 'nix \
+            --extra-experimental-features nix-command \
+            --extra-experimental-features flakes \
+            build .#image;\
+            cp result image'
       - name: SSH Key Creation
         run: |
           echo "${{ secrets.ssh-key}}" > .key
