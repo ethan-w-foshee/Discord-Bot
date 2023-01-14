@@ -23,7 +23,8 @@ export function enableCommandsPlugin(bot) {
 		    ) {
 			for (const action of command.actions) {
 			    if (typeof (action) == "function") {
-				bot.logger.debug(`Running command ${command.name}`,"botCommandPlugin");
+				if (!command.noLog)
+				    bot.logger.debug(`Running command ${command.name}`,"botCommandPlugin");
 				action(...args);
 			    }
 			}

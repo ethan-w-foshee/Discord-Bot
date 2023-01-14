@@ -40,7 +40,7 @@ function logGet(bot, interaction) {
     let page = 1;
     if (interaction.data.customId) {
 	const action = interaction.data.customId;
-	page = parseInt(action.charAt(action.length-1));
+	page = parseInt(action.match(/[\d]+/));
 	if (action.startsWith("log_prev"))
 	    page -=1;
 	else if (action.startsWith("log_next"))
@@ -77,6 +77,7 @@ addBotCommand(bot, {
     type: "slash",
     name: "log",
     description: "Get some logs",
+    noLog: true,
     actions: [
 	logGet,
     ],
