@@ -38,7 +38,7 @@ jobs:
           podman run -v ./:/wd -w /wd docker.io/nixos/nix sh -c 'nix \
             --extra-experimental-features nix-command \
             --extra-experimental-features flakes \
-            build .#image;\
+            build .#${{ inputs.service-name }}
             cp result image
             rm result'
       - name: SSH Key Creation

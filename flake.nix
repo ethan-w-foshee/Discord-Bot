@@ -27,15 +27,10 @@
           deno run -A main.js
         '';
       };
-    in {
-      apps.default = {
-        type = "app";
-        program = "${starBot}/bin/starbot";
-      };
-      packages.default = starBot;
-      packages.image = pkgs.dockerTools.buildImage {
+
+      mkImage = (tag: pkgs.dockerTools.buildImage {
         name = "starbot";
-        tag = "latest";
+        tag = "${tag}";
         copyToRoot = pkgs.buildEnv {
           name = "starbot-root";
           paths = [ starBot pkgs.bashInteractive ];
@@ -43,7 +38,18 @@
             "/bin"
           ];
         };
+      });
+      
+    in {
+      apps.default = {
+        type = "app";
+        program = "${starBot}/bin/starbot";
       };
+      
+      packages.StarBot = mkImage "latest";
+
+      packages.StarBot-Test = mkImage "dev";
+      
       devShells.default = pkgs.mkShell {
         nativeBuildInputs = [ pkgs.bashInteractive ];
         buildInputs = deps;
