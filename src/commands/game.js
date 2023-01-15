@@ -12,7 +12,7 @@ import ackInteraction from "../util/ackInteraction.js";
 
 function chess(bot, interaction) {
     /* Determine if the game interaction is for chess */
-    chessOptions = interaction.data.options?.filter(
+    const chessOptions = interaction.data.options?.filter(
 	(option) => option.name.includes("chess")
     )
     
