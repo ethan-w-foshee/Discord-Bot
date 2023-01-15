@@ -1,37 +1,9 @@
-export async function renderD2(code) {
-    const enc = new TextEncoder();
+import { assert } from "https://deno.land/std@0.159.0/testing/asserts.ts";
+import { renderD2 } from "./d2.js";
 
-    const d2 = Deno.run({
-	cmd: ["d2","-","-"],
-	stderr: "piped",
-	stdout: "piped",
-	stdin: "piped"
-    });
-    const rsvg = Deno.run({
-	cmd: ["rsvg-convert"],
-	stderr: "piped",
-	stdout: "piped",
-	stdin: "piped"
-    });
-
-    /* The code being submitted is
-     * small, no need to worry about
-     * streams */
-    console.log(code)
-    await d2.stdin.write(enc.encode(code));
-    await d2.stdin.close();
-    const svg = await d2.output();
-    await d2.close();
-
-    let i = 0;
-    let n = 0;
-    do {
-	n = await rsvg.stdin.write(svg.slice(i));
-	i += n;
-    } while(n)
-    await rsvg.stdin.close();
-    const png = await rsvg.output();
-    await rsvg.close();
-    
-    return png;
-}
+Deno.test("Command test (d2.js)", async (t) => {
+  await t.step("D2 Rendering", async () => {
+      const png = await renderD2("x -> y -> z");
+      assert(png.length>0, "Failed to render image");
+  });
+});
