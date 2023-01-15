@@ -38,7 +38,7 @@ function makeComponents(page) {
 
 function logHist(page) {
     const rows = bot.logger.db.query(
-	`SELECT level,date,msg,_id FROM logs ORDER BY date DESC LIMIT 10 OFFSET ${(page-1)*10}`
+	`SELECT level,date,msg,_id FROM logs ORDER BY date ASC LIMIT 10 OFFSET ${(page-1)*10}`
     );
     let msg = '';
     for (const row of rows) {
@@ -73,6 +73,7 @@ function logGet(bot, interaction) {
 	id = options?.filter(
 	    (option) => option.name == "ID"
 	)[0]?.value;
+	bot.logger.debug("Running with ${id}");
     }
 
     let msg = '';
