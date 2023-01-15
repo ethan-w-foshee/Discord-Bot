@@ -1,9 +1,9 @@
 import {
     ApplicationCommandOptionTypes,
 //    editOriginalInteractionResponse,
-    sendMessage
+    _sendMessage
 } from "../../deps.js";
-import { bot } from "../../bot.js";
+import { _bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
 import ackInteraction from "../util/ackInteraction.js";
 
