@@ -1,6 +1,6 @@
 import {
     ApplicationCommandOptionTypes,
-    MessageComponentTypes,
+    MessageComponentTypes,    
     TextStyles,
     editOriginalInteractionResponse,
 } from "../../deps.js";
@@ -40,7 +40,7 @@ addBotCommand(bot, {
 			color: 0xffffff,
 			fields: [{
 			    name: "Player 1",
-			    value: getNameFromUser(bot, interaction.member.guildId, interaction.member.user.id),
+			    value: "Nobody yet",
 			    inline: true
 			}, {
 			    name: "Player 2",
@@ -52,10 +52,13 @@ addBotCommand(bot, {
 			}]
 		    }],
 		    components: [{
-			type: MessageComponentTypes.InputText,
-			customId: "game_chess_play",
-			style: TextStyles.Short,
-			label: "Your move"
+			type: MessageComponentTypes.ActionRow,
+			components: [{
+			    type: MessageComponentTypes.InputText,
+			    customId: "game_chess_play",
+			    style: TextStyles.Short,
+			    label: "Your move"
+			}]
 		    }]
 		});
 	    console.log(interaction);
