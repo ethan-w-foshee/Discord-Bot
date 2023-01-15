@@ -73,7 +73,7 @@ function logGet(bot, interaction) {
 	ackInteraction(interaction, "thinking");
 	id = options.filter(
 	    (option) => option.name == "ID"
-	)[0].value;
+	)[0]?.value;
     }
 
     let msg = '';
