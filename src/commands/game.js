@@ -6,7 +6,7 @@ import {
 } from "../../deps.js";
 import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
-import { getNameFromUser } from "../util/quote.js";
+// import { getNameFromUser } from "../util/quote.js";
 import ackInteraction from "../util/ackInteraction.js";
 
 addBotCommand(bot, {
