@@ -63,12 +63,16 @@ function logGet(bot, interaction) {
     }
     
     editOriginalInteractionResponse(bot, interaction.token, {
-	content: `Log Preview
-\`\`\`ansi
-${msg}
-\`\`\`
-`,
 	customId: `${page}`,
+	embeds: [
+	    {
+		title: "Log Preview",
+		type: "rich",
+		description: `\`\`\`ansi
+${msg}
+\`\`\``		
+	    }
+	],
 	components: makeComponents(page)
     });
 }
