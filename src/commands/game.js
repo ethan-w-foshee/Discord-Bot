@@ -3,7 +3,7 @@ import {
 //    editOriginalInteractionResponse,
     _sendMessage
 } from "../../deps.js";
-import { _bot } from "../../bot.js";
+import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
 import ackInteraction from "../util/ackInteraction.js";
 
@@ -25,7 +25,7 @@ addBotCommand(bot, {
     }],
     type: "slash",
     actions: [
-	function (bot, interaction) {
+	function (_bot, interaction) {
 	    ackInteraction(interaction);
 	    console.log(interaction);
 //	    sendMessage(bot, interaction.channelId, {content: `${interaction}`})
