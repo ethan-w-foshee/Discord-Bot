@@ -27,7 +27,8 @@ addBotCommand(bot, {
     actions: [
 	function (bot, interaction) {
 	    ackInteraction(interaction);
-	    sendMessage(bot, interaction.channelId, {content: `${interaction}`})
+	    console.log(interaction);
+//	    sendMessage(bot, interaction.channelId, {content: `${interaction}`})
 	}
     ]
 })
