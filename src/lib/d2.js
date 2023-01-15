@@ -21,6 +21,7 @@ export async function renderD2(code) {
     await d2.stdin.write(enc.encode(code));
     await d2.stdin.close();
     const svg = await d2.output();
+    await d2.stderr.close()
     await d2.close();
 
     let i = 0;
@@ -31,6 +32,7 @@ export async function renderD2(code) {
     } while(n)
     await rsvg.stdin.close();
     const png = await rsvg.output();
+    await rsvg.stderr.close()
     await rsvg.close();
     
     return png;
