@@ -31,7 +31,7 @@ addBotCommand(bot, {
 	    ackInteraction(interaction, "message", {}, {
 		embeds: [{
 		    title: "Chess match",
-		    timestamp: new Date(Date.now().toISOString()),
+		    timestamp: new Date(Date.now()).toISOString(),
 		    color: 0xffffff,
 		    fields: [{
 			name: "Player 1",
