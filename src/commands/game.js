@@ -1,10 +1,12 @@
 import {
     ApplicationCommandOptionTypes,
+    MessageComponentTypes,
+    TextStyles,
 //    editOriginalInteractionResponse,
-//    sendMessage
 } from "../../deps.js";
 import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
+import { getNameFromUser } from "../util/quote.js";
 import ackInteraction from "../util/ackInteraction.js";
 
 addBotCommand(bot, {
@@ -26,9 +28,32 @@ addBotCommand(bot, {
     type: "slash",
     actions: [
 	function (_bot, interaction) {
-	    ackInteraction(interaction);
+	    ackInteraction(interaction, "message", {}, {
+		embeds: [{
+		    title: "Chess match",
+		    timestamp: new Date(Date.now().toISOString()),
+		    color: 0xffffff,
+		    fields: [{
+			name: "Player 1",
+			value: getNameFromUser(bot, interaction.member.guildId, interaction.member.user.id),
+			inline: true
+		    }, {
+			name: "Player 2",
+			value: "Nobody yet",
+			inline: true
+		    }, {
+			name: "Board",
+			value: "WIP"
+		    }]
+		}],
+		components: [{
+		    type: MessageComponentTypes.InputText,
+		    customId: "game_chess_play",
+		    style: TextStyles.Short,
+		    label: "Your move"
+		}]
+	    });
 	    console.log(interaction);
-//	    sendMessage(bot, interaction.channelId, {content: `${interaction}`})
 	}
     ]
 })
