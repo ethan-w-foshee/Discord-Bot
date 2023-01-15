@@ -1,9 +1,8 @@
 import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
+import ackInteraction from "../util/ackInteraction.js";
 import {
     editOriginalInteractionResponse,
-    InteractionResponseTypes,
-    sendInteractionResponse,
 } from "../../deps.js";
 
 function makeComponents(page) {
@@ -45,21 +44,19 @@ function logGet(bot, interaction) {
 	    page -=1;
 	else if (action.startsWith("log_next"))
 	    page +=1;
-	sendInteractionResponse(bot, interaction.id, interaction.token, {
-	    type: InteractionResponseTypes.DeferredUpdateMessage,
-	})
+	ackInteraction(interaction, "deferred");
     }else {
-	sendInteractionResponse(bot, interaction.id, interaction.token, {
-	    type: InteractionResponseTypes.DeferredChannelMessageWithSource,
-	})
+	ackInteraction(interaction, "thinking");	
     }
 
-    const rows = bot.logger.db.query(`SELECT level,date,msg FROM logs ORDER BY date DESC LIMIT 10 OFFSET ${(page-1)*10}`);
+    const rows = bot.logger.db.query(
+	`SELECT level,date,msg,_id FROM logs ORDER BY date DESC LIMIT 10 OFFSET ${(page-1)*10}`
+    );
     let msg = '';
     for (const row of rows) {
 	let date = new Date(row[1]);
 	date = `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
-	msg += `\u001b[3${Math.floor(row[0]/10)}m${date} ${row[2].slice(0,100)}\n\n`;
+	msg += `[${row[3]}] \u001b[3${Math.floor(row[0]/10)}m${date} ${row[2].slice(0,100)}\n\n`;
     }
     
     editOriginalInteractionResponse(bot, interaction.token, {
