@@ -16,15 +16,15 @@ function chess(bot, interaction) {
 	(option) => option.name.includes("chess")
     )
     
-    if (chessOptions.length == 0)
+    if (chessOptions.length == 0 && !interaction.data.name.includes("chess"))
 	return /* Exit if not */
 
     console.log(interaction);
 
     ackInteraction(interaction)
 
-    if (chessOptions.name == "chess") {
-	console.log(`Creating chess game with options:\n${chessOptions.options}`)
+    if (chessOptions[0].name == "chess") {
+	console.log(`Creating chess game with options:\n${chessOptions[0].options}`)
     
 	editOriginalInteractionResponse(
 	    bot,
