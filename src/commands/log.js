@@ -73,7 +73,7 @@ function logGet(bot, interaction) {
 	id = options?.filter(
 	    (option) => option.name == "ID"
 	)[0]?.value;
-	bot.logger.debug("Running with ${id}");
+	bot.logger.debug(`Running with ${id}`);
     }
 
     let msg = '';
