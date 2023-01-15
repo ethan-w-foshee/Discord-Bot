@@ -58,8 +58,8 @@ function logGet(bot, interaction) {
     let msg = '';
     for (const row of rows) {
 	let date = new Date(row[1]);
-	date = `${date.getFullYear()} ${date.getMonth()+1} ${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
-	msg += `\u001b[3${Math.floor(row[0]/10)}m${date} ${row[2].slice(0,50)}\n`;
+	date = `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+	msg += `\u001b[3${Math.floor(row[0]/10)}m${date} ${row[2].slice(0,100)}\n\n`;
     }
     
     editOriginalInteractionResponse(bot, interaction.token, {
