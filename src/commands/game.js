@@ -27,7 +27,7 @@ addBotCommand(bot, {
     }],
     type: "slash",
     actions: [
-	function (_bot, interaction) {
+	function (bot, interaction) {
 	    ackInteraction(interaction, "message", {}, {
 		embeds: [{
 		    title: "Chess match",
