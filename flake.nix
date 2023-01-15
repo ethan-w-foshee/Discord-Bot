@@ -40,6 +40,7 @@
         '';
       };
 
+<<<<<<< HEAD
       lints = pkgs.writeShellApplication {
         name = "lints";
         runtimeInputs = deps;
@@ -48,24 +49,44 @@
         '';
       };
 
+=======
+>>>>>>> 1c9a358 (Fix add tests to Container)
       mkImage = (tag: pkgs.dockerTools.buildImage {
         name = "starbot";
         tag = "${tag}";
         copyToRoot = pkgs.buildEnv {
           name = "starbot-root";
+<<<<<<< HEAD
           paths = [
             starBot
             tests
             lints
             pkgs.bashInteractive
           ] ++ deps;
+=======
+          paths = [ starBot tests pkgs.bashInteractive ];
+>>>>>>> 1c9a358 (Fix add tests to Container)
           pathsToLink = [
             "/bin"
           ];
         };
       });
       
+<<<<<<< HEAD
     in {      
+=======
+    in {
+      apps.default = {
+        type = "app";
+        program = "${starBot}/bin/starbot";
+      };
+
+      apps.tests = {
+        type = "app";
+        program = "${tests}/bin/tests";
+      };
+      
+>>>>>>> 1c9a358 (Fix add tests to Container)
       packages.StarBot = mkImage "latest";
 
       packages.StarBot-Test = mkImage "dev";
