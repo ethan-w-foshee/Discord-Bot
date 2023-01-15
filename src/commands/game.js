@@ -1,13 +1,64 @@
 import {
     ApplicationCommandOptionTypes,
-    MessageComponentTypes,    
-    TextStyles,
+    MessageComponentTypes,
+    ButtonStyles,
+//    TextStyles,
     editOriginalInteractionResponse,
 } from "../../deps.js";
 import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
 // import { getNameFromUser } from "../util/quote.js";
 import ackInteraction from "../util/ackInteraction.js";
+
+function chess(bot, interaction) {
+    /* Determine if the game interaction is for chess */
+    chessOptions = interaction.data.options?.filter(
+	(option) => option.name.includes("chess")
+    )
+    
+    if (chessOptions.length == 0)
+	return /* Exit if not */
+
+    console.log(interaction);
+
+    ackInteraction(interaction)
+
+    if (chessOptions.name == "chess") {
+	console.log(`Creating chess game with options:\n${chessOptions.options}`)
+    
+	editOriginalInteractionResponse(
+	    bot,
+	    interaction.token,
+	    {
+		embeds: [{
+		    title: "Chess match",
+		    timestamp: new Date(Date.now()).toISOString(),
+		    color: 0xffffff,
+		    fields: [{
+			name: "Player 1",
+			value: "Nobody yet",
+			inline: true
+		    }, {
+			name: "Player 2",
+			value: "Nobody yet",
+			inline: true
+		    }, {
+			name: "Board",
+			value: "WIP"
+		    }]
+		}],
+		components: [{
+		    type: MessageComponentTypes.ActionRow,
+		    components: [{
+			type: MessageComponentTypes.Button,
+			customId: "game_chess_play_button",
+			style: ButtonStyles.Primary,
+			label: "Play!"
+		    }]
+		}]
+	    });
+    }
+}
 
 addBotCommand(bot, {
     description: "Play some fun games",
@@ -27,41 +78,6 @@ addBotCommand(bot, {
     }],
     type: "slash",
     actions: [
-	function (bot, interaction) {
-	    ackInteraction(interaction)
-
-	    editOriginalInteractionResponse(
-		bot,
-		interaction.token,
-		{
-		    embeds: [{
-			title: "Chess match",
-			timestamp: new Date(Date.now()).toISOString(),
-			color: 0xffffff,
-			fields: [{
-			    name: "Player 1",
-			    value: "Nobody yet",
-			    inline: true
-			}, {
-			    name: "Player 2",
-			    value: "Nobody yet",
-			    inline: true
-			}, {
-			    name: "Board",
-			    value: "WIP"
-			}]
-		    }],
-		    components: [{
-			type: MessageComponentTypes.ActionRow,
-			components: [{
-			    type: MessageComponentTypes.InputText,
-			    customId: "game_chess_play",
-			    style: TextStyles.Short,
-			    label: "Your move"
-			}]
-		    }]
-		});
-	    console.log(interaction);
-	}
+	chess(bot, interaction)
     ]
 })
