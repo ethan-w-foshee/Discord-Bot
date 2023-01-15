@@ -14,7 +14,6 @@ addBotCommand(bot, {
 	name: "name",
 	description: "Name of the game to play",
 	type: ApplicationCommandOptionTypes.SubCommand,
-	required: true,
 	choices: [
 	    "chess",
 	    "hangman",
