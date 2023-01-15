@@ -106,7 +106,7 @@ addBotCommand(bot, {
     noLog: true,
     options :[
 	{
-	    name: "ID",
+	    name: "id",
 	    description: "ID of Log",
 	    type: ApplicationCommandOptionTypes.Integer
 	}
