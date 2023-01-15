@@ -10,7 +10,7 @@ Deno.test("Chess Testing", async (t) => {
 	await chess.play(n,"h6");
 	const board = (await chess.board(n));
 	await chess.close(n);
-	const expect = await Deno.readTextFile("./expectedboard.txt");
+	const expect = await Deno.readTextFile("./src/lib/chess/expectedboard.txt");
 	console.log(board);
 	console.log("vs");
 	console.log(expect);
