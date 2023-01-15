@@ -78,6 +78,6 @@ addBotCommand(bot, {
     }],
     type: "slash",
     actions: [
-	chess(bot, interaction)
+	chess
     ]
 })
