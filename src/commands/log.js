@@ -38,10 +38,10 @@ function makeComponents(page) {
 
 function logHist(page) {
     const rows = bot.logger.db.query(
-	`SELECT level,date,msg,_id FROM logs ORDER BY date ASC LIMIT 10 OFFSET ${(page-1)*10}`
+	`SELECT level,date,msg,_id FROM logs ORDER BY date DESC LIMIT 10 OFFSET ${(page-1)*10}`
     );
     let msg = '';
-    for (const row of rows) {
+    for (const row of rows.reverse()) {
 	let date = new Date(row[1]);
 	date = `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
 	msg += `[${row[3]}] \u001b[3${Math.floor(row[0]/10)}m${date} ${row[2].slice(0,100)}\n\n`;
