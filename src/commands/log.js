@@ -38,11 +38,9 @@ function makeComponents(page) {
 
 function logGet(bot, interaction) {
     let page = 1;
-    console.log(interaction);
-    console.log(interaction.data);
     if (interaction.data.customId) {
 	const action = interaction.data.customId;
-	page = parseInt(action.charAt(action.length-1));
+	page = parseInt(action.match(/[\d]+/));
 	if (action.startsWith("log_prev"))
 	    page -=1;
 	else if (action.startsWith("log_next"))
@@ -60,17 +58,21 @@ function logGet(bot, interaction) {
     let msg = '';
     for (const row of rows) {
 	let date = new Date(row[1]);
-	date = `${date.getFullYear()} ${date.getMonth()+1} ${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
-	msg += `\u001b[3${Math.floor(row[0]/10)}m${date} ${row[2].slice(0,50)}\n`;
+	date = `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+	msg += `\u001b[3${Math.floor(row[0]/10)}m${date} ${row[2].slice(0,100)}\n\n`;
     }
     
     editOriginalInteractionResponse(bot, interaction.token, {
-	content: `Log Preview
-\`\`\`ansi
-${msg}
-\`\`\`
-`,
 	customId: `${page}`,
+	embeds: [
+	    {
+		title: "Log Preview",
+		type: "rich",
+		description: `\`\`\`ansi
+${msg}
+\`\`\``		
+	    }
+	],
 	components: makeComponents(page)
     });
 }
@@ -79,6 +81,7 @@ addBotCommand(bot, {
     type: "slash",
     name: "log",
     description: "Get some logs",
+    noLog: true,
     actions: [
 	logGet,
     ],

@@ -5,12 +5,13 @@ import {
     sendMessage
 } from "../../deps.js";
 
+// Debated making a function for extracting code
+// But, I want to also add an options query
+// or args format to pass on
+const codeRegex = /(?:```bqn\n)([\s\S]*\n?)(?:```)/;
+
 function diagram(bot, msg) {
     const cont = msg.content;
-    // Debated making a function for extracting code
-    // But, I want to also add an options query
-    // or args format to pass on
-    const codeRegex = /(?:```bqn\n)([\s\S]*\n?)(?:```)/;
 
     let code = cont.match(codeRegex);
     
@@ -31,6 +32,9 @@ function diagram(bot, msg) {
 addBotCommand(bot, {
     type: "content",
     name: "Run BQN Code",
+    runIf: (_bot, msg) => {
+	return (msg.content.match(codeRegex)) != null
+    },
     actions: [
 	diagram,
     ],
