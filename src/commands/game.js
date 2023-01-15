@@ -2,7 +2,7 @@ import {
     ApplicationCommandOptionTypes,
     MessageComponentTypes,
     TextStyles,
-//    editOriginalInteractionResponse,
+    editOriginalInteractionResponse,
 } from "../../deps.js";
 import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
@@ -28,31 +28,36 @@ addBotCommand(bot, {
     type: "slash",
     actions: [
 	function (bot, interaction) {
-	    ackInteraction(interaction, "message", {}, {
-		embeds: [{
-		    title: "Chess match",
-		    timestamp: new Date(Date.now()).toISOString(),
-		    color: 0xffffff,
-		    fields: [{
-			name: "Player 1",
-			value: getNameFromUser(bot, interaction.member.guildId, interaction.member.user.id),
-			inline: true
-		    }, {
-			name: "Player 2",
-			value: "Nobody yet",
-			inline: true
-		    }, {
-			name: "Board",
-			value: "WIP"
+	    ackInteraction(interaction)
+
+	    editOriginalInteractionResponse(
+		bot,
+		interaction.token,
+		{
+		    embeds: [{
+			title: "Chess match",
+			timestamp: new Date(Date.now()).toISOString(),
+			color: 0xffffff,
+			fields: [{
+			    name: "Player 1",
+			    value: getNameFromUser(bot, interaction.member.guildId, interaction.member.user.id),
+			    inline: true
+			}, {
+			    name: "Player 2",
+			    value: "Nobody yet",
+			    inline: true
+			}, {
+			    name: "Board",
+			    value: "WIP"
+			}]
+		    }],
+		    components: [{
+			type: MessageComponentTypes.InputText,
+			customId: "game_chess_play",
+			style: TextStyles.Short,
+			label: "Your move"
 		    }]
-		}],
-		components: [{
-		    type: MessageComponentTypes.InputText,
-		    customId: "game_chess_play",
-		    style: TextStyles.Short,
-		    label: "Your move"
-		}]
-	    });
+		});
 	    console.log(interaction);
 	}
     ]
