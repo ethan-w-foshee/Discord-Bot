@@ -11,20 +11,23 @@ addBotCommand(bot, {
     description: "Play some fun games",
     name: "game",
     options: [{
-	name: "name",
-	description: "Name of the game to play",
-	type: ApplicationCommandOptionTypes.SubCommand,
-	choices: [
-	    "chess",
-	    "hangman",
-	    "test"
-	]
+	name: "chess",
+	description: "Play some chess",
+	type: ApplicationCommandOptionTypes.SubCommand
+    }, {
+	name: "hangman",
+	description: "Play some hangman",
+	type: ApplicationCommandOptionTypes.SubCommand
+    }, {
+	name: "test",
+	description: "Just a test command for now",
+	type: ApplicationCommandOptionTypes.SubCommand
     }],
     type: "slash",
     actions: [
 	function (bot, interaction) {
 	    ackInteraction(interaction);
-	    sendMessage(bot, interaction.channelId, {content: interaction})
+	    sendMessage(bot, interaction.channelId, {content: `${interaction}`})
 	}
     ]
 })
