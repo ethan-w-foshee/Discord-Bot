@@ -71,7 +71,7 @@ function logGet(bot, interaction) {
 	ackInteraction(interaction, "deferred");
     }else {
 	ackInteraction(interaction, "thinking");
-	id = options.filter(
+	id = options?.filter(
 	    (option) => option.name == "ID"
 	)[0]?.value;
     }
