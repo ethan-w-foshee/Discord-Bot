@@ -13,8 +13,6 @@ permissions:
 jobs:
   test:
     runs-on: self-hosted
-    env:
-      tag: ${{fromJSON('["latest","dev"]')[github.ref == 'refs/heads/dev']}}
     steps:
       - name: Setup repo
         uses: actions/checkout@v3
