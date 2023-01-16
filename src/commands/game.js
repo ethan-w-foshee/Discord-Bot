@@ -58,11 +58,16 @@ function chess(bot, interaction) {
 	ackInteraction(interaction)	
 	const chessOptions = data.options.filter(
 	    (option) => option.name.includes("chess")
-	)
-	
-	bot.logger.debug(`Creating chess game with options:\n${JSON.stringify(chessOptions[0].options)}`)
+	)[0].options
 
-	const player1 = interaction.member.id
+	const challenge = chessOptions.filter(
+	    (option) => option.name == "user"
+	)[0].value
+	
+	bot.logger.debug(`Creating chess game with options:\n${JSON.stringify(chessOptions)}`)
+
+	const player1 = "<@" + interaction.member.id + ">"
+	const player2 = challenge ? "<@" + challenge + ">" : "bot"
 	
 	editOriginalInteractionResponse(
 	    bot,
@@ -74,11 +79,11 @@ function chess(bot, interaction) {
 		    color: 0xffffff,
 		    fields: [{
 			name: "Player 1",
-			value: "<@" + player1 + ">",
+			value: player1,
 			inline: true
 		    }, {
 			name: "Player 2",
-			value: "Nobody yet",
+			value: player2,
 			inline: true
 		    }, {
 			name: "Board",
