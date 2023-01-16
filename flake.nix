@@ -41,6 +41,9 @@
       };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3573660 (Workflow all runs in container now.)
       lints = pkgs.writeShellApplication {
         name = "lints";
         runtimeInputs = deps;
@@ -49,13 +52,17 @@
         '';
       };
 
+<<<<<<< HEAD
 =======
 >>>>>>> 1c9a358 (Fix add tests to Container)
+=======
+>>>>>>> 3573660 (Workflow all runs in container now.)
       mkImage = (tag: pkgs.dockerTools.buildImage {
         name = "starbot";
         tag = "${tag}";
         copyToRoot = pkgs.buildEnv {
           name = "starbot-root";
+<<<<<<< HEAD
 <<<<<<< HEAD
           paths = [
             starBot
@@ -66,12 +73,16 @@
 =======
           paths = [ starBot tests pkgs.bashInteractive ];
 >>>>>>> 1c9a358 (Fix add tests to Container)
+=======
+          paths = [ starBot tests lints pkgs.bashInteractive ];
+>>>>>>> 3573660 (Workflow all runs in container now.)
           pathsToLink = [
             "/bin"
           ];
         };
       });
       
+<<<<<<< HEAD
 <<<<<<< HEAD
     in {      
 =======
@@ -87,6 +98,9 @@
       };
       
 >>>>>>> 1c9a358 (Fix add tests to Container)
+=======
+    in {      
+>>>>>>> 3573660 (Workflow all runs in container now.)
       packages.StarBot = mkImage "latest";
 
       packages.StarBot-Test = mkImage "dev";
