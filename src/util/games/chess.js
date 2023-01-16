@@ -107,10 +107,10 @@ async function componentHandler(interaction) {
 	embed.color = 0xff444444
 	embed.timestamp = new Date(Date.now()).toISOString()
 
-	ackInteraction(interaction, "update", {}, {
+	console.log(await ackInteraction(interaction, "update", {}, {
 	    embeds: [embed],
 	    components: [],
-	})
+	}))
 
 	libchess.close(gameId)
 
