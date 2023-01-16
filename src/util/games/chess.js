@@ -147,8 +147,7 @@ async function updateEmbed(bot, interaction, gameId) {
 		    style: ButtonStyles.Primary,
 		    label: "Play!"
 		}]
-	    }],
-	    flags: ApplicationCommandFlags.Ephemeral
+	    }]
 	}
     )
 }
