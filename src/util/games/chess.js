@@ -64,7 +64,7 @@ async function componentHandler(bot, interaction) {
 
 	const callerId = interaction.member.id
 
-	if (checkMyTurn(gameId, callerId)) {
+	if (await checkMyTurn(gameId, callerId)) {
 	    ackInteraction(interaction, "modal", {}, {
 		customId: "game_chess_play_modal",
 		title: "Enter your move",
@@ -186,10 +186,6 @@ async function checkMyTurn(gameId, userId) {
 
     bot.logger.debug(`White is: ${whitePlayer}\nBlack is: ${blackPlayer}\nCurrent move is: ${color}\nCaller ID is: ${userId}`)
     
-    if (color == "Black" && (blackPlayer == userId) ||
-	color == "White" && (whitePlayer == userId)) {
-	return true
-    } else {
-	return false
-    }
+    return (color == "Black" && (blackPlayer == userId) ||
+	    color == "White" && (whitePlayer == userId))
 }
