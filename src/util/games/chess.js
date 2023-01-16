@@ -149,19 +149,22 @@ async function createMatch(interaction) {
     const player1 = interaction.member.id
     const player2 = challenge.length > 0 ? challenge[0].value : "computer"
 
-    const flags = ((player1 == player2) || player2 == "computer") ? {ephemeral: true} : {}
+    const isComputer = player2 == "computer";
+    const isSelf = player1 == player2;
+    
+    const flags = (isSelf || isComputer) ? {ephemeral: true} : {}
 
     ackInteraction(interaction, "thinking", flags)
 
     const gameId = player1 + "v" + player2
 
     if (!(libchess.exists(gameId))) {
-	if (player2 != "computer" && player1 != player2) {
+	if ( !(isComputer && isSelf) ) {
 	    sendMessage(bot, interaction.channelId, {
 		content: `<@${player2}>! You have been challenged to a chess match by <@${player1}>`
 	    })	
 	}	
-	await libchess.make(gameId)
+	await libchess.make(gameId, isComputer)
     }
 
     updateEmbed(interaction, gameId)
