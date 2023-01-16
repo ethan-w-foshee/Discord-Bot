@@ -4,6 +4,7 @@ import {
     ButtonStyles,
     editOriginalInteractionResponse,
     sendMessage,
+    deleteMessage,
 } from "../../../deps.js";
 import ackInteraction from "../ackInteraction.js";
 import * as libchess from "../../lib/chess/chess.js";
@@ -44,12 +45,12 @@ export default function chess(bot, interaction) {
 async function componentHandler(bot, interaction) {
     const component = interaction.data
 
-    const gameId = interaction.message.embeds[0].fields[0].value +
-	  "v" +
-	  interaction.message.embeds[0].fields[1].value
+    const gameId = (interaction.message.embeds[0].fields[0].value +
+		    "v" +
+		    interaction.message.embeds[0].fields[1].value).replaceAll(/[<@>]/g, "").toLowerCase()
 
     if (!(await libchess.exists(gameId))) {
-	console.log(interaction)	
+	deleteMessage(bot, interaction.message.channelId, interaction.message.id)
 	ackInteraction(interaction, "message", {ephemeral: true}, {
 	    content: "This game does not exist anymore, sorry!"
 	})
