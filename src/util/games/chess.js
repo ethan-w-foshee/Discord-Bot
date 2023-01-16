@@ -46,9 +46,17 @@ export default function chess(bot, interaction) {
 async function componentHandler(interaction) {
     const component = interaction.data
 
-    const gameId = (interaction.message.embeds[0].fields[0].value +
-		    "v" +
-		    interaction.message.embeds[0].fields[1].value).replaceAll(/[<@>]/g, "").toLowerCase()
+    try {
+	const gameId = (interaction.message.embeds[0].fields[0].value +
+			"v" +
+			interaction.message.embeds[0].fields[1].value).replaceAll(/[<@>]/g, "").toLowerCase()
+    } catch (error) {
+	const data = {
+	    content: "Something went wrong when getting the game ID"
+	}
+	ackInteraction(interaction, "message", {}, data)
+	return
+    }
 
     if (!(await libchess.exists(gameId))) {
 	deleteMessage(bot, interaction.message.channelId, interaction.message.id)
