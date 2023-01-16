@@ -7,7 +7,7 @@ const dec = new TextDecoder();
 const enc = new TextEncoder();
 
 export async function make(name, computer, lvl) {
-    let cmd = ["gnuchess","-q","-g"];
+    const cmd = ["gnuchess","-q","-g"];
     if (!computer)
 	cmd.push("-m");
     games[name] = Deno.run({
@@ -17,7 +17,7 @@ export async function make(name, computer, lvl) {
 	stdin: "piped"
     });
     await waitOut(name);
-    let level = lvl?lvl:0;
+    const level = lvl?lvl:0;
     await input(name, `depth ${level}`);
     await input(name, "coords");
 }
