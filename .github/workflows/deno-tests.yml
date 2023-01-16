@@ -27,7 +27,6 @@ jobs:
       - name: Build Container
         if: steps.image-cache.outputs.cache-hit != 'true'
         run: |
-          echo $tag
           podman run --rm -v ./:/wd:Z -w /wd docker.io/nixos/nix sh -c 'nix \
             --extra-experimental-features nix-command \
             --extra-experimental-features flakes \
