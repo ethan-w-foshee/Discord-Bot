@@ -139,7 +139,7 @@ function createMatch(bot, interaction) {
     const player1 = "<@" + interaction.member.id + ">"
     const player2 = challenge.length > 0 ? "<@" + challenge[0].value + ">" : "Bot"
 
-    games.append(new ChessGame(bot, interaction.token, player1, player2))
+    games.push(new ChessGame(bot, interaction.token, player1, player2))
     
     if (player2 != "Bot") {
 	sendMessage(bot, interaction.channelId, {
