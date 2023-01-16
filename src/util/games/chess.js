@@ -8,66 +8,6 @@ import {
 import ackInteraction from "../ackInteraction.js";
 import * as libchess from "../../lib/chess/chess.js";
 
-const turns = {
-    white: 0,
-    black: 1,
-}
-
-class ChessGame {
-    constructor(bot, id, player1, player2) {
-	libchess.make("asdf")
-
-	this.bot = bot
-	this.id = id
-	this.player1 = player1
-	this.player2 = player2
-	this.turn = turns.white
-	this.board = "Loading..."
-    }
-
-    async update() {
-	this.board = await libchess.board("asdf")
-	console.log(this.board)
-	console.log(typeof(this.board))
-	editOriginalInteractionResponse(
-	    this.bot,
-	    this.id,
-	    {
-		embeds: [{
-		    title: "Chess match",
-		    timestamp: new Date(Date.now()).toISOString(),
-		    color: this.turn == turns.white ? 0xffffff : 0x000000,
-		    fields: [{
-			name: "White",
-			value: this.player1,
-			inline: true,
-		    }, {
-			name: "Black",
-			value: this.player2,
-			inline: true,
-		    }, {
-			name: "Turn",
-			value: this.turn == turns.white ? "White" : "Black",
-		    }, {
-			name: "Board",
-			value: this.board,
-		    }]
-		}],
-		components: [{
-		    type: MessageComponentTypes.ActionRow,
-		    components: [{
-			type: MessageComponentTypes.Button,
-			customId: "game_chess_play_button",
-			style: ButtonStyles.Primary,
-			label: "Play!"
-		    }]
-		}],
-	    }
-	)
-    }
-}
-const games = []
-
 export default function chess(bot, interaction) {
     const data = interaction.data
     const types = {
@@ -104,26 +44,37 @@ export default function chess(bot, interaction) {
 function componentHandler(bot, interaction) {
     const component = interaction.data
     switch(component.customId) {
-    case "game_chess_play_button":
+    case "game_chess_play_button": {
 	bot.logger.debug("Player pressed play on a chess match")
-	ackInteraction(interaction, "modal", {}, {
-	    customId: "game_chess_play_modal",
-	    title: "Enter your move",
-	    components: [{
-		type: MessageComponentTypes.ActionRow,
+
+	const callerId = interaction.member.id
+	
+	const isParticipant = (interaction.embeds[0].fields[0].value.contains(callerId)) || (interaction.embeds[0].fields[1].value.contaienrs(callerId))
+
+	if (isParticipant) {    
+	    ackInteraction(interaction, "modal", {}, {
+		customId: "game_chess_play_modal",
+		title: "Enter your move",
 		components: [{
-		    type: MessageComponentTypes.InputText,
-		    customId: "game_chess_play_textin",
-		    style: TextStyles.Short,
-		    label: "Input string"
+		    type: MessageComponentTypes.ActionRow,
+		    components: [{
+			type: MessageComponentTypes.InputText,
+			customId: "game_chess_play_textin",
+			style: TextStyles.Short,
+			label: "Input string"
+		    }]
 		}]
-	    }]
-	})
+	    })
+	} else {
+	    ackInteraction(interaction, "message", {ephemeral: true}, {
+		content: "You are not a player in this game"
+	    })
+	}
 	break
-    case "game_chess_play_modal":
-	console.log(interaction)
+    } case "game_chess_play_modal": {
 	bot.logger.debug(`Received chess modal submission with value:\n${JSON.stringify(component.components[0].components[0])}`)
 	ackInteraction(interaction, "message", {ephemeral: true}, {content: "thanks for presing the button"})
+    }
     }
 }
 
@@ -139,53 +90,65 @@ function createMatch(bot, interaction) {
     
     bot.logger.debug(`Creating chess game with options:\n${JSON.stringify(chessOptions)}`)
 
-    const player1 = "<@" + interaction.member.id + ">"
-    const player2 = challenge.length > 0 ? "<@" + challenge[0].value + ">" : "Bot"
+    const player1 = interaction.member.id
+    const player2 = challenge.length > 0 ? challenge[0].value : "computer"
 
-    const thisGame = new ChessGame(bot, interaction.token, player1, player2)
+    const gameId = player1 + "v" + player2
 
-    thisGame.update()
-    games.push(thisGame)
-    
-    if (player2 != "Bot") {
-	sendMessage(bot, interaction.channelId, {
-	    content: `${player2}! You have been challenged to a chess match by ${player1}`
-	})
+    if (!(libchess.exists(gameId))) {
+	libchess.make(gameId)
+	if (player2 != "Bot") {
+	    sendMessage(bot, interaction.channelId, {
+		content: `${player2}! You have been challenged to a chess match by ${player1}`
+	    })	
+	}
     }
+
+    updateEmbed(bot, interaction, gameId)
 }
 
-// function editEmbed(player1, player2, turn, board) {
-//     const color = turn == turns.white ? 0xffffff : 0x000000
-//     return {
-// 	embeds: [{
-// 	    title: "Chess match",
-// 	    timestamp: new Date(Date.now()).toISOString(),
-// 	    color: color,
-// 	    fields: [{
-// 		name: "White",
-// 		value: player1,
-// 		inline: true,
-// 	    }, {
-// 		name: "Black",
-// 		value: player2,
-// 		inline: true,
-// 	    }, {
-// 		name: "Turn",
-// 		value: turn == turns.white ? "White" : "Black",
-// 	    }, {
-// 		name: "Board",
-// 		value: board,
-// 	    }]
-// 	}],
-// 	components: [{
-// 	    type: MessageComponentTypes.ActionRow,
-// 	    components: [{
-// 		type: MessageComponentTypes.Button,
-// 		customId: "game_chess_play_button",
-// 		style: ButtonStyles.Primary,
-// 		label: "Play!"
-// 	    }]
-// 	}],
-// 	flags: ApplicationCommandFlags.Ephemeral
-//     }
-// }
+async function updateEmbed(bot, interaction, gameId) {
+    const color = await libchess.color(gameId) 
+    const turnNum = await libchess.turn(gameId)
+    const board = await libchess.board(gameId)
+    const players = gameId.split("v")
+    const playerTag1 = `<@${players[0]}>`
+    const playerTag2 = players[1] == "computer" ? "Computer" : `<@${players[1]}>`
+
+    editOriginalInteractionResponse(
+	bot,
+	interaction.token,
+	{
+	    embeds: [{
+		title: "Chess match",
+		timestamp: new Date(Date.now()).toISOString(),
+		color: color == "White" ? 0xffffff : 0x000000,
+		fields: [{
+		    name: "White",
+		    value: playerTag1,
+		    inline: true,
+		}, {
+		    name: "Black",
+		    value: playerTag2,
+		    inline: true,
+		}, {
+		    name: "Turn",
+		    value: `${turnNum} (${color})`,
+		}, {
+		    name: "Board",
+		    value: board,
+		}]
+	    }],
+	    components: [{
+		type: MessageComponentTypes.ActionRow,
+		components: [{
+		    type: MessageComponentTypes.Button,
+		    customId: "game_chess_play_button",
+		    style: ButtonStyles.Primary,
+		    label: "Play!"
+		}]
+	    }],
+	    flags: ApplicationCommandFlags.Ephemeral
+	}
+    )
+}
