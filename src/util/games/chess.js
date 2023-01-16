@@ -47,6 +47,14 @@ async function componentHandler(bot, interaction) {
     const gameId = interaction.message.embeds[0].fields[0].value +
 	  "v" +
 	  interaction.message.embeds[0].fields[1].value
+
+    if (!(await libchess.exists(gameId))) {
+	console.log(interaction)	
+	ackInteraction(interaction, "message", {ephemeral: true}, {
+	    content: "This game does not exist anymore, sorry!"
+	})
+	return
+    }
     
     switch(component.customId) {	
     case "game_chess_play_button": {
