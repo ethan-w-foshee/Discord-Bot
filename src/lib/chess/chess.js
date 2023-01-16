@@ -6,15 +6,19 @@ const bufSize = 5000;
 const dec = new TextDecoder();
 const enc = new TextEncoder();
 
-export async function make(name) {
+export async function make(name, computer, lvl) {
+    let cmd = ["gnuchess","-q","-g"];
+    if (!computer)
+	cmd.push("-m");
     games[name] = Deno.run({
-	    cmd: ["gnuchess","-q","-g","-m"],
-	    stderr: "piped",
-	    stdout: "piped",
-	    stdin: "piped"
+	cmd,
+	stderr: "piped",
+	stdout: "piped",
+	stdin: "piped"
     });
     await waitOut(name);
-    await input(name, "depth 0");
+    let level = lvl?lvl:0;
+    await input(name, `depth ${level}`);
     await input(name, "coords");
 }
 
