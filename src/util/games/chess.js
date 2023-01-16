@@ -78,7 +78,7 @@ function componentHandler(bot, interaction) {
     }
 }
 
-function createMatch(bot, interaction) {
+async function createMatch(bot, interaction) {
     ackInteraction(interaction)
     const chessOptions = interaction.data.options.filter(
 	(option) => option.name.includes("chess")
@@ -96,19 +96,19 @@ function createMatch(bot, interaction) {
     const gameId = player1 + "v" + player2
 
     if (!(libchess.exists(gameId))) {
-	libchess.make(gameId)
-	if (player2 != "Bot") {
+	if (player2 != "computer") {
 	    sendMessage(bot, interaction.channelId, {
-		content: `${player2}! You have been challenged to a chess match by ${player1}`
+		content: `<@${player2}>! You have been challenged to a chess match by <@${player1}>`
 	    })	
-	}
+	}	
+	await libchess.make(gameId)
     }
 
     updateEmbed(bot, interaction, gameId)
 }
 
 async function updateEmbed(bot, interaction, gameId) {
-    const color = await libchess.color(gameId) 
+    const color = await libchess.color(gameId)
     const turnNum = await libchess.turn(gameId)
     const board = await libchess.board(gameId)
     const players = gameId.split("v")
