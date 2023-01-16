@@ -25,6 +25,10 @@ export async function close(name) {
     delete games[name];
 }
 
+export function exists(name) {
+    return name in games;
+}
+
 function isInputLine(buf) {
     const lines = dec.decode(buf).split('\n');
     const last = lines[lines.length-1];
