@@ -109,6 +109,8 @@ async function componentHandler(interaction) {
 	
 	libchess.close(gameId)
 
+	console.log(embed)
+	
 	ackInteraction(interaction, "update", {}, {
 	    embeds: [embed]
 	})
