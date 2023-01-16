@@ -18,7 +18,6 @@ function chess(bot, interaction) {
     }
     let type
 
-    console.log(interaction)
     /* Determine if the game interaction is for chess */
     if (data.customId?.includes("chess")) {
 	type = types.component
@@ -36,7 +35,6 @@ function chess(bot, interaction) {
     if (type == types.component) {
 	switch(data.customId) {
 	case "game_chess_play_button":
-	    bot.logger.debug("HE PRESSED THE BUTTON")
 	    ackInteraction(interaction, "modal", {}, {
 		customId: "game_chess_play_modal",
 		title: "Enter your move",
@@ -52,7 +50,7 @@ function chess(bot, interaction) {
 	    })
 	    break
 	case "game_chess_play_modal":
-	    bot.logger.debug(`Received modal submission with value:\n${JSON.stringify(interaction.data.components[0].components[0])}`)
+	    bot.logger.debug(`Received chess modal submission with value:\n${JSON.stringify(interaction.data.components[0].components[0])}`)
 	}
     }
 
@@ -62,8 +60,10 @@ function chess(bot, interaction) {
 	    (option) => option.name.includes("chess")
 	)
 	
-	bot.logger.debug(`Creating chess game with options:\n${chessOptions[0].options}`)
-    
+	bot.logger.debug(`Creating chess game with options:\n${JSON.stringify(chessOptions[0].options)}`)
+
+	const player1 = interaction.member.id.slice(0,-1)
+	
 	editOriginalInteractionResponse(
 	    bot,
 	    interaction.token,
@@ -74,7 +74,7 @@ function chess(bot, interaction) {
 		    color: 0xffffff,
 		    fields: [{
 			name: "Player 1",
-			value: "Nobody yet",
+			value: "<@" + player1 + ">",
 			inline: true
 		    }, {
 			name: "Player 2",
