@@ -2,7 +2,7 @@ import {
     ApplicationCommandOptionTypes,
     MessageComponentTypes,
     ButtonStyles,
-//    TextStyles,
+    TextStyles,
     editOriginalInteractionResponse,
 } from "../../deps.js";
 import { bot } from "../../bot.js";
@@ -13,13 +13,13 @@ import ackInteraction from "../util/ackInteraction.js";
 function chess(bot, interaction) {
     const data = interaction.data
     const types = {
-	button: 1,
+	component: 1,
 	subcommand: 2
     }
     let type
     /* Determine if the game interaction is for chess */
     if (data.customId?.includes("chess")) {
-	type = types.button
+	type = types.component
     } else if (data.options) {
 	if (data.options.filter((option) =>
 	    option.name.includes("chess")
@@ -30,16 +30,29 @@ function chess(bot, interaction) {
 	/* Exit if not */
 	return
     }
-    
-    bot.logger.debug(`${interaction}`);
 
-    ackInteraction(interaction)
+    //ackInteraction(interaction)
 
-    if (type == types.button) {
+    if (type == types.component) {
 	switch(data.customId) {
 	case "game_chess_play_button":
 	    bot.logger.debug("HE PRESSED THE BUTTON")
+	    ackInteraction(interaction, "modal", {}, {
+		customId: "game_chess_play_modal",
+		title: "Enter your move",
+		components: [{
+		    type: MessageComponentTypes.ActionRow,
+		    components: [{
+			type: MessageComponentTypes.InputText,
+			customId: "game_chess_play_textin",
+			style: TextStyles.Short,
+			label: "Input string"
+		    }]
+		}]
+	    })
 	    break
+	case "game_chess_play_textin":
+	    console.log(`${interaction}`)
 	}
     }
 
