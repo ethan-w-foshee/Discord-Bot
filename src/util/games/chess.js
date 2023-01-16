@@ -87,6 +87,7 @@ async function componentHandler(interaction) {
     } case "game_chess_refresh_button": {
 	bot.logger.debug(`Refreshing board for game ${gameId}`)
 
+	ackInteraction(interaction, "deferred")	
 	updateEmbed(interaction, gameId)
 	break
     } case "game_chess_play_modal": {
