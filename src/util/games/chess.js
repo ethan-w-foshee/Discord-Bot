@@ -22,14 +22,11 @@ class ChessGame {
 	this.player1 = player1
 	this.player2 = player2
 	this.turn = turns.white
-
-	libchess.board(id).then((result) => {
-	    this.board = result
-	    this.update()
-	})
+	this.board = "Loading..."
     }
 
-    update() {
+    async update() {
+	this.board = await libchess.board(this.id)
 	console.log(this.board)
 	console.log(typeof(this.board))
 	editOriginalInteractionResponse(
@@ -143,7 +140,10 @@ function createMatch(bot, interaction) {
     const player1 = "<@" + interaction.member.id + ">"
     const player2 = challenge.length > 0 ? "<@" + challenge[0].value + ">" : "Bot"
 
-    games.push(new ChessGame(bot, interaction.token, player1, player2))
+    const thisGame = new ChessGame(bot, interaction.token, player1, player2)
+
+    thisGame.update()
+    games.push(thisGame)
     
     if (player2 != "Bot") {
 	sendMessage(bot, interaction.channelId, {
