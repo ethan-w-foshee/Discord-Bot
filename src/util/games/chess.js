@@ -45,12 +45,13 @@ export default function chess(bot, interaction) {
 
 async function componentHandler(interaction) {
     const component = interaction.data
+    let gameId
 
     try {
-	const gameId = (interaction.message.embeds[0].fields[0].value +
+	gameId = (interaction.message.embeds[0].fields[0].value +
 			"v" +
 			interaction.message.embeds[0].fields[1].value).replaceAll(/[<@>]/g, "").toLowerCase()
-    } catch (error) {
+    } catch {
 	const data = {
 	    content: "Something went wrong when getting the game ID"
 	}
