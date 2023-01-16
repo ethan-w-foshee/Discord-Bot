@@ -14,6 +14,7 @@ export async function make(name) {
 	    stdin: "piped"
     });
     await waitOut(name);
+    await input(name, "depth 0");
 }
 
 export async function close(name) {
