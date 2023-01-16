@@ -17,6 +17,8 @@ function chess(bot, interaction) {
 	subcommand: 2
     }
     let type
+
+    console.log(interaction)
     /* Determine if the game interaction is for chess */
     if (data.customId?.includes("chess")) {
 	type = types.component
