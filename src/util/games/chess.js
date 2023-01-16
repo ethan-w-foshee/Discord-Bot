@@ -35,15 +35,15 @@ export default function chess(bot, interaction) {
     bot.logger.debug("Running a chess command")
     
     if (type == types.component) {
-	componentHandler(bot, interaction)
+	componentHandler(interaction)
     }
 
     if (type == types.subcommand) {
-	createMatch(bot, interaction)
+	createMatch(interaction)
     }
 }
 
-async function componentHandler(bot, interaction) {
+async function componentHandler(interaction) {
     const component = interaction.data
 
     const gameId = (interaction.message.embeds[0].fields[0].value +
@@ -58,7 +58,7 @@ async function componentHandler(bot, interaction) {
 	return
     }
     
-    switch(component.customId) {	
+    switch(component.customId) {
     case "game_chess_play_button": {
 	bot.logger.debug("Player pressed play on a chess match")
 
@@ -92,17 +92,31 @@ async function componentHandler(bot, interaction) {
 
 	if (isValid) {
 	    ackInteraction(interaction, "deferred")
-	    updateEmbed(bot, interaction, gameId)
+	    updateEmbed(interaction, gameId)
 	} else {
 	    ackInteraction(interaction, "message", {ephemeral: true}, {
 		content: "That's an invalid move! Try again!\n\nFor help on using Algebreic notation, see here: https://www.chess.com/terms/chess-notation"
 	    })
 	}
-    }
-    }
+	break
+    } case "game_chess_endgame_button": {
+	bot.logger.debug(`Player is ending chess game ${gameId}`)
+
+	const embed = interaction.message.embeds[0]
+	embed.title = "Chess Match (Ended)"
+	embed.color = 0xff444444
+	embed.timestamp = new Date(Date.now()).toISOString()
+	
+	libchess.close(gameId)
+
+	ackInteraction(interaction, "update", {}, {
+	    embeds: [embed]
+	})
+	break
+    }}
 }
 
-async function createMatch(bot, interaction) {
+async function createMatch(interaction) {
     ackInteraction(interaction)
     const chessOptions = interaction.data.options.filter(
 	(option) => option.name.includes("chess")
@@ -128,10 +142,10 @@ async function createMatch(bot, interaction) {
 	await libchess.make(gameId)
     }
 
-    updateEmbed(bot, interaction, gameId)
+    updateEmbed(interaction, gameId)
 }
 
-async function updateEmbed(bot, interaction, gameId) {
+async function updateEmbed(interaction, gameId) {
     const color = await libchess.color(gameId)
     const turnNum = await libchess.turn(gameId)
     const board = await libchess.board(gameId)
@@ -173,7 +187,12 @@ ${coloredBoard}
 		    type: MessageComponentTypes.Button,
 		    customId: "game_chess_play_button",
 		    style: ButtonStyles.Primary,
-		    label: "Play!"
+		    label: "Play!",
+		},{
+		    type: MessageComponentTypes.Button,
+		    customId: "game_chess_endgame_button",
+		    style: Button.Danger,
+		    label: "End game",
 		}]
 	    }]
 	}
@@ -184,8 +203,6 @@ async function checkMyTurn(gameId, userId) {
     const whitePlayer = gameId.split("v")[0]
     const blackPlayer = gameId.split("v")[1]
     const color = await libchess.color(gameId)
-
-    bot.logger.debug(`White is: ${whitePlayer}\nBlack is: ${blackPlayer}\nCurrent move is: ${color}\nCaller ID is: ${userId}`)
     
     return (color == "Black" && (blackPlayer == userId) ||
 	    color == "White" && (whitePlayer == userId))
