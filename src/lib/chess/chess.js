@@ -22,19 +22,7 @@ export async function close(name) {
     await p.stdin.close();
     await p.stderr.close();
     await p.close();
-}
-
-async function input(name,txt) {
-    const game = games[name];
-    await game.stdin.write(enc.encode(`${txt}\n`));
-    return await waitOut(name);
-}
-
-export async function board(name) {
-    const output = await input(name,"show board");
-    const lines = output.split('\n');
-    const len = lines.length;
-    return lines.splice(len-10,len-4).join('\n');
+    delete games[name];
 }
 
 function isInputLine(buf) {
@@ -58,13 +46,45 @@ async function waitOut(name) {
     return txt;
 }
 
+async function input(name,txt) {
+    const game = games[name];
+    await game.stdin.write(enc.encode(`${txt}\n`));
+    return await waitOut(name);
+}
+
 export async function play(name, move) {
     const output = await input(name,move);
+    return output;
+}
+
+export async function state(name) {
+    const output = await input(name,"show board");
+    return output;
+}
+
+export async function board(name) {
+    const output = await state(name);
     const lines = output.split('\n');
     const len = lines.length;
-    return lines.slice(0,len-1).join('\n');
+    return lines.splice(len-10,len-4).join('\n');
+}
+
+export async function turn(name) {
+    const state = await input(name);
+    const match = state.match(/^(?:White|Black) \(([\d]+)\)/m);
+    if (match?.length==2)
+	return parseInt(match[1]);
+    return undefined;
+}
+
+export async function color(name) {
+    const state = await input(name);
+    const match = state.match(/^(White|Black)/m);
+    if (match?.length==2)
+	return match[1];
+    return undefined;
 }
 
 export function valid(res) {
-    return res.match(/invalid/i) == null
+    return res.match(/invalid/i) == null;
 }
