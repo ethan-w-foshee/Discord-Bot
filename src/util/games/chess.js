@@ -106,14 +106,14 @@ async function componentHandler(interaction) {
 	embed.title = "Chess Match (Ended)"
 	embed.color = 0xff444444
 	embed.timestamp = new Date(Date.now()).toISOString()
-	
+
+	ackInteraction(interaction, "update", {}, {
+	    embeds: [embed],
+	    components: [],
+	})
+
 	libchess.close(gameId)
 
-	console.log(embed)
-	
-	ackInteraction(interaction, "update", {}, {
-	    embeds: [embed]
-	})
 	break
     }}
 }
