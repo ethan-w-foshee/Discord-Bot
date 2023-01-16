@@ -11,19 +11,40 @@ import { addBotCommand } from "../lib/commands.js";
 import ackInteraction from "../util/ackInteraction.js";
 
 function chess(bot, interaction) {
+    const data = interaction.data
+    const types {
+	button: 1,
+	subcommand: 2
+    }
+    let type
     /* Determine if the game interaction is for chess */
-    const chessOptions = interaction.data.options?.filter(
-	(option) => option.name.includes("chess")
-    )
+    if (data.customId?.includes("chess")) {
+	type = types.button
+    } else if (data.options) {
+	const chessOptions = data.options?.filter(
+	    (option) => option.name.includes("chess")
+	)
+	if (chessOptions.length > 0) {
+	    type = types.subcommand
+	}
+    } else {
+	/* Exit if not */
+	return
+    }
     
-    if (chessOptions?.length == 0 && !interaction.data.name.includes("chess"))
-	return /* Exit if not */
-
     console.log(interaction);
 
     ackInteraction(interaction)
 
-    if (chessOptions[0].name == "chess") {
+    if (type == types.button) {
+	switch(data.name) {
+	case "game_chess_play_button":
+	    console.log("HE PRESSED THE BUTTON")
+	    break
+	}
+    }
+
+    if (type == types.subcommand) {
 	console.log(`Creating chess game with options:\n${chessOptions[0].options}`)
     
 	editOriginalInteractionResponse(
