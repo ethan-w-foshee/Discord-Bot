@@ -62,7 +62,7 @@ function chess(bot, interaction) {
 	
 	bot.logger.debug(`Creating chess game with options:\n${JSON.stringify(chessOptions[0].options)}`)
 
-	bot.logger.debug(`DEBUGGING: ${JSON.stringify(interaction)}`)
+	console.log(interaction)
 	const player1 = interaction.member.id.slice(0,-1)
 	
 	editOriginalInteractionResponse(
