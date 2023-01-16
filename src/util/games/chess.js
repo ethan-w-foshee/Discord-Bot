@@ -41,15 +41,13 @@ export default function chess(bot, interaction) {
     }
 }
 
-function componentHandler(bot, interaction) {
+async function componentHandler(bot, interaction) {
     const component = interaction.data
     switch(component.customId) {
     case "game_chess_play_button": {
 	bot.logger.debug("Player pressed play on a chess match")
 
 	const callerId = interaction.member.id
-
-	console.log(interaction.message.embeds[0])
 	
 	const isParticipant = (interaction.message.embeds[0].fields[0].value.includes(callerId)) || (interaction.message.embeds[0].fields[1].value.includes(callerId))
 
@@ -74,7 +72,20 @@ function componentHandler(bot, interaction) {
 	}
 	break
     } case "game_chess_play_modal": {
-	bot.logger.debug(`Received chess modal submission with value:\n${JSON.stringify(component.components[0].components[0])}`)
+	const playValue = component.components[0].components[0].value
+	bot.logger.debug(`Received chess modal submission with value:\n${playValue}`)
+
+	const gameId = interaction.message.embeds[0].footer.text
+
+	const isValid = libchess.valid(await libchess.play(gameId, playValue))
+
+	if (isValid) {
+	    updateEmbed(bot, interaction, gameId)
+	} else {
+	    ackInteraction(interaction, "message", {ephemeral: true}, {
+		content: "That's an invalid move! Try again!\n\nFor help on using Algebreic notation, see here: https://www.chess.com/terms/chess-notation"
+	    })
+	}
 	ackInteraction(interaction, "message", {ephemeral: true}, {content: "thanks for presing the button"})
     }
     }
@@ -127,6 +138,9 @@ async function updateEmbed(bot, interaction, gameId) {
 		title: "Chess match",
 		timestamp: new Date(Date.now()).toISOString(),
 		color: color == "White" ? 0xffffff : 0x000000,
+		footer: {
+		    text: gameId
+		},
 		fields: [{
 		    name: "White",
 		    value: playerTag1,
