@@ -16,7 +16,7 @@ function chess(bot, interaction) {
 	(option) => option.name.includes("chess")
     )
     
-    if (chessOptions.length == 0 && !interaction.data.name.includes("chess"))
+    if (chessOptions?.length == 0 && !interaction.data.name.includes("chess"))
 	return /* Exit if not */
 
     console.log(interaction);
