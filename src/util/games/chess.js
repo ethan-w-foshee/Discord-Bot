@@ -191,7 +191,7 @@ ${coloredBoard}
 		},{
 		    type: MessageComponentTypes.Button,
 		    customId: "game_chess_endgame_button",
-		    style: Button.Danger,
+		    style: ButtonStyles.Danger,
 		    label: "End game",
 		}]
 	    }]
