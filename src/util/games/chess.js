@@ -48,10 +48,8 @@ function componentHandler(bot, interaction) {
 	bot.logger.debug("Player pressed play on a chess match")
 
 	const callerId = interaction.member.id
-	console.log(callerId)
-	console.log(interaction)
 	
-	const isParticipant = (interaction.embeds[0].fields[0].value.contains(callerId)) || (interaction.embeds[0].fields[1].value.contains(callerId))
+	const isParticipant = (interaction.message.embeds[0].fields[0].value.contains(callerId)) || (interaction.message.embeds[0].fields[1].value.contains(callerId))
 
 	if (isParticipant) {    
 	    ackInteraction(interaction, "modal", {}, {
