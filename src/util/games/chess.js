@@ -21,10 +21,12 @@ class ChessGame {
 	this.id = id
 	this.player1 = player1
 	this.player2 = player2
-	libchess.board(id).then((result) => this.board = result)
 	this.turn = turns.white
 
-	this.update()
+	libchess.board(id).then((result) =>
+	    this.board = result
+	    this.update()
+	)
     }
 
     update() {
