@@ -182,6 +182,8 @@ async function checkMyTurn(gameId, userId) {
     const whitePlayer = gameId.split("v")[0]
     const blackPlayer = gameId.split("v")[1]
     const color = await libchess.color(gameId)
+
+    bot.logger.debug(`White is: ${whitePlayer}\nBlack is: ${blackPlayer}\nCurrent move is: ${color}\nCaller ID is: ${userId}`)
     
     if (color == "Black" && (blackPlayer == userId) ||
 	color == "White" && (whitePlayer == userId)) {
