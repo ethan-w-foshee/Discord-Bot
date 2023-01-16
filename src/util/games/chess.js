@@ -147,7 +147,7 @@ async function createMatch(interaction) {
     const gameId = player1 + "v" + player2
 
     if (!(libchess.exists(gameId))) {
-	if (player2 != "computer") {
+	if (player2 != "computer" && player1 != player2) {
 	    sendMessage(bot, interaction.channelId, {
 		content: `<@${player2}>! You have been challenged to a chess match by <@${player1}>`
 	    })	
