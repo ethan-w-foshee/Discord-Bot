@@ -91,6 +91,7 @@ async function componentHandler(bot, interaction) {
 	const isValid = libchess.valid(await libchess.play(gameId, playValue))
 
 	if (isValid) {
+	    ackInteraction(interaction)
 	    updateEmbed(bot, interaction, gameId)
 	} else {
 	    ackInteraction(interaction, "message", {ephemeral: true}, {
