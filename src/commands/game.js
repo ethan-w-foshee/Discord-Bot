@@ -104,7 +104,13 @@ addBotCommand(bot, {
     options: [{
 	name: "chess",
 	description: "Play some chess",
-	type: ApplicationCommandOptionTypes.SubCommand
+	type: ApplicationCommandOptionTypes.SubCommand,
+	options: [{
+	    name: "user",	    
+	    type: ApplicationCommandOptionTypes.User,
+	    description: "The user you want to challenge to Chess. Leave empty to play the bot",
+	    required: false
+	}]
     }, {
 	name: "hangman",
 	description: "Play some hangman",
