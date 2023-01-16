@@ -4,7 +4,6 @@ import {
     ButtonStyles,
     TextStyles,
     editOriginalInteractionResponse,
-    getUser,
 } from "../../deps.js";
 import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
