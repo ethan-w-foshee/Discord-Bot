@@ -28,6 +28,8 @@ class ChessGame {
     }
 
     update() {
+	console.log(this.board)
+	console.log(typeof(this.board))
 	editOriginalInteractionResponse(
 	    this.bot,
 	    this.id,
