@@ -15,7 +15,7 @@ const turns = {
 
 class ChessGame {
     constructor(bot, id, player1, player2) {
-	libchess.make(id)
+	libchess.make("asdf")
 
 	this.bot = bot
 	this.id = id
@@ -26,7 +26,7 @@ class ChessGame {
     }
 
     async update() {
-	this.board = await libchess.board(this.id)
+	this.board = await libchess.board("asdf")
 	console.log(this.board)
 	console.log(typeof(this.board))
 	editOriginalInteractionResponse(
