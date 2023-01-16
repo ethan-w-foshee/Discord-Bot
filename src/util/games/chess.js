@@ -43,15 +43,18 @@ export default function chess(bot, interaction) {
 
 async function componentHandler(bot, interaction) {
     const component = interaction.data
-    switch(component.customId) {
+
+    const gameId = interaction.message.embeds[0].fields[0].value +
+	  "v" +
+	  interaction.message.embeds[0].fields[1].value
+    
+    switch(component.customId) {	
     case "game_chess_play_button": {
 	bot.logger.debug("Player pressed play on a chess match")
 
 	const callerId = interaction.member.id
-	
-	const isParticipant = (interaction.message.embeds[0].fields[0].value.includes(callerId)) || (interaction.message.embeds[0].fields[1].value.includes(callerId))
 
-	if (isParticipant) {    
+	if (checkMyTurn(gameId, callerId)) {
 	    ackInteraction(interaction, "modal", {}, {
 		customId: "game_chess_play_modal",
 		title: "Enter your move",
@@ -67,15 +70,13 @@ async function componentHandler(bot, interaction) {
 	    })
 	} else {
 	    ackInteraction(interaction, "message", {ephemeral: true}, {
-		content: "You are not a player in this game"
+		content: "You can't play right now!"
 	    })
 	}
 	break
     } case "game_chess_play_modal": {
 	const playValue = component.components[0].components[0].value
 	bot.logger.debug(`Received chess modal submission with value:\n${playValue}`)
-
-	const gameId = interaction.message.embeds[0].footer.text
 
 	const isValid = libchess.valid(await libchess.play(gameId, playValue))
 
@@ -86,7 +87,6 @@ async function componentHandler(bot, interaction) {
 		content: "That's an invalid move! Try again!\n\nFor help on using Algebreic notation, see here: https://www.chess.com/terms/chess-notation"
 	    })
 	}
-	ackInteraction(interaction, "message", {ephemeral: true}, {content: "thanks for presing the button"})
     }
     }
 }
@@ -138,9 +138,6 @@ async function updateEmbed(bot, interaction, gameId) {
 		title: "Chess match",
 		timestamp: new Date(Date.now()).toISOString(),
 		color: color == "White" ? 0xffffff : 0x000000,
-		footer: {
-		    text: gameId
-		},
 		fields: [{
 		    name: "White",
 		    value: playerTag1,
@@ -170,4 +167,17 @@ ${coloredBoard}
 	    }]
 	}
     )
+}
+
+function checkMyTurn(gameId, userId) {
+    const whitePlayer = gameId.split("v")[0]
+    const blackPlayer = gameId.split("v")[1]
+    const color = await libchess.color(gameId)
+    
+    if (color == "Black" && (blackPlayer == userId) ||
+	color == "White" && (whitePlayer == userId)) {
+	return true
+    } else {
+	return false
+    }
 }
