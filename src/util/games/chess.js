@@ -49,7 +49,7 @@ class ChessGame {
 			value: this.turn == turns.white ? "White" : "Black",
 		    }, {
 			name: "Board",
-			value: board,
+			value: this.board,
 		    }]
 		}],
 		components: [{
