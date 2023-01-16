@@ -84,6 +84,10 @@ async function componentHandler(interaction) {
 	    })
 	}
 	break
+    } case "game_chess_refresh_button": {
+	bot.logger.debug(`Refreshing board for game ${gameId}`)
+
+	updateEmbed(interaction, gameId)
     } case "game_chess_play_modal": {
 	const playValue = component.components[0].components[0].value
 	bot.logger.debug(`Received chess modal submission with value:\n${playValue}`)
@@ -190,6 +194,11 @@ ${coloredBoard}
 		    customId: "game_chess_play_button",
 		    style: ButtonStyles.Primary,
 		    label: "Play!",
+		},{
+		    type: MessageComponentTypes.Button,
+		    customId: "game_chess_refresh_button",
+		    style: ButtonStyles.Secondary,
+		    label: "Refresh board",
 		},{
 		    type: MessageComponentTypes.Button,
 		    customId: "game_chess_endgame_button",
