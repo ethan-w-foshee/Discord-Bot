@@ -27,7 +27,7 @@ class ChessGame {
 	this.update()
     }
 
-    static update() {
+    update() {
 	editOriginalInteractionResponse(
 	    bot,
 	    this.id,
