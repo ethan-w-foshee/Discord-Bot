@@ -12,7 +12,7 @@ import ackInteraction from "../util/ackInteraction.js";
 
 function chess(bot, interaction) {
     const data = interaction.data
-    const types {
+    const types = {
 	button: 1,
 	subcommand: 2
     }
@@ -21,10 +21,9 @@ function chess(bot, interaction) {
     if (data.customId?.includes("chess")) {
 	type = types.button
     } else if (data.options) {
-	const chessOptions = data.options?.filter(
-	    (option) => option.name.includes("chess")
-	)
-	if (chessOptions.length > 0) {
+	if (data.options.filter((option) =>
+	    option.name.includes("chess")
+	).length > 0) {
 	    type = types.subcommand
 	}
     } else {
@@ -37,7 +36,7 @@ function chess(bot, interaction) {
     ackInteraction(interaction)
 
     if (type == types.button) {
-	switch(data.name) {
+	switch(data.customId) {
 	case "game_chess_play_button":
 	    console.log("HE PRESSED THE BUTTON")
 	    break
@@ -45,6 +44,10 @@ function chess(bot, interaction) {
     }
 
     if (type == types.subcommand) {
+	const chessOptions = data.options.filter(
+	    (option) => option.name.includes("chess")
+	)
+	
 	console.log(`Creating chess game with options:\n${chessOptions[0].options}`)
     
 	editOriginalInteractionResponse(
