@@ -29,7 +29,7 @@ class ChessGame {
 
     update() {
 	editOriginalInteractionResponse(
-	    bot,
+	    this.bot,
 	    this.id,
 	    {
 		embeds: [{
