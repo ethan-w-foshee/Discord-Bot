@@ -52,9 +52,8 @@ async function componentHandler(interaction) {
 
     if (!(await libchess.exists(gameId))) {
 	deleteMessage(bot, interaction.message.channelId, interaction.message.id)
-	ackInteraction(interaction, "message", {ephemeral: true}, {
-	    content: "This game does not exist anymore, sorry!"
-	})
+	const data = {content: "This game does not exist anymore, sorry!"}
+	ackInteraction(interaction, "message", {ephemeral: true}, data)
 	return
     }
     
@@ -65,7 +64,7 @@ async function componentHandler(interaction) {
 	const callerId = interaction.member.id
 
 	if (await checkMyTurn(gameId, callerId)) {
-	    ackInteraction(interaction, "modal", {}, {
+	    const data = {
 		customId: "game_chess_play_modal",
 		title: "Enter your move",
 		components: [{
@@ -77,11 +76,12 @@ async function componentHandler(interaction) {
 			label: "Input string"
 		    }]
 		}]
-	    })
+	    }
+	    
+	    ackInteraction(interaction, "modal", {}, data)
 	} else {
-	    ackInteraction(interaction, "message", {ephemeral: true}, {
-		content: "You can't play right now!"
-	    })
+	    const data = {content: "You can't play right now!"}
+	    ackInteraction(interaction, "message", {ephemeral: true}, data)
 	}
 	break
     } case "game_chess_refresh_button": {
@@ -99,9 +99,10 @@ async function componentHandler(interaction) {
 	    ackInteraction(interaction, "deferred")
 	    updateEmbed(interaction, gameId)
 	} else {
-	    ackInteraction(interaction, "message", {ephemeral: true}, {
+	    const data = {
 		content: "That's an invalid move! Try again!\n\nFor help on using Algebreic notation, see here: https://www.chess.com/terms/chess-notation"
-	    })
+	    }
+	    ackInteraction(interaction, "message", {ephemeral: true}, data)
 	}
 	break
     } case "game_chess_endgame_button": {
@@ -112,10 +113,11 @@ async function componentHandler(interaction) {
 	embed.color = 0xff444444
 	embed.timestamp = new Date(Date.now()).toISOString()
 
-	console.log(await ackInteraction(interaction, "update", {}, {
+	const data = {
 	    embeds: [embed],
 	    components: [],
-	}))
+	}
+	console.log(await ackInteraction(interaction, "update", {}, data))
 
 	libchess.close(gameId)
 
