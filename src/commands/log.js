@@ -94,7 +94,7 @@ ${msg}
 \`\`\``		
 	    }
 	],
-	components: makeComponents(page)
+	components: id?undefined:makeComponents(page)
     });
 }
 
