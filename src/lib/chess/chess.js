@@ -15,6 +15,7 @@ export async function make(name) {
     });
     await waitOut(name);
     await input(name, "depth 0");
+    await input(name, "coords");
 }
 
 export async function close(name) {
