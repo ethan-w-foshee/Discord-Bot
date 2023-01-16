@@ -115,6 +115,8 @@ async function updateEmbed(bot, interaction, gameId) {
     const playerTag1 = `<@${players[0]}>`
     const playerTag2 = players[1] == "computer" ? "Computer" : `<@${players[1]}>`
 
+    const coloredBoard = board.replaceAll(";37", ";47").replaceAll(";35", ";42")
+
     editOriginalInteractionResponse(
 	bot,
 	interaction.token,
@@ -136,7 +138,9 @@ async function updateEmbed(bot, interaction, gameId) {
 		    value: `${turnNum} (${color})`,
 		}, {
 		    name: "Board",
-		    value: board,
+		    value: `\`\`\`ansi
+${coloredBoard}
+\`\`\``,
 		}]
 	    }],
 	    components: [{
