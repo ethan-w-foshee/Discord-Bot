@@ -33,8 +33,6 @@ function chess(bot, interaction) {
 	return
     }
 
-    //ackInteraction(interaction)
-
     if (type == types.component) {
 	switch(data.customId) {
 	case "game_chess_play_button":
@@ -59,6 +57,7 @@ function chess(bot, interaction) {
     }
 
     if (type == types.subcommand) {
+	ackInteraction(interaction)	
 	const chessOptions = data.options.filter(
 	    (option) => option.name.includes("chess")
 	)
