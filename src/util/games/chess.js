@@ -121,7 +121,9 @@ function componentHandler(bot, interaction) {
 	})
 	break
     case "game_chess_play_modal":
+	console.log(interaction)
 	bot.logger.debug(`Received chess modal submission with value:\n${JSON.stringify(component.components[0].components[0])}`)
+	ackInteraction(interaction, "message", {ephemeral: true}, {content: "thanks for presing the button"}
     }
 }
 
