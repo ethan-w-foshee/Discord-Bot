@@ -169,7 +169,7 @@ ${coloredBoard}
     )
 }
 
-function checkMyTurn(gameId, userId) {
+await function checkMyTurn(gameId, userId) {
     const whitePlayer = gameId.split("v")[0]
     const blackPlayer = gameId.split("v")[1]
     const color = await libchess.color(gameId)
