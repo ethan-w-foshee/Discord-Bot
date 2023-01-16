@@ -31,7 +31,7 @@ function chess(bot, interaction) {
 	return
     }
     
-    bot.logger.debug(interaction);
+    bot.logger.debug(`${interaction}`);
 
     ackInteraction(interaction)
 
