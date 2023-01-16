@@ -48,6 +48,8 @@ function componentHandler(bot, interaction) {
 	bot.logger.debug("Player pressed play on a chess match")
 
 	const callerId = interaction.member.id
+	console.log(callerId)
+	console.log(interaction.embeds[0].fields)
 	
 	const isParticipant = (interaction.embeds[0].fields[0].value.contains(callerId)) || (interaction.embeds[0].fields[1].value.contains(callerId))
 
@@ -115,7 +117,7 @@ async function updateEmbed(bot, interaction, gameId) {
     const playerTag1 = `<@${players[0]}>`
     const playerTag2 = players[1] == "computer" ? "Computer" : `<@${players[1]}>`
 
-    const coloredBoard = board.replaceAll(";37", ";47").replaceAll(";35", ";42")
+    const coloredBoard = board.replaceAll(";37", ";42").replaceAll(";35", ";44")
 
     editOriginalInteractionResponse(
 	bot,
