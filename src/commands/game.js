@@ -52,7 +52,7 @@ function chess(bot, interaction) {
 	    })
 	    break
 	case "game_chess_play_modal":
-	    bot.logger.debug(`Received modal submission with value:\n${interaction.data.components[0].components[0]}`)
+	    bot.logger.debug(`Received modal submission with value:\n${JSON.stringify(interaction.data.components[0].components[0])}`)
 	}
     }
 
