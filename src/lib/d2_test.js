@@ -1,4 +1,4 @@
-import { assert } from "https://deno.land/std@0.159.0/testing/asserts.ts";
+import { assert } from "../../deps.js";
 import { renderD2 } from "./d2.js";
 
 Deno.test("Command test (d2.js)", async (t) => {
