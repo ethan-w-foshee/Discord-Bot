@@ -88,6 +88,7 @@ async function componentHandler(interaction) {
 	bot.logger.debug(`Refreshing board for game ${gameId}`)
 
 	updateEmbed(interaction, gameId)
+	break
     } case "game_chess_play_modal": {
 	const playValue = component.components[0].components[0].value
 	bot.logger.debug(`Received chess modal submission with value:\n${playValue}`)
@@ -123,7 +124,6 @@ async function componentHandler(interaction) {
 }
 
 async function createMatch(interaction) {
-    ackInteraction(interaction)
     const chessOptions = interaction.data.options.filter(
 	(option) => option.name.includes("chess")
     )[0].options
@@ -133,9 +133,13 @@ async function createMatch(interaction) {
     )
     
     bot.logger.debug(`Creating chess game with options:\n${JSON.stringify(chessOptions)}`)
-
+    
     const player1 = interaction.member.id
     const player2 = challenge.length > 0 ? challenge[0].value : "computer"
+
+    const flags = ((player1 == player2) || player2 == "computer") ? {ephemeral: true} : {}
+
+    ackInteraction(interaction, "thinking", flags)
 
     const gameId = player1 + "v" + player2
 
