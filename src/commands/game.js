@@ -51,8 +51,8 @@ function chess(bot, interaction) {
 		}]
 	    })
 	    break
-	case "game_chess_play_textin":
-	    console.log(`${interaction}`)
+	case "game_chess_play_modal":
+	    bot.logger.debug(`Received modal submission with value:\n${interaction.data.components[0].components[0]}`)
 	}
     }
 
