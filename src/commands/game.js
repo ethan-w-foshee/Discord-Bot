@@ -31,14 +31,14 @@ function chess(bot, interaction) {
 	return
     }
     
-    console.log(interaction);
+    bot.logger.debug(interaction);
 
     ackInteraction(interaction)
 
     if (type == types.button) {
 	switch(data.customId) {
 	case "game_chess_play_button":
-	    console.log("HE PRESSED THE BUTTON")
+	    bot.logger.debug("HE PRESSED THE BUTTON")
 	    break
 	}
     }
@@ -48,7 +48,7 @@ function chess(bot, interaction) {
 	    (option) => option.name.includes("chess")
 	)
 	
-	console.log(`Creating chess game with options:\n${chessOptions[0].options}`)
+	bot.logger.debug(`Creating chess game with options:\n${chessOptions[0].options}`)
     
 	editOriginalInteractionResponse(
 	    bot,
