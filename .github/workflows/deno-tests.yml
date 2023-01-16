@@ -49,8 +49,6 @@ jobs:
           mv image.tar.gz image
       - name: Load Image
         run: podman import image starbot:$tag
-      - name: Clean Load
-        run: find /var/tmp -user $USER -name "docker-tar*" -exec rm {} \; || true
       - name: Lint code
         run: |
           podman run --rm -v ./:/wd:Z -w /wd starbot:$tag lints
