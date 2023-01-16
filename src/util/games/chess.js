@@ -49,7 +49,7 @@ function componentHandler(bot, interaction) {
 
 	const callerId = interaction.member.id
 	
-	const isParticipant = (interaction.embeds[0].fields[0].value.contains(callerId)) || (interaction.embeds[0].fields[1].value.contaienrs(callerId))
+	const isParticipant = (interaction.embeds[0].fields[0].value.contains(callerId)) || (interaction.embeds[0].fields[1].value.contains(callerId))
 
 	if (isParticipant) {    
 	    ackInteraction(interaction, "modal", {}, {
