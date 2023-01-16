@@ -8,6 +8,7 @@ import {
 } from "../../../deps.js";
 import ackInteraction from "../ackInteraction.js";
 import * as libchess from "../../lib/chess/chess.js";
+import { bot } from "../../../bot.js";
 
 export default function chess(bot, interaction) {
     const data = interaction.data
