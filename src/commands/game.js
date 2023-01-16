@@ -4,10 +4,10 @@ import {
     ButtonStyles,
     TextStyles,
     editOriginalInteractionResponse,
+    getUser,
 } from "../../deps.js";
 import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
-// import { getNameFromUser } from "../util/quote.js";
 import ackInteraction from "../util/ackInteraction.js";
 
 function chess(bot, interaction) {
@@ -62,12 +62,12 @@ function chess(bot, interaction) {
 
 	const challenge = chessOptions.filter(
 	    (option) => option.name == "user"
-	)[0].value
+	)
 	
 	bot.logger.debug(`Creating chess game with options:\n${JSON.stringify(chessOptions)}`)
 
 	const player1 = "<@" + interaction.member.id + ">"
-	const player2 = challenge ? "<@" + challenge + ">" : "bot"
+	const player2 = challenge.length > 0 ? "<@" + challenge[0].value + ">" : "Bot"
 	
 	editOriginalInteractionResponse(
 	    bot,
@@ -78,11 +78,11 @@ function chess(bot, interaction) {
 		    timestamp: new Date(Date.now()).toISOString(),
 		    color: 0xffffff,
 		    fields: [{
-			name: "Player 1",
+			name: "White",
 			value: player1,
 			inline: true
 		    }, {
-			name: "Player 2",
+			name: "Black",
 			value: player2,
 			inline: true
 		    }, {
