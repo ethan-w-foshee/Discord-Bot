@@ -72,7 +72,7 @@ export async function board(name) {
     const output = await state(name);
     const lines = output.split('\n');
     const len = lines.length;
-    return lines.splice(len-10,len-4).join('\n');
+    return lines.splice(len-10,len-3).join('\n');
 }
 
 export async function turn(name) {
