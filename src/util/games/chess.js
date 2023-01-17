@@ -21,6 +21,11 @@ export default function chess(bot, interaction) {
 	    componentHandler(interaction);
 	}
 	break;
+    } case InteractionTypes.ModalSubmit: {
+	if (data.customId?.includes("chess")) {
+	    modalHandler(interaction);
+	}
+	break;
     } case InteractionTypes.ApplicationCommand: {
 	if (data.options?.filter((option) =>
 	    option.name.includes("chess")
@@ -92,22 +97,6 @@ async function componentHandler(interaction) {
 	ackInteraction(interaction, "deferred");
 	updateEmbed(interaction, gameId);
 	break;
-    } case "game_chess_play_modal": {
-	const playValue = component.components[0].components[0].value;
-	bot.logger.debug(`Received chess modal submission with value:\n${playValue}`);
-
-	const isValid = libchess.valid(await libchess.play(gameId, playValue));
-
-	if (isValid) {
-	    ackInteraction(interaction, "deferred");
-	    updateEmbed(interaction, gameId);
-	} else {
-	    const data = {
-		content: "That's an invalid move! Try again!\n\nFor help on using Algebreic notation, see here: https://www.chess.com/terms/chess-notation"
-	    };
-	    ackInteraction(interaction, "message", {ephemeral: true}, data);
-	}
-	break;
     } case "game_chess_forfeit_button": {
 	if (await checkMyTurn(gameId, callerId)) {
 	    bot.logger.debug(`Player is ending chess game ${gameId}`);
@@ -127,6 +116,29 @@ async function componentHandler(interaction) {
 	} else {
 	    const data = {
 		content: "You can only forfeit on your turn!",
+	    };
+	    ackInteraction(interaction, "message", {ephemeral: true}, data);
+	}
+	break;
+    }}
+}
+
+async function modalHandler(interaction) {
+    const component = interaction.data;
+
+    switch(component.customId) {
+    case "game_chess_play_modal": {
+	const playValue = component.components[0].components[0].value;
+	bot.logger.debug(`Received chess Play modal submission with value: ${playValue}`);
+
+	const isValid = libchess.valid(await libchess.play(gameId, playValue));
+
+	if (isValid) {
+	    ackInteraction(interaction, "deferred");
+	    updateEmbed(interaction, gameId);
+	} else {
+	    const data = {
+		content: "That's an invalid move! Try again!\n\nFor help on using Algebreic notation, see here: https://www.chess.com/terms/chess-notation"
 	    };
 	    ackInteraction(interaction, "message", {ephemeral: true}, data);
 	}
