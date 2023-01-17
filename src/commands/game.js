@@ -12,12 +12,22 @@ addBotCommand(bot, {
 	name: "chess",
 	description: "Play some chess",
 	type: ApplicationCommandOptionTypes.SubCommand,
-	options: [{
-	    name: "user",	    
-	    type: ApplicationCommandOptionTypes.User,
-	    description: "The user you want to challenge to Chess. Leave empty to play the bot",
-	    required: false
-	}]
+	options: [
+	    {
+		name: "user",	    
+		type: ApplicationCommandOptionTypes.User,
+		description: "The user you want to challenge to Chess. Leave empty to play the bot",
+		required: false
+	    },
+	    {
+		name: "level",
+		type: ApplicationCommandOptionTypes.Integer,
+		description: "The difficulty of the bot",
+		min_value: 0,
+		max_value: 8,
+		required: false
+	    }
+	]
     }, {
 	name: "hangman",
 	description: "Play some hangman",

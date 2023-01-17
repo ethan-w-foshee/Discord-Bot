@@ -33,7 +33,7 @@ export default function chess(bot, interaction) {
     }
 
     bot.logger.debug("Running a chess command")
-    
+
     if (type == types.component) {
 	componentHandler(interaction)
     }
@@ -65,7 +65,7 @@ async function componentHandler(interaction) {
 	ackInteraction(interaction, "message", {ephemeral: true}, data)
 	return
     }
-    
+
     switch(component.customId) {
     case "game_chess_play_button": {
 	bot.logger.debug("Player pressed play on a chess match")
@@ -86,7 +86,7 @@ async function componentHandler(interaction) {
 		    }]
 		}]
 	    }
-	    
+
 	    ackInteraction(interaction, "modal", {}, data)
 	} else {
 	    const data = {content: "You can't play right now!"}
@@ -96,7 +96,7 @@ async function componentHandler(interaction) {
     } case "game_chess_refresh_button": {
 	bot.logger.debug(`Refreshing board for game ${gameId}`)
 
-	ackInteraction(interaction, "deferred")	
+	ackInteraction(interaction, "deferred")
 	updateEmbed(interaction, gameId)
 	break
     } case "game_chess_play_modal": {
@@ -139,47 +139,53 @@ async function componentHandler(interaction) {
 async function createMatch(interaction) {
     const chessOptions = interaction.data.options.filter(
 	(option) => option.name.includes("chess")
-    )[0].options
+    )[0].options;
 
     const challenge = chessOptions.filter(
 	(option) => option.name == "user"
-    )
-    
-    bot.logger.debug(`Creating chess game with options:\n${JSON.stringify(chessOptions)}`)
-    
-    const player1 = interaction.member.id
-    const player2 = challenge.length > 0 ? challenge[0].value : "computer"
+    )[0];
+
+    const level = chessOptions.filter(
+	(option) => option.name == "level"
+    )[0];
+
+    const difficulty = level ? level.value : 0;
+
+    bot.logger.debug(`Creating chess game with options:\n${JSON.stringify(chessOptions)}`);
+
+    const player1 = interaction.member.id;
+    const player2 = challenge ? challenge.value : "computer";
 
     const isComputer = player2 == "computer";
     const isSelf = player1 == player2;
-    
-    const flags = (isSelf || isComputer) ? {ephemeral: true} : {}
 
-    ackInteraction(interaction, "thinking", flags)
+    const flags = (isSelf || isComputer) ? {ephemeral: true} : {};
 
-    const gameId = player1 + "v" + player2
+    ackInteraction(interaction, "thinking", flags);
+
+    const gameId = player1 + "v" + player2;
 
     if (!(libchess.exists(gameId))) {
 	if ( !(isComputer || isSelf) ) {
 	    sendMessage(bot, interaction.channelId, {
 		content: `<@${player2}>! You have been challenged to a chess match by <@${player1}>`
-	    })	
-	}	
-	await libchess.make(gameId, isComputer)
+	    });
+	}
+	await libchess.make(gameId, isComputer, difficulty);
     }
 
-    updateEmbed(interaction, gameId)
+    updateEmbed(interaction, gameId);
 }
 
 async function updateEmbed(interaction, gameId) {
-    const color = await libchess.color(gameId)
-    const turnNum = await libchess.turn(gameId)
-    const board = await libchess.board(gameId)
-    const players = gameId.split("v")
-    const playerTag1 = `<@${players[0]}>`
-    const playerTag2 = players[1] == "computer" ? "Computer" : `<@${players[1]}>`
+    const color = await libchess.color(gameId);
+    const turnNum = await libchess.turn(gameId);
+    const board = await libchess.board(gameId);
+    const players = gameId.split("v");
+    const playerTag1 = `<@${players[0]}>`;
+    const playerTag2 = players[1] == "computer" ? "Computer" : `<@${players[1]}>`;
 
-    const coloredBoard = board.replaceAll(";37", ";40").replaceAll(";35", ";42")
+    const coloredBoard = board.replaceAll(";37", ";40").replaceAll(";35", ";42");
 
     editOriginalInteractionResponse(
 	bot,
@@ -227,14 +233,14 @@ ${coloredBoard}
 		}]
 	    }]
 	}
-    )
+    );
 }
 
 async function checkMyTurn(gameId, userId) {
     const whitePlayer = gameId.split("v")[0]
     const blackPlayer = gameId.split("v")[1]
     const color = await libchess.color(gameId)
-    
+
     return (color == "Black" && (blackPlayer == userId) ||
 	    color == "White" && (whitePlayer == userId))
 }
