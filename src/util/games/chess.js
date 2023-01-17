@@ -16,14 +16,32 @@ export default function chess(bot, interaction) {
     const data = interaction.data;
 
     switch(interaction.type) {
-    case InteractionTypes.MessageComponent: {
+    case InteractionTypes.MessageComponent: /* falls through */
+    case InteractionTypes.ModalSubmit: {
 	if (data.customId?.includes("chess")) {
-	    componentHandler(interaction);
-	}
-	break;
-    } case InteractionTypes.ModalSubmit: {
-	if (data.customId?.includes("chess")) {
-	    modalHandler(interaction);
+	    /* Calc some variables used in both handlers*/
+	    /* Get Game ID */
+	    let gameId;
+	    try {
+		gameId = (interaction.message.embeds[0].fields[0].value +
+			  "v" +
+			  interaction.message.embeds[0].fields[1].value).replaceAll(/[<@>]/g, "");
+	    } catch {
+		const data = {
+		    content: "Something went wrong when getting the game ID"
+		};
+		ackInteraction(interaction, "message", {}, data);
+		return;
+	    }
+
+	    /* Shorthand for the component */
+	    const component = interaction.data;
+
+	    if (interaction.type == InteractionTypes.ModalSubmit) {
+		modalHandler(interaction, gameId, component);
+	    } else if (interaction.type == InteractionTypes.MessageComponent) {
+		componentHandler(interaction, gameId, component);
+	    }
 	}
 	break;
     } case InteractionTypes.ApplicationCommand: {
@@ -40,22 +58,8 @@ export default function chess(bot, interaction) {
     bot.logger.debug("Running a chess command");
 }
 
-async function componentHandler(interaction) {
-    const component = interaction.data;
+async function componentHandler(interaction, gameId, component) {
     const callerId = interaction.member.id;
-    let gameId;
-
-    try {
-	gameId = (interaction.message.embeds[0].fields[0].value +
-		  "v" +
-		  interaction.message.embeds[0].fields[1].value).replaceAll(/[<@>]/g, "");
-    } catch {
-	const data = {
-	    content: "Something went wrong when getting the game ID"
-	};
-	ackInteraction(interaction, "message", {}, data);
-	return;
-    }
 
     if (!(await libchess.exists(gameId))) {
 	console.log(interaction.message);
@@ -123,8 +127,7 @@ async function componentHandler(interaction) {
     }}
 }
 
-async function modalHandler(interaction) {
-    const component = interaction.data;
+async function modalHandler(interaction, gameId, component) {
 
     switch(component.customId) {
     case "game_chess_play_modal": {
