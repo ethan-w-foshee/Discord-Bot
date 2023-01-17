@@ -11,6 +11,7 @@ import * as libchess from "../../lib/chess/chess.js";
 import { bot } from "../../../bot.js";
 
 export default function chess(bot, interaction) {
+    console.log(interaction)
     const data = interaction.data
     const types = {
 	component: 1,
@@ -61,12 +62,11 @@ async function componentHandler(interaction) {
     }
 
     if (!(await libchess.exists(gameId))) {
-	try {
-	    deleteMessage(bot, interaction.message.channelId, interaction.message.id)
-	} finally {
-	    const data = {content: "This game does not exist anymore, sorry!"}
-	    ackInteraction(interaction, "message", {ephemeral: true}, data)
-	}
+	console.log(interaction.message);
+	deleteMessage(bot, interaction.message.channelId, interaction.message.id);
+	const data = {content: "This game does not exist anymore, sorry!"}
+	ackInteraction(interaction, "message", {ephemeral: true}, data)
+
 	return
     }
 
@@ -130,7 +130,6 @@ async function componentHandler(interaction) {
 		embeds: [embed],
 		components: [],
 	    };
-	    console.log(data);
 	    ackInteraction(interaction, "update", {}, data);
 
 	    libchess.close(gameId);
