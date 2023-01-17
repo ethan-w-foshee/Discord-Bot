@@ -12,7 +12,6 @@ import * as libchess from "../../lib/chess/chess.js";
 import { bot } from "../../../bot.js";
 
 export default function chess(bot, interaction) {
-    console.log(interaction);
     const data = interaction.data;
 
     switch(interaction.type) {
@@ -62,8 +61,13 @@ async function componentHandler(interaction, gameId, component) {
     const callerId = interaction.member.id;
 
     if (!(await libchess.exists(gameId))) {
-	console.log(interaction.message);
-	deleteMessage(bot, interaction.message.channelId, interaction.message.id);
+	/* This is a cheap and bad way of detecting if the
+	   target message is ephemeral or not. This needs
+	   to change at some point but I don't wanna right
+	   now. */
+	if (interaction.message.flags != 64) {
+	    deleteMessage(bot, interaction.message.channelId, interaction.message.id);
+	}
 	const data = {content: "This game does not exist anymore, sorry!"};
 	ackInteraction(interaction, "message", {ephemeral: true}, data);
 
