@@ -1,5 +1,6 @@
 import {
     MessageComponentTypes,
+    InteractionTypes,
     TextStyles,
     ButtonStyles,
     editOriginalInteractionResponse,
@@ -11,68 +12,58 @@ import * as libchess from "../../lib/chess/chess.js";
 import { bot } from "../../../bot.js";
 
 export default function chess(bot, interaction) {
-    console.log(interaction)
-    const data = interaction.data
-    const types = {
-	component: 1,
-	subcommand: 2
-    }
-    let type
+    console.log(interaction);
+    const data = interaction.data;
 
-    /* Determine if the game interaction is for chess */
-    if (data.customId?.includes("chess")) {
-	type = types.component
-    } else if (data.options) {
+    switch(interaction.type) {
+    case InteractionTypes.ApplicationCommand: {
+	if (data.customId.includes("chess")) {
+	    componentHandler(interaction);
+	}
+	break;
+    } case InteractionTypes.MessageComponent: {
 	if (data.options.filter((option) =>
 	    option.name.includes("chess")
 	).length > 0) {
-	    type = types.subcommand
+	    slashHandler(interaction);
 	}
-    } else {
-	/* Exit if not */
-	return
-    }
+	break;
+    } default: {
+	return;
+    }}
 
-    bot.logger.debug("Running a chess command")
-
-    if (type == types.component) {
-	componentHandler(interaction)
-    }
-
-    if (type == types.subcommand) {
-	createMatch(interaction)
-    }
+    bot.logger.debug("Running a chess command");
 }
 
 async function componentHandler(interaction) {
-    const component = interaction.data
-    const callerId = interaction.member.id
-    let gameId
+    const component = interaction.data;
+    const callerId = interaction.member.id;
+    let gameId;
 
     try {
 	gameId = (interaction.message.embeds[0].fields[0].value +
 		  "v" +
-		  interaction.message.embeds[0].fields[1].value).replaceAll(/[<@>]/g, "").toLowerCase()
+		  interaction.message.embeds[0].fields[1].value).replaceAll(/[<@>]/g, "");
     } catch {
 	const data = {
 	    content: "Something went wrong when getting the game ID"
-	}
-	ackInteraction(interaction, "message", {}, data)
-	return
+	};
+	ackInteraction(interaction, "message", {}, data);
+	return;
     }
 
     if (!(await libchess.exists(gameId))) {
 	console.log(interaction.message);
 	deleteMessage(bot, interaction.message.channelId, interaction.message.id);
-	const data = {content: "This game does not exist anymore, sorry!"}
-	ackInteraction(interaction, "message", {ephemeral: true}, data)
+	const data = {content: "This game does not exist anymore, sorry!"};
+	ackInteraction(interaction, "message", {ephemeral: true}, data);
 
-	return
+	return;
     }
 
     switch(component.customId) {
     case "game_chess_play_button": {
-	bot.logger.debug("Player pressed play on a chess match")
+	bot.logger.debug("Player pressed play on a chess match");
 
 	if (await checkMyTurn(gameId, callerId)) {
 	    const data = {
@@ -87,34 +78,34 @@ async function componentHandler(interaction) {
 			label: "Input string"
 		    }]
 		}]
-	    }
+	    };
 
-	    ackInteraction(interaction, "modal", {}, data)
+	    ackInteraction(interaction, "modal", {}, data);
 	} else {
-	    const data = {content: "You can't play right now!"}
-	    ackInteraction(interaction, "message", {ephemeral: true}, data)
+	    const data = {content: "You can't play right now!"};
+	    ackInteraction(interaction, "message", {ephemeral: true}, data);
 	}
-	break
+	break;
     } case "game_chess_refresh_button": {
-	bot.logger.debug(`Refreshing board for game ${gameId}`)
+	bot.logger.debug(`Refreshing board for game ${gameId}`);
 
-	ackInteraction(interaction, "deferred")
-	updateEmbed(interaction, gameId)
-	break
+	ackInteraction(interaction, "deferred");
+	updateEmbed(interaction, gameId);
+	break;
     } case "game_chess_play_modal": {
-	const playValue = component.components[0].components[0].value
-	bot.logger.debug(`Received chess modal submission with value:\n${playValue}`)
+	const playValue = component.components[0].components[0].value;
+	bot.logger.debug(`Received chess modal submission with value:\n${playValue}`);
 
-	const isValid = libchess.valid(await libchess.play(gameId, playValue))
+	const isValid = libchess.valid(await libchess.play(gameId, playValue));
 
 	if (isValid) {
-	    ackInteraction(interaction, "deferred")
-	    updateEmbed(interaction, gameId)
+	    ackInteraction(interaction, "deferred");
+	    updateEmbed(interaction, gameId);
 	} else {
 	    const data = {
 		content: "That's an invalid move! Try again!\n\nFor help on using Algebreic notation, see here: https://www.chess.com/terms/chess-notation"
-	    }
-	    ackInteraction(interaction, "message", {ephemeral: true}, data)
+	    };
+	    ackInteraction(interaction, "message", {ephemeral: true}, data);
 	}
 	break;
     } case "game_chess_forfeit_button": {
@@ -143,7 +134,7 @@ async function componentHandler(interaction) {
     }}
 }
 
-async function createMatch(interaction) {
+async function slashHandler(interaction) {
     const chessOptions = interaction.data.options.filter(
 	(option) => option.name.includes("chess")
     )[0].options;
@@ -156,31 +147,42 @@ async function createMatch(interaction) {
 	(option) => option.name == "level"
     )[0];
 
+    /* Default difficulty */
     const difficulty = level ? level.value : 0;
 
     bot.logger.debug(`Creating chess game with options:\n${JSON.stringify(chessOptions)}`);
 
+    /* Get participant IDs. Default challenge bot */
     const player1 = interaction.member.id;
-    const player2 = challenge ? challenge.value : "computer";
+    const player2 = challenge ? challenge.value : "Computer";
 
-    const isComputer = player2 == "computer";
+    /* Determine whether or not this is a private game */
+    const isComputer = player2 == "Computer";
     const isSelf = player1 == player2;
 
+    /* If the game is private, enable the "ephemeral" flag */
     const flags = (isSelf || isComputer) ? {ephemeral: true} : {};
 
     ackInteraction(interaction, "thinking", flags);
 
+    /* Generate gameId based on player IDs */
     const gameId = player1 + "v" + player2;
 
+    /* If the game doesn't exist, make it */
     if (!(libchess.exists(gameId))) {
+	/* If this is NOT a private game, alert the opponent */
 	if ( !(isComputer || isSelf) ) {
-	    sendMessage(bot, interaction.channelId, {
+	    const data = {
 		content: `<@${player2}>! You have been challenged to a chess match by <@${player1}>`
-	    });
+	    };
+	    sendMessage(bot, interaction.channelId, data);
 	}
 	await libchess.make(gameId, isComputer, difficulty);
     }
 
+    /* Fetch the game. If the game did exist already,
+       this will display the game in whatever state it
+       was in previously */
     updateEmbed(interaction, gameId);
 }
 
@@ -190,64 +192,66 @@ async function updateEmbed(interaction, gameId) {
     const board = await libchess.board(gameId);
     const players = gameId.split("v");
     const playerTag1 = `<@${players[0]}>`;
-    const playerTag2 = players[1] == "computer" ? "Computer" : `<@${players[1]}>`;
+    const playerTag2 = players[1] == "Computer" ? players[1] : `<@${players[1]}>`;
 
+    /* The default ansii color codes don't work. Let's make
+       it dark mode! */
     const coloredBoard = board.replaceAll(";37", ";40").replaceAll(";35", ";42");
 
-    editOriginalInteractionResponse(
-	bot,
-	interaction.token,
-	{
-	    embeds: [{
-		title: "Chess match",
-		timestamp: new Date(Date.now()).toISOString(),
-		color: color == "White" ? 0xffffff : 0x000000,
-		fields: [{
-		    name: "White",
-		    value: playerTag1,
-		    inline: true,
-		}, {
-		    name: "Black",
-		    value: playerTag2,
-		    inline: true,
-		}, {
-		    name: "Turn",
-		    value: `${turnNum} (${color})`,
-		}, {
-		    name: "Board",
-		    value: `\`\`\`ansi
+    const data = {
+	embeds: [{
+	    title: "Chess match",
+	    timestamp: new Date(Date.now()).toISOString(),
+	    color: color == "White" ? 0xffffff : 0x000000,
+	    fields: [{
+		name: "White",
+		value: playerTag1,
+		inline: true,
+	    }, {
+		name: "Black",
+		value: playerTag2,
+		inline: true,
+	    }, {
+		name: "Turn",
+		value: `${turnNum} (${color})`,
+	    }, {
+		name: "Board",
+		value: `\`\`\`ansi
 ${coloredBoard}
 \`\`\``,
-		}]
-	    }],
-	    components: [{
-		type: MessageComponentTypes.ActionRow,
-		components: [{
-		    type: MessageComponentTypes.Button,
-		    customId: "game_chess_play_button",
-		    style: ButtonStyles.Primary,
-		    label: "Play!",
-		},{
-		    type: MessageComponentTypes.Button,
-		    customId: "game_chess_refresh_button",
-		    style: ButtonStyles.Secondary,
-		    label: "Refresh board",
-		},{
-		    type: MessageComponentTypes.Button,
-		    customId: "game_chess_forfeit_button",
-		    style: ButtonStyles.Danger,
-		    label: "Forfeit",
-		}]
 	    }]
-	}
-    );
+	}],
+	components: [{
+	    type: MessageComponentTypes.ActionRow,
+	    components: [{
+		type: MessageComponentTypes.Button,
+		customId: "game_chess_play_button",
+		style: ButtonStyles.Primary,
+		label: "Play!",
+	    },{
+		type: MessageComponentTypes.Button,
+		customId: "game_chess_refresh_button",
+		style: ButtonStyles.Secondary,
+		label: "Refresh board",
+	    },{
+		type: MessageComponentTypes.Button,
+		customId: "game_chess_forfeit_button",
+		style: ButtonStyles.Danger,
+		label: "Forfeit",
+	    }]
+	}]
+    };
+    
+    editOriginalInteractionResponse(bot, interaction.token, data);
+
 }
 
 async function checkMyTurn(gameId, userId) {
-    const whitePlayer = gameId.split("v")[0]
-    const blackPlayer = gameId.split("v")[1]
-    const color = await libchess.color(gameId)
+    /* Return whether or not it is the user's turn */
+    const whitePlayer = gameId.split("v")[0];
+    const blackPlayer = gameId.split("v")[1];
+    const color = await libchess.color(gameId);
 
     return (color == "Black" && (blackPlayer == userId) ||
-	    color == "White" && (whitePlayer == userId))
+	    color == "White" && (whitePlayer == userId));
 }
