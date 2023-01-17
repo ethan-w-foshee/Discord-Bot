@@ -114,25 +114,31 @@ async function componentHandler(interaction) {
 	    }
 	    ackInteraction(interaction, "message", {ephemeral: true}, data)
 	}
-	break
-    } case "game_chess_endgame_button": {
-	bot.logger.debug(`Player is ending chess game ${gameId}`)
+	break;
+    } case "game_chess_forfeit_button": {
+	if (await checkMyTurn(gameId, callerId)) {
+	    bot.logger.debug(`Player is ending chess game ${gameId}`);
 
-	const embed = interaction.message.embeds[0]
-	embed.title = "Chess Match (Ended)"
-	embed.color = 0xff444444
-	embed.timestamp = new Date(Date.now()).toISOString()
+	    const embed = interaction.message.embeds[0];
+	    embed.title = "Chess Match (Ended)";
+	    embed.color = 0xff444444;
+	    embed.timestamp = new Date(Date.now()).toISOString();
 
-	const data = {
-	    embeds: [embed],
-	    components: [],
-	}
-	console.log(data)
-	ackInteraction(interaction, "update", {}, data)
+	    const data = {
+		embeds: [embed],
+		components: [],
+	    };
+	    console.log(data);
+	    ackInteraction(interaction, "update", {}, data);
 
-	libchess.close(gameId)
+	    libchess.close(gameId);
+	} else {
+	    const data = {
+		content: "You can only forfeit on your turn!",
+	    };
+	    ackInteraction(interaction, "message", {ephemeral: true}, data);
 
-	break
+	    break;
     }}
 }
 
@@ -227,7 +233,7 @@ ${coloredBoard}
 		    label: "Refresh board",
 		},{
 		    type: MessageComponentTypes.Button,
-		    customId: "game_chess_endgame_button",
+		    customId: "game_chess_forfeit_button",
 		    style: ButtonStyles.Danger,
 		    label: "End game",
 		}]
