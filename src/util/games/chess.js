@@ -137,8 +137,8 @@ async function componentHandler(interaction) {
 		content: "You can only forfeit on your turn!",
 	    };
 	    ackInteraction(interaction, "message", {ephemeral: true}, data);
-
-	    break;
+	}
+	break;
     }}
 }
 
