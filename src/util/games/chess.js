@@ -49,8 +49,8 @@ async function componentHandler(interaction) {
 
     try {
 	gameId = (interaction.message.embeds[0].fields[0].value +
-			"v" +
-			interaction.message.embeds[0].fields[1].value).replaceAll(/[<@>]/g, "").toLowerCase()
+		  "v" +
+		  interaction.message.embeds[0].fields[1].value).replaceAll(/[<@>]/g, "").toLowerCase()
     } catch {
 	const data = {
 	    content: "Something went wrong when getting the game ID"
