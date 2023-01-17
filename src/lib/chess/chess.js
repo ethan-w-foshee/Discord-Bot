@@ -98,3 +98,7 @@ export async function color(name) {
 export function valid(res) {
     return res.match(/invalid/i) == null;
 }
+
+export function win(res) {
+    return res.match(/mate/i) == null;
+}

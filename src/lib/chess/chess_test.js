@@ -23,6 +23,14 @@ Deno.test("Chess Testing", async (t) => {
 	await chess.close(n);
 	assert(res == false);
     });
+    await t.step("Chess Win", async () => {
+	const n = "Win Chess";
+	await chess.make(n);
+	await chess.play(n, "pgnload ./src/lib/chess/win.pgn");
+	const res = chess.win(await chess.play(n,"c4#"));
+	await chess.close(n);
+	assert(res == true);
+    });
     await t.step("Chess State", async () => {
 	const n = "State";
 	await chess.make(n);
