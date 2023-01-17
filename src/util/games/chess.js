@@ -16,13 +16,13 @@ export default function chess(bot, interaction) {
     const data = interaction.data;
 
     switch(interaction.type) {
-    case InteractionTypes.ApplicationCommand: {
-	if (data.customId.includes("chess")) {
+    case InteractionTypes.MessageComponent: {
+	if (data.customId?.includes("chess")) {
 	    componentHandler(interaction);
 	}
 	break;
-    } case InteractionTypes.MessageComponent: {
-	if (data.options.filter((option) =>
+    } case InteractionTypes.ApplicationCommand: {
+	if (data.options?.filter((option) =>
 	    option.name.includes("chess")
 	).length > 0) {
 	    slashHandler(interaction);
