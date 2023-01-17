@@ -61,9 +61,12 @@ async function componentHandler(interaction) {
     }
 
     if (!(await libchess.exists(gameId))) {
-	deleteMessage(bot, interaction.message.channelId, interaction.message.id)
-	const data = {content: "This game does not exist anymore, sorry!"}
-	ackInteraction(interaction, "message", {ephemeral: true}, data)
+	try {
+	    deleteMessage(bot, interaction.message.channelId, interaction.message.id)
+	} finally {
+	    const data = {content: "This game does not exist anymore, sorry!"}
+	    ackInteraction(interaction, "message", {ephemeral: true}, data)
+	}
 	return
     }
 
