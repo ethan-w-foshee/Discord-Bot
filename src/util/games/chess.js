@@ -45,6 +45,7 @@ export default function chess(bot, interaction) {
 
 async function componentHandler(interaction) {
     const component = interaction.data
+    const callerId = interaction.member.id
     let gameId
 
     try {
@@ -69,8 +70,6 @@ async function componentHandler(interaction) {
     switch(component.customId) {
     case "game_chess_play_button": {
 	bot.logger.debug("Player pressed play on a chess match")
-
-	const callerId = interaction.member.id
 
 	if (await checkMyTurn(gameId, callerId)) {
 	    const data = {
@@ -235,7 +234,7 @@ ${coloredBoard}
 		    type: MessageComponentTypes.Button,
 		    customId: "game_chess_forfeit_button",
 		    style: ButtonStyles.Danger,
-		    label: "End game",
+		    label: "Forfeit",
 		}]
 	    }]
 	}
