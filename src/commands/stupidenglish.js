@@ -33,7 +33,7 @@ addBotCommand(bot, {
 	name: "stupidenglish",
 	type: "message",
 	actions: [
-		function (bot, interaction) {
+		function (_bot, interaction) {
 			/* Get options */
 			const options = interaction.data.options
 
