@@ -19,6 +19,6 @@ addBotCommand(bot, {
         required: true,
     }],
     actions: [
-	    kickSlash(bot, interaction)
+	    kickSlash
     ]
 });

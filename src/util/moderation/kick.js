@@ -1,8 +1,5 @@
 import { kickMember } from "../../../deps.js";
-import {
-    ackInteraction
-} from "../ackInteraction.js";
-// import { bot } from "../../../bot.js";
+import ackInteraction from "../ackInteraction.js";
 
 export default function kickSlash(bot, interaction) {
     const options = interaction.data.options
