@@ -1,6 +1,6 @@
 import { bot } from "../../../bot.js";
 import { addBotCommand } from "../../lib/commands.js";
-import { kickSlash } from "../../util/moderation/kick.js"
+import kickSlash from "../../util/moderation/kick.js"
 
 addBotCommand(bot, {
     type: "slash",
