@@ -6,7 +6,7 @@ import ackInteraction from "../util/ackInteraction.js";
 
 addBotCommand(bot, {
 	description: "Send a message but without a few letters",
-	name: "stupidenglish",
+	name: "stupify-my-words",
 	options: [{
 		name: "content",
 		description: "The original message to be \"corrected\"",
