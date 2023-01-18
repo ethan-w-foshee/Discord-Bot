@@ -1,7 +1,7 @@
 import { kickMember } from "../../../deps.js";
 import {
-    editOriginalInteractionResponse
-} from "../../../deps.js";
+    ackInteraction
+} from "../ackInteraction.js";
 // import { bot } from "../../../bot.js";
 
 export default function kickSlash(bot, interaction) {
@@ -17,9 +17,8 @@ export default function kickSlash(bot, interaction) {
             reason: reason
         }
     );
-    editOriginalInteractionResponse(
-	bot,
-	interaction.token,
+    ackInteraction(
+        interaction, "message", { },
 	{
 	    content:`User ${user} kicked for ${reason}.`
 	}
