@@ -1,7 +1,7 @@
 import { kickMember } from "../../../deps.js";
 import ackInteraction from "../ackInteraction.js";
 
-export default function kickSlash(bot, interaction) {
+export function kickSlash(bot, interaction) {
     const options = interaction.data.options
     const guild = interaction.guildId
     const user = options.filter(option => option.name == "user")[0].value
