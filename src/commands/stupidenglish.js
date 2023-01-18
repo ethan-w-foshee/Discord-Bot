@@ -23,28 +23,21 @@ addBotCommand(bot, {
 				option.name == "content"
 			)[0].value;
 
-			ackInteraction(interaction, "message", '', { content: stupidify(inval) })
+			ackInteraction(interaction, "message", {}, { content: stupidify(inval) })
 		}
 	]
 });
 
 addBotCommand(bot, {
 	description: "Stupify a message",
-	name: "stupidenglish",
+	name: "stupify",
 	type: "message",
 	actions: [
 		function (_bot, interaction) {
-			/* Get options */
-			const messageObject =
-        interaction.data.resolved.messages.values().next().value;
+			const messageContent =
+        interaction.data.resolved.messages.values().next().value.content;
 
-			const options = interaction.data.options
-
-			messageObject = options.filter((option) =>
-				option.name == "content"
-			)[0].value;
-
-			ackInteraction(messageObject)
+			ackInteraction(interaction, "message", {}, {content: stupidify(messageContent) })
 		},
 	],
 });
