@@ -1,29 +1,6 @@
 import { bot } from "../../../bot.js";
 import { addBotCommand } from "../../lib/commands.js";
-import { ApplicationCommandOptionTypes,
-	 kickMember } from "../../../deps.js";
-
-function kickSlash(bot, interaction) {
-    const options = interaction.data.options
-    guild = interaction.guildId
-    user = options.filter(option => option.User == "User")[0].value
-    reason = options.filter(option => option.Reason == "Reason")[0].value
-    kickMember(
-        {
-            bot: bot,
-            guildId: guild,
-            userId: user,
-            reason: reason
-        }
-    );
-    editOriginalInteractionResponse(
-	bot,
-	interaction.token,
-	{
-	    content:`User ${user} kicked for ${reason}.`
-	}
-    );
-}
+import { kickSlash } from "../../util/moderation/kick.js"
 
 addBotCommand(bot, {
     type: "slash",
@@ -42,6 +19,6 @@ addBotCommand(bot, {
         required: true,
     }],
     actions: [
-	kickSlash
+	    kickSlash
     ]
 });
