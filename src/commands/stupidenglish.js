@@ -33,18 +33,18 @@ addBotCommand(bot, {
 	name: "stupidenglish",
 	type: "message",
 	actions: [
-		function (_bot, interaction) {
+		function (/*_bot, interaction*/) {
 			/* Get options */
-			const messageObject =
-        interaction.data.resolved.messages.values().next().value;
+		// 	const messageObject =
+        // interaction.data.resolved.messages.values().next().value;
 
-			const options = interaction.data.options
+		// 	const options = interaction.data.options
 
-			messageObject = options.filter((option) =>
-				option.name == "content"
-			)[0].value;
+		// 	messageObject = options.filter((option) =>
+		// 		option.name == "content"
+		// 	)[0].value;
 
-			ackInteraction(interaction, "message", '', { content: stupidify(messageObject) })
+			ackInteraction(/*interaction, "message", '', { content: stupidify(messageObject) } */"HEY!")
 		},
 	],
 });
