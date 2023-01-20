@@ -1,3 +1,5 @@
+import { logger } from "../../logger.js";
+
 export async function runBQN(code) {
     const enc = new TextEncoder();
     const dec = new TextDecoder();
@@ -8,6 +10,9 @@ export async function runBQN(code) {
 	stdout: "piped",
 	stdin: "piped"
     });
+
+    logger.info(`Received code: ${code}`,"libBQN");
+    
     const bytes = enc.encode(code);
     let i = 0;
     let n = 0;
