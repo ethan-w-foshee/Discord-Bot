@@ -19,7 +19,7 @@ function diagram(bot, msg) {
 	// System functions like files and FFI start with F You need to
 	// clean the code submitted as to not let people escape the
 	// sandbox and do something malicious	
-	code = code[1].replaceAll(/•(F[\S]|SH)*/ig,'');
+	code = code[1].replaceAll(/•(F[\S]|SH) */ig,'');
 	
 	runBQN(code).then( (res) => {
 	    sendMessage(bot, msg.channelId, {
