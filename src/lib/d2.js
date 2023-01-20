@@ -19,11 +19,11 @@ const themes = [
 export async function renderD2(code, opts) {
     const enc = new TextEncoder();
 
-    let theme = opts.theme;
+    const theme = opts.theme;
 
-    let sketch = opts.sketch;
+    const sketch = opts.sketch;
 
-    let cmd = ["d2"];
+    const cmd = ["d2"];
 
     if (sketch)
 	cmd.push("-s");
