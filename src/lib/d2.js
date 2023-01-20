@@ -19,9 +19,9 @@ const themes = [
 export async function renderD2(code, opts) {
     const enc = new TextEncoder();
 
-    let theme = opt.theme;
+    let theme = opts.theme;
 
-    let sketch = opt.sketch;
+    let sketch = opts.sketch;
 
     let cmd = ["d2"];
 
