@@ -29,12 +29,17 @@ router
 	context.response.type = "image/png";
     }).get("/d2", async (context) => {
 	const params = context.request.url.searchParams;
+	const theme = params.get("theme");
+	const sketch = params.get("sketch");
 	// TODO: Add GET options for things like '?theme=light'
 	let code = params.get('code');
 	if (code) {
 	    console.log(code);
 	    code = decode(code);
-	    context.response.body = await renderD2(code);
+	    context.response.body = await renderD2(code, {
+		theme
+		sketch
+	    });
 	    context.response.type = "image/png";
 	}else {
 	    context.response.body = "No D2";

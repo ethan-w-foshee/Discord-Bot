@@ -1,8 +1,39 @@
-export async function renderD2(code) {
+const themes = [
+    "0",
+    "1",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "100",
+    "101",
+    "102",
+    "103",
+    "104",
+    "105"
+];
+
+
+export async function renderD2(code, opts) {
     const enc = new TextEncoder();
 
+    let theme = opt.theme;
+
+    let sketch = opt.sketch;
+
+    let cmd = ["d2"];
+
+    if (sketch)
+	cmd.push("-s");
+    if (theme in themes)
+	cmd.push(...["-t",theme]);
+
+    cmd.push(...["-","-"])
+    
     const d2 = Deno.run({
-	cmd: ["d2","-","-"],
+	cmd,
 	stderr: "piped",
 	stdout: "piped",
 	stdin: "piped"
