@@ -32,6 +32,7 @@ router
 	const theme = params.get("theme");
 	const sketch = params.get("sketch");
 	const layout = params.get("layout");
+	const bare = params.get("bare");
 	let code = params.get('code');
 	if (code) {
 	    console.log(code);
