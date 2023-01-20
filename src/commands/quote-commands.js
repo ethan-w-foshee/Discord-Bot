@@ -78,7 +78,7 @@ addBotCommand(bot, {
 
 addBotCommand(bot, {
   description: "Turn a message into an inspriational quote",
-  name: "quote-message",
+  name: "quoth",
   type: "message",
   actions: [
     function (bot, interaction) {
