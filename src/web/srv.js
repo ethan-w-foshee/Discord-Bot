@@ -32,7 +32,6 @@ router
 	const theme = params.get("theme");
 	const sketch = params.get("sketch");
 	const layout = params.get("layout");
-	// TODO: Add GET options for things like '?theme=light'
 	let code = params.get('code');
 	if (code) {
 	    console.log(code);
