@@ -29,6 +29,8 @@ export async function renderD2(code, opts) {
 
     const layout = opts?.layout;
 
+    const bare = opts?.bare;
+
     const cmd = ["d2"];
 
     if (sketch)
@@ -56,8 +58,10 @@ export async function renderD2(code, opts) {
     /* The code being submitted is
      * small, no need to worry about
      * streams */
-    console.log(code)
-    await d2.stdin.write(enc.encode(code));
+    let code_ = code
+    if (!bare)
+	code_ = '" ":{\n'+code+'\n}';
+    await d2.stdin.write(enc.encode(code_));
     await d2.stdin.close();
     const svg = await d2.output();
     await d2.stderr.close()
