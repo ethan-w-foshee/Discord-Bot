@@ -40,7 +40,8 @@ router
 	    context.response.body = await renderD2(code, {
 		theme,
 		sketch,
-		layout
+		layout,
+		bare
 	    });
 	    context.response.type = "image/png";
 	}else {
