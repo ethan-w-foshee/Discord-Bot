@@ -37,7 +37,7 @@ router
 	    console.log(code);
 	    code = decode(code);
 	    context.response.body = await renderD2(code, {
-		theme
+		theme,
 		sketch
 	    });
 	    context.response.type = "image/png";
