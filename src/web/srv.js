@@ -32,7 +32,7 @@ router
 	const theme = params.get("theme");
 	const sketch = params.get("sketch");
 	const layout = params.get("layout");
-	// TODO: Add GET options for things like '?theme=light'
+	const bare = params.get("bare");
 	let code = params.get('code');
 	if (code) {
 	    console.log(code);
@@ -40,7 +40,8 @@ router
 	    context.response.body = await renderD2(code, {
 		theme,
 		sketch,
-		layout
+		layout,
+		bare
 	    });
 	    context.response.type = "image/png";
 	}else {
