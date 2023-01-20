@@ -2,10 +2,6 @@
 name: Deno linting and unit tests
 on:
   workflow_call:
-  push:
-    branches-ignore:
-      - main
-      - dev
   pull_request:
     branches:
       - main
@@ -15,29 +11,47 @@ permissions:
   contents: read
 
 jobs:
-  lint:
-    runs-on: self-hosted
-    steps:
-      - name: Setup repo
-        uses: actions/checkout@v3
-      - name: Setup Deno
-        uses: denoland/setup-deno@v1
-        with:
-          deno-version: v1.x
-      - name: Run linter
-        run: deno lint
-
   test:
-    # If (push to master or dev branch) OR (pull_request)
-    if: ${{ (github.event_name == 'push' && ( github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev' ) ) || github.event_name == 'pull_request' }}
-    needs: lint
     runs-on: self-hosted
+    env:
+      tag: ${{fromJSON('["latest","dev"]')[github.ref == 'refs/heads/dev']}}
     steps:
       - name: Setup repo
         uses: actions/checkout@v3
-      - name: Setup Deno
-        uses: denoland/setup-deno@v1
+      - name: Cache Container
+        id: image-cache
+        uses: actions/cache@v3
         with:
-          deno-version: v1.x
+          path: image
+          key: starbot_container-${{ hashFiles('flake.*','deps.js') }}
+      - name: Build Container
+        if: steps.image-cache.outputs.cache-hit != 'true'
+        run: |
+          echo $tag
+          podman run --rm -v ./:/wd:Z -w /wd docker.io/nixos/nix sh -c 'nix \
+            --extra-experimental-features nix-command \
+            --extra-experimental-features flakes \
+            build .#${{fromJSON('["StarBot","StarBot-Test"]')[github.ref == 'refs/heads/dev']}}
+            cp result image
+            rm result'
+      - name: Create Deno Cache Container
+        if: steps.image-cache.outputs.cache-hit != 'true'
+        run: |
+          podman load -i image
+          podman run --name denoCache -v ./:/wd:Z \
+            -w /wd localhost/starbot:$tag deno cache deps.js
+          rm image
+          podman export -o image.tar denoCache
+          podman container stop denoCache
+          podman container rm denoCache
+          podman image rm starbot:$tag
+          gzip image.tar
+          mv image.tar.gz image
+      - name: Load Image
+        run: podman import image starbot:$tag
+      - name: Lint code
+        run: |
+          podman run --rm -v ./:/wd:Z -w /wd starbot:$tag lints
       - name: Run tests
-        run: deno test --allow-env --allow-read --allow-write --allow-net --unstable
+        run: |
+          podman run --rm -v ./:/wd:Z -w /wd starbot:$tag tests

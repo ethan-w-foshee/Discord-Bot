@@ -31,16 +31,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: image
-          key: starbot_container-${{ hashFiles('flake.*') }}
-      - name: Build Container
-        if: steps.image-cache.outputs.cache-hit != 'true'
-        run: |
-          podman run --rm -v ./:/wd -w /wd docker.io/nixos/nix sh -c 'nix \
-            --extra-experimental-features nix-command \
-            --extra-experimental-features flakes \
-            build .#${{ inputs.service-name }}
-            cp result image
-            rm result'
+          key: starbot_container-${{ hashFiles('flake.*','deps.js') }}
       - name: SSH Key Creation
         run: |
           echo "${{ secrets.ssh-key}}" > .key
