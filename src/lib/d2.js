@@ -15,6 +15,10 @@ const themes = [
     "105"
 ];
 
+const layouts = [
+    "dagre",
+    "elk"
+];
 
 export async function renderD2(code, opts) {
     const enc = new TextEncoder();
@@ -23,12 +27,16 @@ export async function renderD2(code, opts) {
 
     const sketch = opts?.sketch;
 
+    const layout = opts?.layout;
+
     const cmd = ["d2"];
 
     if (sketch)
 	cmd.push("-s");
     if (theme in themes)
 	cmd.push(...["-t",theme]);
+    if (layout in layouts)
+	cmd.push(...["-l",layout]);
 
     cmd.push(...["-","-"])
     

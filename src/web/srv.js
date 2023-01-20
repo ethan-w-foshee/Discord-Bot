@@ -31,6 +31,7 @@ router
 	const params = context.request.url.searchParams;
 	const theme = params.get("theme");
 	const sketch = params.get("sketch");
+	const layout = params.get("layout");
 	// TODO: Add GET options for things like '?theme=light'
 	let code = params.get('code');
 	if (code) {
@@ -38,7 +39,8 @@ router
 	    code = decode(code);
 	    context.response.body = await renderD2(code, {
 		theme,
-		sketch
+		sketch,
+		layout
 	    });
 	    context.response.type = "image/png";
 	}else {
