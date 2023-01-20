@@ -6,7 +6,7 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
-
+      
       deps = with pkgs; [
         deno
         # Graphs
@@ -17,6 +17,10 @@
         librsvg
         # Funny WingDing Language
         cbqn
+        # Python
+        pypy3
+        # Chess
+        gnuchess
       ];
       
       # The thing that runs starbot
@@ -28,24 +32,40 @@
         '';
       };
 
+      tests = pkgs.writeShellApplication {
+        name = "tests";
+        runtimeInputs = deps;
+        text = ''
+          deno test -A
+        '';
+      };
+
+      lints = pkgs.writeShellApplication {
+        name = "lints";
+        runtimeInputs = deps;
+        text = ''
+          deno lint
+        '';
+      };
+
       mkImage = (tag: pkgs.dockerTools.buildImage {
         name = "starbot";
         tag = "${tag}";
         copyToRoot = pkgs.buildEnv {
           name = "starbot-root";
-          paths = [ starBot pkgs.bashInteractive ];
+          paths = [
+            starBot
+            tests
+            lints
+            pkgs.bashInteractive
+          ] ++ deps;
           pathsToLink = [
             "/bin"
           ];
         };
       });
       
-    in {
-      apps.default = {
-        type = "app";
-        program = "${starBot}/bin/starbot";
-      };
-      
+    in {      
       packages.StarBot = mkImage "latest";
 
       packages.StarBot-Test = mkImage "dev";
