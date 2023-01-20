@@ -59,7 +59,6 @@
             lints
             pkgs.bashInteractive
           ] ++ deps;
-          paths = [ starBot tests lints pkgs.bashInteractive ];
           pathsToLink = [
             "/bin"
           ];
