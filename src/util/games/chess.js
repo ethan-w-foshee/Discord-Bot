@@ -21,7 +21,7 @@ export default function chess(bot, interaction) {
 	    /* Get Game ID */
 	    let gameId;
 	    try {
-		gameId = (interaction.message.embeds[0].fields[0].value +
+		gameId = "chess." + (interaction.message.embeds[0].fields[0].value +
 			  "v" +
 			  interaction.message.embeds[0].fields[1].value).replaceAll(/[<@>]/g, "");
 	    } catch {
@@ -102,7 +102,7 @@ async function componentHandler(bot, interaction, gameId, component) {
 	bot.logger.debug(`Refreshing board for game ${gameId}`);
 
 	ackInteraction(interaction, "deferred");
-	updateEmbed(interaction, gameId);
+	updateEmbed(bot, interaction, gameId);
 	break;
     } case "game_chess_forfeit_button": {
 	if (await checkMyTurn(gameId, callerId)) {
@@ -141,7 +141,7 @@ async function modalHandler(bot, interaction, gameId, component) {
 
 	if (isValid) {
 	    ackInteraction(interaction, "deferred");
-	    updateEmbed(interaction, gameId);
+	    updateEmbed(bot, interaction, gameId);
 	} else {
 	    const data = {
 		content: "That's an invalid move! Try again!\n\nFor help on using Algebreic notation, see here: https://www.chess.com/terms/chess-notation"
@@ -174,6 +174,19 @@ async function slashHandler(bot, interaction) {
     const player1 = interaction.member.id;
     const player2 = challenge ? challenge.value : "Computer";
 
+    /* If the game doesn't exist, make it */
+    await createGame(bot, interaction, player1, player2, difficulty);
+
+    /* Fetch the game. If the game did exist already,
+       this will display the game in whatever state it
+       was in previously */
+    updateEmbed(bot, interaction, gameId);
+}
+
+async function createGame(bot, interaction, player1, player2, difficulty) {
+    /* Generate game ID based on competitors */
+    const gameId = "chess." + player1 + "b" + player2;
+
     /* Determine whether or not this is a private game */
     const isComputer = player2 == "Computer";
     const isSelf = player1 == player2;
@@ -183,11 +196,8 @@ async function slashHandler(bot, interaction) {
 
     ackInteraction(interaction, "thinking", flags);
 
-    /* Generate gameId based on player IDs */
-    const gameId = player1 + "v" + player2;
-
-    /* If the game doesn't exist, make it */
     if (!(libchess.exists(gameId))) {
+	
 	/* If this is NOT a private game, alert the opponent */
 	if ( !(isComputer || isSelf) ) {
 	    const data = {
@@ -197,14 +207,9 @@ async function slashHandler(bot, interaction) {
 	}
 	await libchess.make(gameId, isComputer, difficulty);
     }
-
-    /* Fetch the game. If the game did exist already,
-       this will display the game in whatever state it
-       was in previously */
-    updateEmbed(interaction, gameId);
 }
 
-async function updateEmbed(interaction, gameId) {
+async function updateEmbed(bot, interaction, gameId) {
     const color = await libchess.color(gameId);
     const turnNum = await libchess.turn(gameId);
     const board = await libchess.board(gameId);
