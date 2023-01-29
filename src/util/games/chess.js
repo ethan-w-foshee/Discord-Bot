@@ -175,7 +175,7 @@ async function slashHandler(bot, interaction) {
     const player2 = challenge ? challenge.value : "Computer";
 
     /* If the game doesn't exist, make it */
-    await createGame(bot, interaction, player1, player2, difficulty);
+    const gameId = await createGame(bot, interaction, player1, player2, difficulty);
 
     /* Fetch the game. If the game did exist already,
        this will display the game in whatever state it
@@ -186,6 +186,8 @@ async function slashHandler(bot, interaction) {
 async function createGame(bot, interaction, player1, player2, difficulty) {
     /* Generate game ID based on competitors */
     const gameId = "chess." + player1 + "b" + player2;
+
+    bot.logger.debug(`Creating chess game ${gameId}...`);
 
     /* Determine whether or not this is a private game */
     const isComputer = player2 == "Computer";
@@ -206,7 +208,12 @@ async function createGame(bot, interaction, player1, player2, difficulty) {
 	    sendMessage(bot, interaction.channelId, data);
 	}
 	await libchess.make(gameId, isComputer, difficulty);
+	bot.logger.info(`Created chess game ${gameId}`);
+    } else {
+	bot.logger.info(`Chess game ${gameId} already exists!`);
     }
+
+    return gameId;
 }
 
 async function updateEmbed(bot, interaction, gameId) {
