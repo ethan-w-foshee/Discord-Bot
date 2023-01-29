@@ -35,20 +35,15 @@ export default function chess(bot, interaction) {
 }
 
 async function componentHandler(bot, interaction) {
-    const needsGameId = ["game_chess_play_button", "game_chess_forfeit_button", "game_chess_play_modal"]
+    const needsGameId = ["play", "forfeit", "submitMove"]
     const component = interaction.data;
+    const gameId = component.customId.split("_")[2];
+    const componentId = component.customId.split("_").slice(3);
     const callerId = interaction.member.id;
-    let gameId;
 
     /* If the component needs a gameId to work, provide some error handling */
-    if (needsGameId.includes(component.customId)) {
-	/* Get the gameId, fail if not possible */
-	try {
-	    gameId = "chess." + (interaction.message.embeds[0].fields[0].value +
-				 "v" +
-				 interaction.message.embeds[0].fields[1].value)
-		.replaceAll(/[<@>]/g, "");
-	} catch {
+    if (needsGameId.includes(componentId)) {
+	if (gameId == "none") {
 	    const data = {
 		content: "Something went wrong when getting the game ID"
 	    };
@@ -72,19 +67,19 @@ async function componentHandler(bot, interaction) {
 	}	
     }
 
-    switch(component.customId) {
-    case "game_chess_play_button": {
+    switch(componentId) {
+    case "play": {
 	bot.logger.debug("Player pressed play on a chess match");
 
 	if (await checkMyTurn(gameId, callerId)) {
 	    const data = {
-		customId: "game_chess_play_modal",
+		customId: "game_chess_" + gameId + "_submitMove",
 		title: "Enter your move",
 		components: [{
 		    type: MessageComponentTypes.ActionRow,
 		    components: [{
 			type: MessageComponentTypes.InputText,
-			customId: "game_chess_play_textin",
+			customId: "game_chess_" + gameId +"_enterMove",
 			style: TextStyles.Short,
 			label: "Input string"
 		    }]
@@ -97,7 +92,7 @@ async function componentHandler(bot, interaction) {
 	    ackInteraction(interaction, "message", {ephemeral: true}, data);
 	}
 	break;
-    } case "game_chess_forfeit_button": {
+    } case "forfeit": {
 	if (await checkMyTurn(gameId, callerId)) {
 	    bot.logger.debug(`Player is ending chess game ${gameId}`);
 
@@ -120,9 +115,10 @@ async function componentHandler(bot, interaction) {
 	    ackInteraction(interaction, "message", {ephemeral: true}, data);
 	}
 	break;
-    } case "game_chess_challenge_accept": {
+    } case "chlgAccept": {
+	bot.logger.debug("Player accepted")
 	break;
-    } case "game_chess_play_modal": {
+    } case "submitMove": {
 	const playValue = component.components[0].components[0].value;
 	bot.logger.debug(`Received chess Play modal submission with value: ${playValue}`);
 
@@ -135,7 +131,7 @@ async function componentHandler(bot, interaction) {
 	    const data = {
 		content: "That's an invalid move! Try again!\n\nFor help on using Algebreic notation, see here: https://www.chess.com/terms/chess-notation"
 	    };
-	    ackInteraction(interaction, "message", {ephemeral: true}, data);
+	    ackInteraction(interaction, "message", {ephemeral: true, suppress_embeds: true}, data);
 	}
 	break;
     }}
@@ -199,12 +195,12 @@ function challenge(bot, interaction, player1, player2) {
 	    type: MessageComponentTypes.ActionRow,
 	    components: [{
 		type: MessageComponentTypes.Button,
-		customId: "game_chess_challenge_accept",
+		customId: "game_chess_none_chlgAccept",
 		style: ButtonStyles.Success,
 		label: "Accept",
 	    }, {
 		type: MessageComponentTypes.Button,
-		customId: "game_chess_challenge_decline",
+		customId: "game_chess_none_chlgDecline",
 		style: ButtonStyles.Danger,
 		label: "Decline",
 	    }]
@@ -252,12 +248,12 @@ ${coloredBoard}
 	    type: MessageComponentTypes.ActionRow,
 	    components: [{
 		type: MessageComponentTypes.Button,
-		customId: "game_chess_play_button",
+		customId: "game_chess_" + gameId + "_play",
 		style: ButtonStyles.Primary,
 		label: "Play!",
 	    },{
 		type: MessageComponentTypes.Button,
-		customId: "game_chess_forfeit_button",
+		customId: "game_chess_" + gameId + "_forfeit",
 		style: ButtonStyles.Secondary,
 		label: "Forfeit",
 	    }]
