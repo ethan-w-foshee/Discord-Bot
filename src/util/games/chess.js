@@ -121,6 +121,8 @@ async function componentHandler(bot, interaction, gameId, component) {
 	    ackInteraction(interaction, "message", {ephemeral: true}, data);
 	}
 	break;
+    } case "game_chess_challenge_accept": {
+	break;
     }}
 }
 
@@ -135,7 +137,7 @@ async function modalHandler(bot, interaction, gameId, component) {
 
 	if (isValid) {
 	    ackInteraction(interaction, "deferred");
-	    updateEmbed(bot, interaction, gameId);
+	    updateBoard(bot, interaction, gameId);
 	} else {
 	    const data = {
 		content: "That's an invalid move! Try again!\n\nFor help on using Algebreic notation, see here: https://www.chess.com/terms/chess-notation"
@@ -151,7 +153,7 @@ async function slashHandler(bot, interaction) {
 	(option) => option.name.includes("chess")
     )[0].options;
 
-    const challenge = chessOptions.filter(
+    const opponent = chessOptions.filter(
 	(option) => option.name == "user"
     )[0];
 
@@ -166,31 +168,59 @@ async function slashHandler(bot, interaction) {
 
     /* Get participant IDs. Default challenge bot */
     const player1 = interaction.member.id;
-    const player2 = challenge ? challenge.value : "Computer";
-
-    /* If the game doesn't exist, make it */
-    const gameId = await createGame(bot, interaction, player1, player2, difficulty);
-
-    /* Fetch the game. If the game did exist already,
-       this will display the game in whatever state it
-       was in previously */
-    updateEmbed(bot, interaction, gameId);
-}
-
-async function createGame(bot, interaction, player1, player2, difficulty) {
-    /* Generate game ID based on competitors */
-    const gameId = "chess." + player1 + "v" + player2;
-
-    bot.logger.debug(`Creating chess game ${gameId}...`);
+    const player2 = opponent ? opponent.value : "Computer";
 
     /* Determine whether or not this is a private game */
     const isComputer = player2 == "Computer";
     const isSelf = player1 == player2;
+    const isPrivate = (isSelf || isComputer)
 
     /* If the game is private, enable the "ephemeral" flag */
-    const flags = (isSelf || isComputer) ? {ephemeral: true} : {};
+    const flags = isPrivate ? {ephemeral: true} : {};
+    
+    ackInteraction(interaction, "thinking", flags);    
 
-    ackInteraction(interaction, "thinking", flags);
+    /* Generate game ID based on competitors */
+    const gameId = "chess." + player1 + "v" + player2;
+
+    if (libchess.exists(gameId)) {
+	/* If the game already exists, just present it */	
+	bot.logger.info(`Chess game ${gameId} already exists, presenting`);
+	updateBoard(bot, interaction, gameId);
+    } else {
+	if (isPrivate) {
+	    /* If not, but the game is private, just create it */	    
+	    const gameId = await createGame(bot, interaction, player1, player2, difficulty);
+	    updateBoard(bot, interaction, gameId);
+	} else {
+	    /* Otherwise, send a challenge */
+	    challenge(bot, interaction, player1, player2);
+	}
+    }
+}
+
+function challenge(bot, interaction, player1, player2) {
+    const data = {
+	content: `<@${player2}>! You have been challenged to a chess match by <@${player1}>! Do you accept?`,
+	components: [{
+	    type: MessageComponentTypes.ActionRow,
+	    components: [{
+		type: MessageComponentTypes.Button,
+		customId: "game_chess_challenge_accept",
+		style: ButtonStyles.Success,
+		label: "Accept",
+	    }, {
+		type: MessageComponentTypes.Button,
+		customId: "game_chess_challenge_decline",
+		style: ButtonStyles.Danger,
+		label: "Decline",
+	    }]
+	}]
+    };
+    editOriginalInteractionResponse(bot, interaction.token, data);
+}
+
+async function createGame(bot, interaction, player1, player2, difficulty) {
 
     if (!(libchess.exists(gameId))) {
 	
@@ -205,12 +235,13 @@ async function createGame(bot, interaction, player1, player2, difficulty) {
 	bot.logger.info(`Created chess game ${gameId}`);
     } else {
 	bot.logger.info(`Chess game ${gameId} already exists!`);
+	updateBoard(bot, interaction, gameId);
     }
 
     return gameId;
 }
 
-async function updateEmbed(bot, interaction, gameId) {
+async function updateBoard(bot, interaction, gameId) {
     const color = await libchess.color(gameId);
     const turnNum = await libchess.turn(gameId);
     const board = await libchess.board(gameId);
@@ -255,7 +286,7 @@ ${coloredBoard}
 	    },{
 		type: MessageComponentTypes.Button,
 		customId: "game_chess_forfeit_button",
-		style: ButtonStyles.Danger,
+		style: ButtonStyles.Secondary,
 		label: "Forfeit",
 	    }]
 	}]
