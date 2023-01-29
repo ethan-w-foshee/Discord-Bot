@@ -9,7 +9,6 @@ import {
 } from "../../../deps.js";
 import ackInteraction from "../ackInteraction.js";
 import * as libchess from "../../lib/chess/chess.js";
-import { bot } from "../../../bot.js";
 
 export default function chess(bot, interaction) {
     const data = interaction.data;
@@ -37,9 +36,9 @@ export default function chess(bot, interaction) {
 	    const component = interaction.data;
 
 	    if (interaction.type == InteractionTypes.ModalSubmit) {
-		modalHandler(interaction, gameId, component);
+		modalHandler(bot, interaction, gameId, component);
 	    } else if (interaction.type == InteractionTypes.MessageComponent) {
-		componentHandler(interaction, gameId, component);
+		componentHandler(bot, interaction, gameId, component);
 	    }
 	}
 	break;
@@ -47,7 +46,7 @@ export default function chess(bot, interaction) {
 	if (data.options?.filter((option) =>
 	    option.name.includes("chess")
 	).length > 0) {
-	    slashHandler(interaction);
+	    slashHandler(bot, interaction);
 	}
 	break;
     } default: {
@@ -57,7 +56,7 @@ export default function chess(bot, interaction) {
     bot.logger.debug("Running a chess command");
 }
 
-async function componentHandler(interaction, gameId, component) {
+async function componentHandler(bot, interaction, gameId, component) {
     const callerId = interaction.member.id;
 
     if (!(await libchess.exists(gameId))) {
@@ -131,7 +130,7 @@ async function componentHandler(interaction, gameId, component) {
     }}
 }
 
-async function modalHandler(interaction, gameId, component) {
+async function modalHandler(bot, interaction, gameId, component) {
 
     switch(component.customId) {
     case "game_chess_play_modal": {
@@ -153,7 +152,7 @@ async function modalHandler(interaction, gameId, component) {
     }}
 }
 
-async function slashHandler(interaction) {
+async function slashHandler(bot, interaction) {
     const chessOptions = interaction.data.options.filter(
 	(option) => option.name.includes("chess")
     )[0].options;
