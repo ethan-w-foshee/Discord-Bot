@@ -35,13 +35,15 @@ export default function chess(bot, interaction) {
 }
 
 async function componentHandler(bot, interaction) {
-    const needsGameId = ["play", "forfeit", "submitMove"]
     const component = interaction.data;
     const gameId = component.customId.split("_")[2];
-    const componentId = component.customId.split("_").slice(3);
+    const componentId = component.customId.split("_").slice(3).join("_");
     const callerId = interaction.member.id;
+    const needsGameId = ["play", "forfeit", "submitMove"];
 
-    /* If the component needs a gameId to work, provide some error handling */
+    bot.logger.debug(`Running component handler for: ${componentId}`);
+
+    /* If the component needs a gameId to work, provide some error handling */    
     if (needsGameId.includes(componentId)) {
 	if (gameId == "none") {
 	    const data = {
