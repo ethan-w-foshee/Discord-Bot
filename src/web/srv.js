@@ -2,6 +2,7 @@ import { Application, Router,
 	 Image } from "../../deps.js";
 import { fonts } from "../../data/fonts.js";
 import { renderD2 } from "../lib/d2.js";
+import { renderDoubt } from "../lib/doubt.js";
 import { decode } from "../lib/web.js";
 import "../lib/images.js";
 
@@ -48,7 +49,14 @@ router
 	    context.response.body = "No D2";
 	    context.response.type = "text/html";
 	}
-  });
+    }).get("/doubt", async (context) => {
+	// TODO: Allow supplying a url of an image to get? unsafe but uh, that's okay
+	// And supply position and whatnot
+	const params = context.request.url.searchParams;
+	const txt = decodeURI(params.get("txt"));
+	context.response.body = await renderDoubt(txt);
+	context.response.type = "image/png";
+    });
 
 const starbotWeb = new Application();
 

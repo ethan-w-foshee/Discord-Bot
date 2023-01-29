@@ -24,5 +24,5 @@ export async function runBQN(code) {
     const output = await bqn.output();
     await bqn.close();
 
-    return dec.decode(output);
+    return dec.decode(output).trimEnd();
 }
