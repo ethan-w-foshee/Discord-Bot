@@ -4,7 +4,7 @@ import {
     TextStyles,
     ButtonStyles,
     editOriginalInteractionResponse,
-    sendMessage,
+//    sendMessage,
     deleteMessage,
 } from "../../../deps.js";
 import ackInteraction from "../ackInteraction.js";
@@ -189,8 +189,8 @@ async function slashHandler(bot, interaction) {
 	updateBoard(bot, interaction, gameId);
     } else {
 	if (isPrivate) {
-	    /* If not, but the game is private, just create it */	    
-	    const gameId = await createGame(bot, interaction, player1, player2, difficulty);
+	    /* If not, but the game is private, just create it */
+	    await libchess.make(gameId, isComputer, difficulty)
 	    updateBoard(bot, interaction, gameId);
 	} else {
 	    /* Otherwise, send a challenge */
@@ -218,27 +218,6 @@ function challenge(bot, interaction, player1, player2) {
 	}]
     };
     editOriginalInteractionResponse(bot, interaction.token, data);
-}
-
-async function createGame(bot, interaction, player1, player2, difficulty) {
-
-    if (!(libchess.exists(gameId))) {
-	
-	/* If this is NOT a private game, alert the opponent */
-	if ( !(isComputer || isSelf) ) {
-	    const data = {
-		content: `<@${player2}>! You have been challenged to a chess match by <@${player1}>`
-	    };
-	    sendMessage(bot, interaction.channelId, data);
-	}
-	await libchess.make(gameId, isComputer, difficulty);
-	bot.logger.info(`Created chess game ${gameId}`);
-    } else {
-	bot.logger.info(`Chess game ${gameId} already exists!`);
-	updateBoard(bot, interaction, gameId);
-    }
-
-    return gameId;
 }
 
 async function updateBoard(bot, interaction, gameId) {
