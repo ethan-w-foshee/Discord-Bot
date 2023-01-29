@@ -185,7 +185,7 @@ async function slashHandler(bot, interaction) {
 
 async function createGame(bot, interaction, player1, player2, difficulty) {
     /* Generate game ID based on competitors */
-    const gameId = "chess." + player1 + "b" + player2;
+    const gameId = "chess." + player1 + "v" + player2;
 
     bot.logger.debug(`Creating chess game ${gameId}...`);
 
@@ -220,7 +220,7 @@ async function updateEmbed(bot, interaction, gameId) {
     const color = await libchess.color(gameId);
     const turnNum = await libchess.turn(gameId);
     const board = await libchess.board(gameId);
-    const players = gameId.split("v");
+    const players = gameId.split(".")[1].split("v");
     const playerTag1 = `<@${players[0]}>`;
     const playerTag2 = players[1] == "Computer" ? players[1] : `<@${players[1]}>`;
 
@@ -278,8 +278,8 @@ ${coloredBoard}
 
 async function checkMyTurn(gameId, userId) {
     /* Return whether or not it is the user's turn */
-    const whitePlayer = gameId.split("v")[0];
-    const blackPlayer = gameId.split("v")[1];
+    const whitePlayer = gameId.split(".")[1].split("v")[0];
+    const blackPlayer = gameId.split(".")[1].split("v")[1];
     const color = await libchess.color(gameId);
 
     return (color == "Black" && (blackPlayer == userId) ||
