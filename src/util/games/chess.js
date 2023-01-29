@@ -98,12 +98,6 @@ async function componentHandler(bot, interaction, gameId, component) {
 	    ackInteraction(interaction, "message", {ephemeral: true}, data);
 	}
 	break;
-    } case "game_chess_refresh_button": {
-	bot.logger.debug(`Refreshing board for game ${gameId}`);
-
-	ackInteraction(interaction, "deferred");
-	updateEmbed(bot, interaction, gameId);
-	break;
     } case "game_chess_forfeit_button": {
 	if (await checkMyTurn(gameId, callerId)) {
 	    bot.logger.debug(`Player is ending chess game ${gameId}`);
@@ -258,11 +252,6 @@ ${coloredBoard}
 		customId: "game_chess_play_button",
 		style: ButtonStyles.Primary,
 		label: "Play!",
-	    },{
-		type: MessageComponentTypes.Button,
-		customId: "game_chess_refresh_button",
-		style: ButtonStyles.Secondary,
-		label: "Refresh board",
 	    },{
 		type: MessageComponentTypes.Button,
 		customId: "game_chess_forfeit_button",
