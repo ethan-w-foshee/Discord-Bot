@@ -14,32 +14,10 @@ export default function chess(bot, interaction) {
     const data = interaction.data;
 
     switch(interaction.type) {
-    case InteractionTypes.MessageComponent: /* falls through */
-    case InteractionTypes.ModalSubmit: {
+    case InteractionTypes.ModalSubmit: /* falls through */
+    case InteractionTypes.MessageComponent: {
 	if (data.customId?.includes("chess")) {
-	    /* Calc some variables used in both handlers*/
-	    /* Get Game ID */
-	    let gameId;
-	    try {
-		gameId = "chess." + (interaction.message.embeds[0].fields[0].value +
-			  "v" +
-			  interaction.message.embeds[0].fields[1].value).replaceAll(/[<@>]/g, "");
-	    } catch {
-		const data = {
-		    content: "Something went wrong when getting the game ID"
-		};
-		ackInteraction(interaction, "message", {}, data);
-		return;
-	    }
-
-	    /* Shorthand for the component */
-	    const component = interaction.data;
-
-	    if (interaction.type == InteractionTypes.ModalSubmit) {
-		modalHandler(bot, interaction, gameId, component);
-	    } else if (interaction.type == InteractionTypes.MessageComponent) {
-		componentHandler(bot, interaction, gameId, component);
-	    }
+	    componentHandler(bot, interaction);
 	}
 	break;
     } case InteractionTypes.ApplicationCommand: {
@@ -56,21 +34,42 @@ export default function chess(bot, interaction) {
     bot.logger.debug("Running a chess command");
 }
 
-async function componentHandler(bot, interaction, gameId, component) {
+async function componentHandler(bot, interaction) {
+    const needsGameId = ["game_chess_play_button", "game_chess_forfeit_button", "game_chess_play_modal"]
+    const component = interaction.data;
     const callerId = interaction.member.id;
+    let gameId;
 
-    if (!(await libchess.exists(gameId))) {
-	/* This is a cheap and bad way of detecting if the
-	   target message is ephemeral or not. This needs
-	   to change at some point but I don't wanna right
-	   now. */
-	if (interaction.message.flags != 64) {
-	    deleteMessage(bot, interaction.message.channelId, interaction.message.id);
+    /* If the component needs a gameId to work, provide some error handling */
+    if (needsGameId.includes(component.customId)) {
+	/* Get the gameId, fail if not possible */
+	try {
+	    gameId = "chess." + (interaction.message.embeds[0].fields[0].value +
+				 "v" +
+				 interaction.message.embeds[0].fields[1].value)
+		.replaceAll(/[<@>]/g, "");
+	} catch {
+	    const data = {
+		content: "Something went wrong when getting the game ID"
+	    };
+	    ackInteraction(interaction, "message", {}, data);
+	    return;
 	}
-	const data = {content: "This game does not exist anymore, sorry!"};
-	ackInteraction(interaction, "message", {ephemeral: true}, data);
 
-	return;
+	/* If the gameId can be found but the game doesn't exist, fail */
+	if (!(await libchess.exists(gameId))) {
+	    /* This is a cheap and bad way of detecting if the
+	       target message is ephemeral or not. This needs
+	       to change at some point but I don't wanna right
+	       now. */
+	    if (interaction.message.flags != 64) {
+		deleteMessage(bot, interaction.message.channelId, interaction.message.id);
+	    }
+	    const data = {content: "This game does not exist anymore, sorry!"};
+	    ackInteraction(interaction, "message", {ephemeral: true}, data);
+
+	    return;
+	}	
     }
 
     switch(component.customId) {
@@ -123,13 +122,7 @@ async function componentHandler(bot, interaction, gameId, component) {
 	break;
     } case "game_chess_challenge_accept": {
 	break;
-    }}
-}
-
-async function modalHandler(bot, interaction, gameId, component) {
-
-    switch(component.customId) {
-    case "game_chess_play_modal": {
+    } case "game_chess_play_modal": {
 	const playValue = component.components[0].components[0].value;
 	bot.logger.debug(`Received chess Play modal submission with value: ${playValue}`);
 
