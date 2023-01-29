@@ -7,8 +7,8 @@ export async function renderDoubt(txt) {
 
     const text = Image.renderText(fonts[0],
 				  50, txt)
-    base.composite(text.fit(base.width,base.height),
-			 0, base-text.height*(text.width/base.width));
+    base.composite(text.fit(base.width/3.5,base.height/2),
+			 base.width/3*2, 0);
     const png = await base.encode();
     return png;
 }
