@@ -2,7 +2,7 @@ import { Application, Router,
 	 Image } from "../../deps.js";
 import { fonts } from "../../data/fonts.js";
 import { renderD2 } from "../lib/d2.js";
-import { renderDoubt } from "../lib/doubt.js";
+import { renderMeme } from "../lib/renderMeme.js";
 import { decode } from "../lib/web.js";
 import "../lib/images.js";
 
@@ -53,8 +53,9 @@ router
 	// TODO: Allow supplying a url of an image to get? unsafe but uh, that's okay
 	// And supply position and whatnot
 	const params = context.request.url.searchParams;
+	const base = decodeURI(params.get("base"));
 	const txt = decodeURI(params.get("txt"));
-	context.response.body = await renderDoubt(txt);
+	context.response.body = await renderMeme(base,txt);
 	context.response.type = "image/png";
     });
 
