@@ -12,5 +12,3 @@ for (const file of walkSync("./data/fonts")) {
 	}
     }
 }
-
-console.log(Fonts)
