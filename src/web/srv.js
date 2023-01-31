@@ -49,7 +49,7 @@ router
 	    context.response.body = "No D2";
 	    context.response.type = "text/html";
 	}
-    }).get("/doubt", async (context) => {
+    }).get("/meme", async (context) => {
 	// TODO: Allow supplying a url of an image to get? unsafe but uh, that's okay
 	// And supply position and whatnot
 	const params = context.request.url.searchParams;
