@@ -11,6 +11,15 @@ const memes = {
 	y: 0,
 	color: 0xffffffff,
 	font: "GreatVibes-Regular.ttf"
+    },
+    whiteboard: {
+	name: "Whiteboard.png",
+	width: 0.40,
+	height: 0.85,
+	x: 0.55,
+	y: 0.1,
+	color: 0x000000ff,
+	font: "CreteRound-Regular.ttf"
     }
 };
 
