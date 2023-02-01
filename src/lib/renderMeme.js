@@ -1,10 +1,11 @@
-import { Image } from "../../deps.js";
+import { Image, TextLayout } from "../../deps.js";
 import { Fonts } from "../../data/fonts.js";
 import { memeages } from "../../data/imgs.js";
 
 const memes = {
     bendoubt: {
 	name: "BenDoubt.png",
+	wrap: 500,
 	width: 1/3.5,
 	height: 1/2,
 	x: 2/3,
@@ -14,6 +15,7 @@ const memes = {
     },
     whiteboard: {
 	name: "Whiteboard.png",
+	wrap: 500,
 	width: 0.40,
 	height: 0.85,
 	x: 0.55,
@@ -32,6 +34,7 @@ export async function renderMeme(imgName, txt) {
     
     const {
 	name,
+	wrap,
 	width: w,
 	height: h,
 	x,
@@ -44,7 +47,9 @@ export async function renderMeme(imgName, txt) {
     const text = Image.renderText(
 	Fonts[font],
 	120, txt,
-	color
+	color, new TextLayout({
+	    maxWidth: wrap
+	})
     );
     
     base.composite(
