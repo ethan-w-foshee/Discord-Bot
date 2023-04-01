@@ -40,10 +40,10 @@ export async function createQuote(author, message) {
   const templateId = templates[index]["templateId"];
 
   // Apply the template to the quote
-  path = `api/v1/quotes/${quoteId}?templateId=${templateId}`;
+  path = `api/v1/quotes/${quoteId}/imageUrls?templateId=${templateId}`;
   const imageUrl = await fetch(host + path).then((val) => val.json()).then((
     val,
-  ) => val["imageUrls"]["medium"]);
+  ) => val["medium"]);
     logger.debug("Created quote image at: " + imageUrl, "quote");
 
   // Return generated image
