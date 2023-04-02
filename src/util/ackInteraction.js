@@ -16,7 +16,7 @@ const typeList = {
     update: InteractionResponseTypes.UpdateMessage
 };
 
-export default function ackInteraction(interaction, type, flags, data) {
+export default async function ackInteraction(interaction, type, flags, data) {
     /* Default type is thinking (deferred channel message w source) */
     if ( !(type in typeList) )
 	type = "thinking";
@@ -40,5 +40,5 @@ export default function ackInteraction(interaction, type, flags, data) {
     }
 
     /* Send response */
-    sendInteractionResponse(bot, interaction.id, interaction.token, interactionResponse);
+    return await sendInteractionResponse(bot, interaction.id, interaction.token, interactionResponse);
 }

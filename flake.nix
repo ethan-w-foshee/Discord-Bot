@@ -64,8 +64,17 @@
           ];
         };
       });
+    in {
+      apps.default = {
+        type = "app";
+        program = "${starBot}/bin/starbot";
+      };
+
+      apps.tests = {
+        type = "app";
+        program = "${tests}/bin/tests";
+      };
       
-    in {      
       packages.StarBot = mkImage "latest";
 
       packages.StarBot-Test = mkImage "dev";

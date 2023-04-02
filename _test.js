@@ -1,4 +1,4 @@
-import { assert } from "https://deno.land/std@0.159.0/testing/asserts.ts";
+import { assert } from "./deps.js";
 import { formatRoll, parseRoll } from "./src/util/rolls.js";
 import { createQuote } from "./src/util/quote.js";
 import { stupidify } from "./src/util/stupidenglish.js"
