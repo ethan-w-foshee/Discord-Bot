@@ -20,12 +20,14 @@ async function loadOptions() {
     const ret = []
 
     // Define all the input files to read
+    const prefix = "./src/util/peptalk/";
     const inputFiles = ["phase1.txt", "phase2.txt", "phase3.txt", "phase4.txt"]
 
     for (const file of inputFiles) {
 
+	//const filePath = import.meta.resolve(prefix + file);
 	// Read then split by lines
-	const raw = await Deno.readTextFile(file)
+	const raw = await Deno.readTextFile(prefix + file)
 	let lines = raw.split("\n")
 
 	// Sanitization. Ignore comments (#) or empty lines
