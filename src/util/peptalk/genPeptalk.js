@@ -1,7 +1,5 @@
 // Generate a pep talk
 
-import { logger } from "../../../logger.js";
-
 export async function genPeptalk() {
     // Get all the peptalk options
     const options = await loadOptions()
