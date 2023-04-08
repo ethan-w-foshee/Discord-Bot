@@ -37,3 +37,14 @@ Deno.test("Command test (stupidenglish.js)", async (t) => {
 	assert(converted == "abcdefmnopqrstuvwxyzABCDEFMNOPQRSTUVWXYZ")
     });
 });
+
+Deno.test("Command test (peptalk.js)", async (t) => {
+    await t.step("Generate a peptalk", () => {
+	// 4 is just an arbitrary value. If it's returning a string that's more
+	// than 4 characters, it's probably working. If it's returning an empty string
+	// then it probably isn't.
+
+	const peptalk = await genPeptalk();
+	assert(peptalk.length > 4);
+    });
+});
