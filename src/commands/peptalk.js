@@ -1,3 +1,4 @@
+import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
 import { genPeptalk } from "../util/peptalk/genPeptalk.js";
 import ackInteraction from "../util/ackInteraction.js";
