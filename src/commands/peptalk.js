@@ -8,9 +8,8 @@ addBotCommand(bot, {
     name: "peptalk",
     type: "slash",
     actions: [
-	async function (bot, interaction) {
-	    const msg = await genPeptalk();
-	    ackInteraction(interaction, "message", {}, {content: msg})
+	async function (_bot, interaction) {
+	    ackInteraction(interaction, "message", {}, {content: await genPeptalk()})
 	}
     ]
 });
