@@ -1,7 +1,8 @@
 import { assert } from "./deps.js";
 import { formatRoll, parseRoll } from "./src/util/rolls.js";
 import { createQuote } from "./src/util/quote.js";
-import { stupidify } from "./src/util/stupidenglish.js"
+import { stupidify } from "./src/util/stupidenglish.js";
+import { genPeptalk } from "./src/util/peptalk/genPeptalk.js";
 
 Deno.test("Command Test (roll.js)", async (t) => {
   await t.step("Rolling", () => {
@@ -39,7 +40,7 @@ Deno.test("Command test (stupidenglish.js)", async (t) => {
 });
 
 Deno.test("Command test (peptalk.js)", async (t) => {
-    await t.step("Generate a peptalk", () => {
+    await t.step("Generate a peptalk", async () => {
 	// 4 is just an arbitrary value. If it's returning a string that's more
 	// than 4 characters, it's probably working. If it's returning an empty string
 	// then it probably isn't.
