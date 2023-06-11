@@ -1,3 +1,3 @@
-export function createCommand() {
+export function createCommand(_bot, _interaction) {
     return
 }

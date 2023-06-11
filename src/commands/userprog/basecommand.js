@@ -6,8 +6,7 @@ import { addBotCommand } from "../../lib/commands.js";
 
 import { } from "../../lib/usercomms/commandDB.js";
 
-import { createCommand } from "../../lib/usercomms/createCommand.js";
-import { updateCommand } from "../../lib/usercomms/updateCommand.js";
+import { masterAction } from "../../lib/usercomms/masterAction.js";
 
 addBotCommand(bot, {
     description: "Run and Make Custom Programs and Games!",
@@ -51,7 +50,6 @@ addBotCommand(bot, {
     }],
     type: "slash",
     actions: [
-	createCommand,
-	updateCommand,
+	masterAction
     ]
 })
