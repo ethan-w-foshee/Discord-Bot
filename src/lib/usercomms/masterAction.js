@@ -13,7 +13,7 @@ const subcommands = {
 export function masterAction(bot, interaction) {
     const data = interaction.data;
 
-    switch(interact]ion.type) {
+    switch(interaction.type) {
 	case InteractionTypes.ApplicationCommand: {
 	    if (!data.options)
 		return;
