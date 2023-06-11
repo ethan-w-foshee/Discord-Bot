@@ -6,7 +6,16 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
-      
+
+      py = pkgs.python3;
+
+      pyenv = py.withPackages (p: with p; [
+        matplotlib
+        numpy
+        scipy
+        pillow
+      ]);      
+
       deps = with pkgs; [
         deno
         # Graphs
@@ -18,7 +27,7 @@
         # Funny WingDing Language
         cbqn
         # Python
-        pypy3
+        pyenv
         # Chess
         gnuchess
       ];
