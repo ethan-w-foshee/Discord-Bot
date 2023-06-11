@@ -17,9 +17,10 @@ export function masterAction(bot, interaction) {
 	case InteractionTypes.ApplicationCommand: {
 	    if (!data.options)
 		return;
-	    for (option of data.options) {
+	    for (const option of data.options) {
 		if (option.name in subcommands) {
 		    subcommands[option.name](bot, interaction);
+		    break;
 		}
 	    }
 	    break;
