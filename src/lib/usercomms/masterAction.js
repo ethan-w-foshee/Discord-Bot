@@ -1,3 +1,7 @@
+import {
+    InteractionTypes,
+} from "../../../deps.js";
+
 import { createCommand } from "../../lib/usercomms/createCommand.js";
 import { updateCommand } from "../../lib/usercomms/updateCommand.js";
 
@@ -9,7 +13,7 @@ const subcommands = {
 export function masterAction(bot, interaction) {
     const data = interaction.data;
 
-    switch(interaction.type) {
+    switch(interact]ion.type) {
 	case InteractionTypes.ApplicationCommand: {
 	    if (!data.options)
 		return;
