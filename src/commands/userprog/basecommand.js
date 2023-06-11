@@ -4,10 +4,10 @@ import {
 import { bot } from "../../../bot.js";
 import { addBotCommand } from "../../lib/commands.js";
 
-import { } from "";
+import { } from "../../lib/usercomms/commandDB.js";
 
-import { createCommand } from "./createCommand.js";
-import { updateCommand } from "./updateCommand.js";
+import { createCommand } from "../../lib/usercomms/createCommand.js";
+import { updateCommand } from "../../lib/usercomms/updateCommand.js";
 
 addBotCommand(bot, {
     description: "Run and Make Custom Programs and Games!",

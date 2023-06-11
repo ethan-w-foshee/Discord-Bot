@@ -1,4 +1,4 @@
-import { db } from "./sql.js";
+import { db } from "../../../sql.js";
 
 export class SQLiteHandler extends log.handlers.BaseHandler {
   constructor(levelName, options) {
