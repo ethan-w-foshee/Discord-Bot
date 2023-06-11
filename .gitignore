@@ -9,3 +9,4 @@ db
 *.db
 result
 ./data/training
+/data/training/
