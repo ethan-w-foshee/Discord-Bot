@@ -1,3 +1,4 @@
+import { log } from "../../../deps.js";
 import { db } from "../../../sql.js";
 
 export class SQLiteHandler extends log.handlers.BaseHandler {
