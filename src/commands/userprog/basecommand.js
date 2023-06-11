@@ -8,6 +8,8 @@ import { } from "../../lib/usercomms/commandDB.js";
 
 import { masterAction } from "../../lib/usercomms/masterAction.js";
 
+const maxCommandName = 30;
+
 addBotCommand(bot, {
     description: "Run and Make Custom Programs and Games!",
     name: "usergame",
@@ -20,14 +22,9 @@ addBotCommand(bot, {
 		name: "command",	    
 		type: ApplicationCommandOptionTypes.String,
 		description: "The name of the command you're making",
-		required: true
+		required: true,
+		max_length: maxCommandName
 	    },
-	    {
-		name: "code",
-		type: ApplicationCommandOptionTypes.String,
-		description: "The code that makes the program do",
-		required: true
-	    }
 	]
     }, {
 	name: "update",
@@ -38,14 +35,9 @@ addBotCommand(bot, {
 		name: "command",	    
 		type: ApplicationCommandOptionTypes.String,
 		description: "The name of the command you're updating",
-		required: true
+		required: true,
+		max_length: maxCommandName
 	    },
-	    {
-		name: "code",
-		type: ApplicationCommandOptionTypes.String,
-		description: "The code that makes the program do",
-		required: true
-	    }
 	]
     }],
     type: "slash",
