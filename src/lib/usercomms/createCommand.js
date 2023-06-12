@@ -1,6 +1,7 @@
 import ackInteraction from "../../util/ackInteraction.js";
 import {
     MessageComponentTypes,
+    TextStyles,
 } from "../../../deps.js";
 
 export function createCommand(_bot, interaction) {
