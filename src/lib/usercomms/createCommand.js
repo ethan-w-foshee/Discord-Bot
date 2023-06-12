@@ -13,7 +13,7 @@ export function createCommand(bot, interaction) {
     
     const commandId = createOptions.filter(
 	o => o.name == "command"
-    )[0];
+    )[0]["value"];
     
     ackInteraction(
 	interaction,
