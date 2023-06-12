@@ -6,16 +6,8 @@ import {
 
 export function sourceCommand(bot, interaction) {
     bot.logger.debug(`${JSON.stringify(interaction)}`);
-    ackInteraction(interaction, "thinking", {ephemeral: true}, {
-	content: "Updating command..."
+    ackInteraction(interaction, "message", {ephemeral: true}, {
+	content: "Updated command."
     });
-
-    editOriginalInteractionResponse(
-	bot,
-	interaction.token,
-	{
-	    content: "Command created!"
-	}
-    );
     return
 }
