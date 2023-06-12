@@ -18,6 +18,7 @@ export function masterAction(bot, interaction) {
     switch(interaction.type) {
 	case InteractionTypes.ModalSubmit:
 	case InteractionTypes.MessageComponent: {
+	    bot.logger.debug(`Component/Modal: ${data.customId}`,"UserComm")
 	    if (!data.customId.includes("usercomm"))
 		return;
 	    const commInstr = data.customId.split('_');
