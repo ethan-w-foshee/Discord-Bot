@@ -1,6 +1,5 @@
 import ackInteraction from "../../util/ackInteraction.js";
 import {
-    editOriginalInteractionResponse,
 } from "../../../deps.js";
 
 
