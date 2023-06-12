@@ -19,13 +19,13 @@ export function createCommand(_bot, interaction) {
 	{},
 	{
 	    // TODO: Actually get ID
-	    customId: `usercomm_${commandId}_src_create`,
+	    customId: `usergame_${commandId}_src_create`,
 	    title: `${commandId}: Code Creation`,
 	    components: [{
 		type: MessageComponentTypes.ActionRow,
 		components: [{
 		    type: MessageComponentTypes.InputText,
-		    customId: `usercomm_${commandId}_source`,
+		    customId: `usergame_${commandId}_source`,
 		    style: TextStyles.Paragraph,
 		    label: "Source Code"
 		}]	

@@ -20,7 +20,7 @@ export function masterAction(bot, interaction) {
     switch(interaction.type) {
 	case InteractionTypes.ModalSubmit:
 	case InteractionTypes.MessageComponent: {
-	    if (!data.customId.includes("usercomm"))
+	    if (!data.customId.includes("usergame"))
 		return;
 	    const commInstr = data.customId.split('_');
 	    const action = commInstr[2];
