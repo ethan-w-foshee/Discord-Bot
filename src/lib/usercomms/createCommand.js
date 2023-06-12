@@ -4,12 +4,14 @@ import {
     TextStyles,
 } from "../../../deps.js";
 
-export function createCommand(_bot, interaction) {
+export function createCommand(bot, interaction) {
     const createOptions = interaction.data.options.filter(
 	o => o.name == "create"
     )[0].options;
+
+    bot.logger.debug(`Creating command from... ${JSON.stringify(createOptions)}`);
     
-    const commandId = createOptions?.filter(
+    const commandId = createOptions.filter(
 	o => o.name == "command"
     )[0];
     
