@@ -22,6 +22,7 @@ export function masterAction(bot, interaction) {
 		return;
 	    const commInstr = data.customId.split('_');
 	    const action = commInstr[2];
+	    bot.logger.debug(`Received component/modal "${action}"`,"UserComm")
 	    if (action in subcommands) {
 		subcommands[action](bot, interaction)
 		return;

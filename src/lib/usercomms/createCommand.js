@@ -20,7 +20,7 @@ export function createCommand(_bot, interaction) {
 	{
 	    // TODO: Actually get ID
 	    customId: `usercomm_${commandId}_src_create`,
-	    title: "",
+	    title: `${commandId}: Code Creation`,
 	    components: [{
 		type: MessageComponentTypes.ActionRow,
 		components: [{
