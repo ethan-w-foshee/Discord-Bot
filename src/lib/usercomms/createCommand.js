@@ -4,7 +4,7 @@ import {
 } from "../../../deps.js";
 
 export function createCommand(_bot, interaction) {
-    const createOptions = interaction?.options.filter(
+    const createOptions = interaction?.options?.filter(
 	o => o.name == "create"
     )[0].options;
 
