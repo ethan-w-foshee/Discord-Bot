@@ -4,11 +4,11 @@ import {
 } from "../../../deps.js";
 
 export function createCommand(_bot, interaction) {
-    const createOptions = interaction.options.filter(
+    const createOptions = interaction?.options.filter(
 	o => o.name == "create"
     )[0].options;
 
-    const commandId = createOptions.options.filter(
+    const commandId = createOptions?.filter(
 	o => o.name == "command"
     )[0];
     
