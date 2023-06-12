@@ -14,16 +14,16 @@ const subcommands = {
 
 export function masterAction(bot, interaction) {
     const data = interaction.data;
+    bot.logger.debug(`Received and running UserComm`)
+    bot.logger.debug(`2: Received and running UserComm`,"UserComm")
 
     switch(interaction.type) {
 	case InteractionTypes.ModalSubmit:
 	case InteractionTypes.MessageComponent: {
-	    bot.logger.debug(`Component/Modal: ${data.customId}`,"UserComm")
 	    if (!data.customId.includes("usercomm"))
 		return;
 	    const commInstr = data.customId.split('_');
 	    const action = commInstr[2];
-	    bot.logger.debug(`Received component/modal "${action}"`,"UserComm")
 	    if (action in subcommands) {
 		subcommands[action](bot, interaction)
 		return;
