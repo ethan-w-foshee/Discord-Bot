@@ -5,6 +5,7 @@ import {
 
 
 export function sourceCommand(bot, interaction) {
+    bot.logger.debug(`${interaction}`);
     ackInteraction(interaction, "deferred", {ephemeral: true}, {
 	content: "Updating command..."
     })
