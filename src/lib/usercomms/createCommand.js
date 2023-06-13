@@ -3,6 +3,7 @@ import {
     MessageComponentTypes,
     TextStyles,
 } from "../../../deps.js";
+import usergameDB from "./commandDB.js";
 
 export function createCommand(bot, interaction) {
     const createOptions = interaction.data.options.filter(
@@ -14,24 +15,40 @@ export function createCommand(bot, interaction) {
     const commandId = createOptions.filter(
 	o => o.name == "command"
     )[0]["value"];
-    
-    ackInteraction(
-	interaction,
-	"modal",
-	{},
-	{
-	    // TODO: Actually get ID
-	    customId: `usergame_${commandId}_src_create`,
-	    title: `${commandId}: Code Creation`,
-	    components: [{
-		type: MessageComponentTypes.ActionRow,
+
+    // Check if command name exists, if it does, complain
+    // Otherwise present the modal
+
+    const exists = usergameDB.queryCommandName(commandId)
+
+    if (exists) {
+	ackInteraction(
+	    interaction,
+	    "message",
+	    {},
+	    {
+		content: `Command with name ${commandId} already exists`
+	    }
+	);
+    }else {
+	ackInteraction(
+	    interaction,
+	    "modal",
+	    {},
+	    {
+		// TODO: Actually get ID
+		customId: `usergame_${commandId}_src_create`,
+		title: `${commandId}: Code Creation`,
 		components: [{
-		    type: MessageComponentTypes.InputText,
-		    customId: `usergame_${commandId}_source`,
-		    style: TextStyles.Paragraph,
-		    label: "Source Code"
-		}]	
-	    }]
-	}
-    );
+		    type: MessageComponentTypes.ActionRow,
+		    components: [{
+			type: MessageComponentTypes.InputText,
+			customId: `usergame_${commandId}_source`,
+			style: TextStyles.Paragraph,
+			label: "Source Code"
+		    }]	
+		}]
+	    }
+	);
+    }
 }

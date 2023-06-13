@@ -6,5 +6,6 @@ export function sourceCommand(_bot, interaction) {
     ackInteraction(interaction, "message", {ephemeral: true}, {
 	content: "Updated command."
     });
+    // Using Command Name, create/update the command in the DB
     return
 }

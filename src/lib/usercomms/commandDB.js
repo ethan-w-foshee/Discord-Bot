@@ -1,51 +1,29 @@
-import { log } from "../../../deps.js";
 import { db } from "../../../sql.js";
 
-export class SQLiteHandler extends log.handlers.BaseHandler {
-  constructor(levelName, options) {
-    super(levelName, options);
-    db.execute(`
-CREATE TABLE IF NOT EXISTS logs(
+class CommandDB {
+    constructor() {
+	db.execute(`
+CREATE TABLE IF NOT EXISTS commandDB(
     _id INTEGER PRIMARY KEY ASC AUTOINCREMENT,
     owner TEXT NOT NULL,
-    name TEXT NOT NULL,
+    name TEXT UNIQUE NOT NULL,
     created TEXT NOT NULL,
     modified TEXT NOT NULL,
     invoked INTEGER NOT NULL,
     code TEXT NOT NULL
 );
 	`);
-    /* TODO:
+	/* TODO:
 
 	   Implement other tables such as for variable storage and
 	   acess so that command variables can persist for longer than
 	   the life of the executed user program */
-  }
+    }
+
+    queryCommandName(name) {
+	const resp = db.query("SELECT owner,created FROM commandDB WHERE name = (name);", [name])
+	return resp.length > 0;
+    }
 }
 
-log.setup({
-  handlers: {
-    console: new log.handlers.ConsoleHandler("DEBUG", {
-      formatter: (logRecord) => {
-        let tags = "";
-        if (logRecord.args.length) {
-          tags += "\n\t\t";
-          for (const tag of logRecord.args) {
-            tags += " " + tag;
-          }
-        }
-        return `[${logRecord.name}] <${logRecord.owner}> \n\`\`\`${logRecord.code}\`\`\``;
-      },
-    }),
-    sql: new SQLiteHandler("DEBUG"),
-  },
-  loggers: {
-    default: {
-      level: "DEBUG",
-      handlers: ["console", "sql"],
-    },
-  },
-});
-
-export const logger = log.getLogger();
-logger.db = db;
+export const usergameDB = CommandDB();
