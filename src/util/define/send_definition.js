@@ -20,6 +20,8 @@ function formatDefinition(result, dictionary) {
 		title: "Define " + result["word"],
 		color: 0xe03b2c,
 		fields: [{
+		    name: "Definition",
+		    value: "Not implemented"
 		}]
 	    }]
 	};
