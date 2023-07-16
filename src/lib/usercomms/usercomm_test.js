@@ -47,7 +47,7 @@ Deno.test("User Command Testing", async (t) => {
     });
 
     await t.step("Delete a Command", () => {
-	const success = usergameDB.deleteCommand(
+	usergameDB.deleteCommand(
 	    "TestUser",
 	    "noway"
 	);

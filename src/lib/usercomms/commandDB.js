@@ -68,8 +68,11 @@ CREATE TABLE IF NOT EXISTS commandDB(
     }
 
     deleteCommand(owner, name) {
-	db.query('DELETE FROM commandDB WHERE owner = (?) AND name = (?);')
-    };
+	db.query('DELETE FROM commandDB WHERE owner = (?) AND name = (?);',[
+	    owner,
+	    name
+	])
+    }
     
     queryCommandName(name) {
 	const resp = db.query("SELECT owner,created FROM commandDB WHERE name = (name);", [name])
@@ -78,3 +81,10 @@ CREATE TABLE IF NOT EXISTS commandDB(
 }
 
 export const usergameDB = new CommandDB();
+
+export function runGame(owner, name) {
+    /*
+       timeout 30s bwrap --unshare-all --ro-bind /nix /nix python3 -Iq -c 'print(sum(range(100)))
+     */
+    const _command = usergameDB.searchCommand(owner, name);
+}
