@@ -13,9 +13,10 @@ export function sendDefinition(bot, interaction, result, dictUsed) {
 }
 
 function formatDefinition(result, dictionary) {
+    let data
     switch(dictionary) {
-    case 0: // If collins dictionary was used
-	return {
+    case 0: {// If collins dictionary was used
+	data = {
 	    embeds: [{
 		title: "Define " + result["word"],
 		color: 0xe03b2c,
@@ -25,8 +26,9 @@ function formatDefinition(result, dictionary) {
 		}]
 	    }]
 	};
-    case 1: // If urban dictionary was used
-	return {
+	break;
+    } case 1: {// If urban dictionary was used
+	data = {
 	    embeds: [{
 		title: "Define " + result["word"],
 		color: 0xe03b2c,
@@ -40,5 +42,8 @@ function formatDefinition(result, dictionary) {
 		}]
 	    }]
 	};
-    }
+	break;
+    }}
+    console.log(data);
+    return data;
 }
