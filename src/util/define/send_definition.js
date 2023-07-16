@@ -32,7 +32,7 @@ function formatDefinition(result, dictionary) {
 	    embeds: [{
 		title: "Define " + result["word"],
 		color: 0xe03b2c,
-		provider: {
+		author: {
 		    name: "Urban Dictionary",
 		    url: result["permalink"]
 		},
