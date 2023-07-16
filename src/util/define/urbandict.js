@@ -7,7 +7,7 @@ export async function urbanDictDefine(word) {
     const path = "v0/define?term=" + word;
 
     logger.debug("Looking up "+word+" from Urban Dictionary");
-    const results = (await fetch(host + path)).json()["list"];
+    const results = (await (await fetch(host + path)).json())["list"];
 
     if (results.length == 0) {
 	return {
