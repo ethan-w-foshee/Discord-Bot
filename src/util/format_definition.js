@@ -1,10 +1,10 @@
 // Get a word's definition from Urban Dictionary
 
 import { logger } from "../../logger.js";
-import ackInteraction from "./ackInteraction.js";
 import { editOriginalInteractionResponse } from "../../deps.js";
 
 export function sendDefinition(bot, interaction, result, dictUsed) {
+    logger.debug("Sending a definition") // This should be parameterized but I don't want to right now
     editOriginalInteractionResponse(
 	bot,
 	interaction.token,
@@ -17,7 +17,7 @@ function formatDefinition(result, dictionary) {
     case 0: // If collins dictionary was used
 	return {
 	    "embeds": [{
-		"title": "Define " + result["word"]
+		"title": "Define " + result["word"],
 		"color": 0xe03b2c,
 		"fields": [{
 		}]
@@ -26,7 +26,7 @@ function formatDefinition(result, dictionary) {
     case 1: // If urban dictionary was used
 	return {
 	    "embeds": [{
-		"title": "Define " + result["word"]
+		"title": "Define " + result["word"],
 		"color": 0xe03b2c,
 		"url": result["permalink"],
 		"fields": [{
@@ -38,23 +38,5 @@ function formatDefinition(result, dictionary) {
 		}]
 	    }]
 	};
-    }
-}
-
-export async function urbanDictDefine(word) {
-    const host = "https://api.urbandictionary.com/";
-    let path = "v0/define?=" + word;
-
-    const results = (await fetch(host + path)).json()["list"]
-
-    if results.length == 0 {
-	return {
-	    "definition": "No definition found",
-	    "permalink": "",
-	    "word": word,
-	    "example": "No examples available"
-	}
-    } else {
-	return results[0]
     }
 }

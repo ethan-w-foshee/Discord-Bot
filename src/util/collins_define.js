@@ -10,7 +10,7 @@ export async function collinsDefine(word) {
     logger.debug("Looking up "+word+" from Urban Dictionary");
     const results = (await fetch(host + path)).json()["list"];
 
-    if results.length == 0 {
+    if (results.length == 0) {
 	return {
 	    "definition": "No definition found",
 	    "permalink": "",

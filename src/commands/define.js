@@ -32,12 +32,13 @@ addBotCommand(bot, {
 	    )[0].value || ((Math.floor(Math.random() * 100)) < 20);
 
 	    /* Get definition */
-	    if urbanDict {
-		const result = urbanDictDefine(word);
-		const dictUsed = 1
+	    let result, dictUsed
+	    if (urbanDict) {
+		result = urbanDictDefine(word);
+		dictUsed = 1
 	    } else {
-		const result = collinsDefine(word);
-		const dictUsed = 0
+		result = collinsDefine(word);
+		dictUsed = 0
 	    }
 
 	    sendDefinition(bot, interaction, result, dictUsed);
