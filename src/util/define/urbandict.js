@@ -4,7 +4,7 @@ import { logger } from "../../../logger.js";
 
 export async function urbanDictDefine(word) {
     const host = "https://api.urbandictionary.com/";
-    const path = "v0/define?=" + word;
+    const path = "v0/define?term=" + word;
 
     logger.debug("Looking up "+word+" from Urban Dictionary");
     const results = (await fetch(host + path)).json()["list"];
