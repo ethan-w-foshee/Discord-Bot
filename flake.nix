@@ -90,7 +90,9 @@
       
       devShells.default = pkgs.mkShell {
         nativeBuildInputs = [ pkgs.bashInteractive ];
-        buildInputs = deps;
+        buildInputs = deps ++ (with pkgs; [
+          sqlite          
+        ]);
       };
     });
 }
