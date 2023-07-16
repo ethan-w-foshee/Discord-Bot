@@ -44,7 +44,6 @@ addBotCommand(bot, {
 	    }
 
 	    sendDefinition(bot, interaction, result, dictUsed);
-	    ackInteraction(interaction, "message", {}, { content: stupidify(inval) })
 	}
     ]
 });
