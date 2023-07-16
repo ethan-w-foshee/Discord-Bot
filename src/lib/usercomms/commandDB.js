@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS commandDB(
     owner TEXT NOT NULL,
     name TEXT UNIQUE NOT NULL,
     created TEXT NOT NULL,
-    modified TEXT NOT NULL,
-    invoked INTEGER NOT NULL,
+    modified TEXT,
+    invoked INTEGER DEFAULT 0,
     code TEXT NOT NULL
 );
 	`);
@@ -20,10 +20,57 @@ CREATE TABLE IF NOT EXISTS commandDB(
 	   the life of the executed user program */
     }
 
+    createCommand(owner, name, code) {
+	const now = Date.now()
+	try {
+	    db.query('INSERT INTO commandDB(owner, name, created, code) VALUES (?, ?, ?, ?);',
+		     [
+			 owner,
+			 name,
+			 now,
+			 code,
+		     ],
+	    );
+	} catch (error) {
+	    // TODO: Use Logger
+	    console.error(`Error: ${error}`);
+	    return false;
+	}
+	return true;
+    }
+
+    searchCommand(owner, name) {
+	const res = db.query('SELECT * FROM commandDB WHERE owner = (?) AND name = (?);',
+			     [
+				 owner,
+				 name
+			     ]
+	);
+	return res;
+    }
+    
+    updateCommand(owner, name, code) {
+	const res = this.searchCommand(owner, name);
+	if (res.length == 1) {
+	    const now = Date.now();
+	    db.query('UPDATE commandDB SET (modified, code) = (?, ?) WHERE owner = (?) AND name = (?);'
+		    ,[
+			now,
+			code,
+			owner,
+			name,
+		    ],
+	    );
+	    return true;
+	}
+	console.error("No command exists to update")
+	return false;
+    }
+
     queryCommandName(name) {
 	const resp = db.query("SELECT owner,created FROM commandDB WHERE name = (name);", [name])
 	return resp.length > 0;
     }
 }
 
-export const usergameDB = CommandDB();
+export const usergameDB = new CommandDB();
