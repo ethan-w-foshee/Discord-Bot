@@ -38,7 +38,7 @@ addBotCommand(bot, {
 	    /* Get definition */
 	    let result, dictUsed
 	    if (urbanDict) {
-		result = urbanDictDefine(word);
+		result = await urbanDictDefine(word);
 		dictUsed = 1
 	    } else {
 		result = collinsDefine(word);
