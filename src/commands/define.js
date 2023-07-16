@@ -29,9 +29,11 @@ addBotCommand(bot, {
 	    const word = options.filter((option) =>
 		option.name == "word"
 	    )[0].value;
-	    const urbanDict = options.filter((option) =>
+
+	    const urbanDictOption = options.filter((option) =>
 		option.name == "urban"
-	    )[0].value || ((Math.floor(Math.random() * 100)) < 20);
+	    )[0]
+	    const urbanDict = urbanDictOption ? urbanDictOption.value : ((Math.floor(Math.random() * 100)) < 20);
 
 	    /* Get definition */
 	    let result, dictUsed
