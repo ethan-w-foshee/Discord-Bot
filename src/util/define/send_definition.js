@@ -1,7 +1,7 @@
 // Get a word's definition from Urban Dictionary
 
-import { logger } from "../../logger.js";
-import { editOriginalInteractionResponse } from "../../deps.js";
+import { logger } from "../../../logger.js";
+import { editOriginalInteractionResponse } from "../../../deps.js";
 
 export function sendDefinition(bot, interaction, result, dictUsed) {
     logger.debug("Sending a definition") // This should be parameterized but I don't want to right now

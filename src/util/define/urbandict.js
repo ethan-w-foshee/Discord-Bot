@@ -1,6 +1,6 @@
 // Get a word's definition from Urban Dictionary
 
-import { logger } from "../../logger.js";
+import { logger } from "../../../logger.js";
 
 export async function urbanDictDefine(word) {
     const host = "https://api.urbandictionary.com/";
