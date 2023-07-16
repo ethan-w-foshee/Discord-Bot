@@ -3,6 +3,6 @@
 
 // import { logger } from "../../../logger.js";
 
-export async function collinsDefine(word) {
+export function collinsDefine(_word) {
     return {"value": "not implemented"}
 }
