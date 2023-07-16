@@ -27,7 +27,7 @@ addBotCommand(bot, {
 	    /* Get options */
 	    const options = interaction.data.options
 	    const word = options.filter((option) =>
-		option.name == "content"
+		option.name == "word"
 	    )[0].value;
 	    const urbanDict = options.filter((option) =>
 		option.name == "urban"
