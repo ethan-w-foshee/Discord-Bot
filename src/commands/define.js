@@ -22,7 +22,7 @@ addBotCommand(bot, {
     }],
     type: "slash",
     actions: [
-	function (bot, interaction) {
+	async function (bot, interaction) {
 	    ackInteraction(interaction)
 	    /* Get options */
 	    const options = interaction.data.options
