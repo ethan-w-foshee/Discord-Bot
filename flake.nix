@@ -28,6 +28,8 @@
         cbqn
         # Python
         pyenv
+        # Sandboxing tool, for safety executing... well, Arbitrary code.
+        bubblewrap
         # Chess
         gnuchess
       ];
