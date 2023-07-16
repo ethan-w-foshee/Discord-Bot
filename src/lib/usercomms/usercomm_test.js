@@ -54,6 +54,4 @@ Deno.test("User Command Testing", async (t) => {
 	const res = usergameDB.searchCommand("TestUser", "noway")
 	assert(res.length == 0);
     });
-    
-
 });
