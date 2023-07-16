@@ -32,13 +32,16 @@ function formatDefinition(result, dictionary) {
 	    embeds: [{
 		title: "Define " + result["word"],
 		color: 0xe03b2c,
-		url: result["permalink"],
+		provider: {
+		    name: "Urban Dictionary",
+		    url: result["permalink"]
+		},
 		fields: [{
 		    name: "Definition",
-		    value: result["definition"]
+		    value: result["definition"].replaceAll("[", "").replaceAll("]", "")
 		},{
 		    name: "Example usage",
-		    value: result["example"]
+		    value: result["example"].replaceAll("[", "").replaceAll("]", "")
 		}]
 	    }]
 	};
