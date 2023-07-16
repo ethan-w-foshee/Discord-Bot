@@ -45,4 +45,15 @@ Deno.test("User Command Testing", async (t) => {
 	);
 	assert(!success);
     });
+
+    await t.step("Delete a Command", () => {
+	const success = usergameDB.deleteCommand(
+	    "TestUser",
+	    "noway"
+	);
+	const res = usergameDB.searchCommand("TestUser", "noway")
+	assert(res.length == 0);
+    });
+    
+
 });
