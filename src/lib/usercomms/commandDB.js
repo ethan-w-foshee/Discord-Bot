@@ -67,6 +67,10 @@ CREATE TABLE IF NOT EXISTS commandDB(
 	return false;
     }
 
+    deleteCommand(owner, name) {
+	db.query('DELETE FROM commandDB WHERE owner = (?) AND name = (?);')
+    };
+    
     queryCommandName(name) {
 	const resp = db.query("SELECT owner,created FROM commandDB WHERE name = (name);", [name])
 	return resp.length > 0;
