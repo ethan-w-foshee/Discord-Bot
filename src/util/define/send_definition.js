@@ -34,11 +34,9 @@ function formatDefinition(result, dictionary) {
 		color: 0xe03b2c,
 		author: {
 		    name: "Dictionary",
-		    icon_url: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwebstockreview.net%2Fimages%2Fdictionary-clipart-cartoon-1.jpg&f=1&nofb=1&ipt=1f21df73e16ed5c7ab1cbe77dbb08e3a8d6c3105fe2a53af867619e1d3adb5d1&ipo=images"
+		    icon_url: "https://webstockreview.net/images/dictionary-clipart-cartoon-1.jpg"
 		},
-		footer: {
-		    text: result["permalink"],
-		},
+		url: result["permalink"],
 		fields: [{
 		    name: "Definition",
 		    value: result["definition"].replaceAll("[", "").replaceAll("]", "")
