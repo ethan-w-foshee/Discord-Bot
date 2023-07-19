@@ -30,6 +30,8 @@
         pyenv
         # Sandboxing tool, for safety executing... well, Arbitrary code.
         bubblewrap
+        # timeout
+        coreutils
         # Chess
         gnuchess
       ];
