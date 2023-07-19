@@ -67,6 +67,38 @@ CREATE TABLE IF NOT EXISTS commandDB(
 	return false;
     }
 
+    async runCommand(owner, name) {
+	const dec = new TextDecoder();
+	const command = this.searchCommand(owner, name)[0];
+	const code = command[command.length-1];
+	const tmpCodeDir = await Deno.makeTempDir();
+
+	Deno.writeTextFileSync(`${tmpCodeDir}/main.py`, code);
+
+	const timeoutPythonCommand = new Deno.Command("timeout", {
+	    args: [
+		"30s",
+		"bwrap",
+		"--unshare-all",
+		"--ro-bind",
+		`${tmpCodeDir}`,
+		"/app",
+		"--ro-bind",
+		"/nix",
+		"/nix",
+		"python3",
+		"-Iq",
+		"/app/main.py"
+	    ]
+	});
+
+	const pyOut = dec.decode((await timeoutPythonCommand.output()).stdout);
+
+	await Deno.remove(tmpCodeDir, {recursive: true});
+
+	return pyOut;
+    }
+    
     deleteCommand(owner, name) {
 	db.query('DELETE FROM commandDB WHERE owner = (?) AND name = (?);',[
 	    owner,
