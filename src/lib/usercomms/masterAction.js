@@ -15,7 +15,6 @@ const subcommands = {
 export function masterAction(bot, interaction) {
     const data = interaction.data;
     bot.logger.debug(`Received and running UserComm`)
-    bot.logger.debug(`2: Received and running UserComm`,"UserComm")
 
     switch(interaction.type) {
 	case InteractionTypes.ModalSubmit:

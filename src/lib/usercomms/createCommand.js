@@ -19,9 +19,9 @@ export function createCommand(bot, interaction) {
     // Check if command name exists, if it does, complain
     // Otherwise present the modal
 
-    const exists = usergameDB.queryCommandName(commandId)
+    const exists = usergameDB.searchCommand({name: commandId})
 
-    if (exists) {
+    if (exists.length != 0) {
 	ackInteraction(
 	    interaction,
 	    "message",
