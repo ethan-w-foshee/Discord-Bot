@@ -54,12 +54,45 @@ Deno.test("User Command Testing", async (t) => {
 	assert(res == "goodbye\n");
     });
 
+    await t.step("Create a second Command", () => {
+	const success = usergameDB.createCommand(
+	    "TestUser",
+	    "echo",
+	    `print(input())`
+	);
+	assert(success);
+    });
+
+    await t.step("Query all Commands", () => {
+	const res = usergameDB.searchCommand();
+	console.log(res)
+	assert(res.length == 2);
+    });
+
+    await t.step("Run Command With Input", async () => {
+	const res = await usergameDB.runCommand(
+	    "echo",
+	    "hello"
+	);
+	console.log(res);
+	assert(res == "hello\n");
+    });
+
+    await t.step("Run Command With Input That Doesn't Use It", async () => {
+	const res = await usergameDB.runCommand(
+	    "printHello",
+	    "hello"
+	);
+	console.log(res);
+	assert(res == "goodbye\n");
+    });
+    
     await t.step("Delete a Command", () => {
 	usergameDB.deleteCommand(
 	    "TestUser",
 	    "printHello"
 	);
 	const res = usergameDB.searchCommand("TestUser", "printHello")
-	assert(res.length == 0);
+	assert(res.length == 1);
     });
 });

@@ -40,7 +40,10 @@ CREATE TABLE IF NOT EXISTS commandDB(
     }
 
     searchCommand(query) {
-	let {owner, name} = query;
+	let owner, name;
+	if (query) {
+	    ({owner, name} = query);
+	}
 	let res;
 	if (owner && name) {
 	    res = db.query('SELECT * FROM commandDB WHERE owner = (?) AND name = (?);',
@@ -85,7 +88,8 @@ CREATE TABLE IF NOT EXISTS commandDB(
 	return false;
     }
 
-    async runCommand(name) {
+    async runCommand(name, textInput) {
+	const enc = new TextEncoder();
 	const dec = new TextDecoder();
 	const command = this.searchCommand({name})[0];
 	const code = command[command.length-1];
@@ -107,14 +111,31 @@ CREATE TABLE IF NOT EXISTS commandDB(
 		"python3",
 		"-Iq",
 		"/app/main.py"
-	    ]
+	    ],
+	    stdin: "piped",
+	    stdout: "piped",
 	});
 
-	const pyOut = dec.decode((await timeoutPythonCommand.output()).stdout);
+	const py = await timeoutPythonCommand.spawn();
+	const pyin = await py.stdin.getWriter();
+
+	if (textInput) {
+	    const bytes = enc.encode(textInput);
+	    let i = 0;
+	    let n = 0;
+	    do {
+		n = await pyin.write(bytes.slice(i));
+		i += n;
+	    } while(n)
+	}
+	await pyin.close();
+
+	const pyout = await py.output();
+	const output = dec.decode(pyout.stdout);
 
 	await Deno.remove(tmpCodeDir, {recursive: true});
 
-	return pyOut;
+	return output;
     }
     
     deleteCommand(owner, name) {
