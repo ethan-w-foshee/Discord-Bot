@@ -39,18 +39,36 @@ CREATE TABLE IF NOT EXISTS commandDB(
 	return true;
     }
 
-    searchCommand(owner, name) {
-	const res = db.query('SELECT * FROM commandDB WHERE owner = (?) AND name = (?);',
-			     [
-				 owner,
-				 name
-			     ]
-	);
+    searchCommand(query) {
+	let {owner, name} = query;
+	let res;
+	if (owner && name) {
+	    res = db.query('SELECT * FROM commandDB WHERE owner = (?) AND name = (?);',
+			   [
+			       owner,
+			       name
+			   ]
+	    );
+	}else if (owner) {
+	    res = db.query('SELECT * FROM commandDB WHERE owner = (?);',
+			   [
+			       owner
+			   ]
+	    );
+	}else if (name) {
+	    res = db.query('SELECT * FROM commandDB WHERE name = (?);',
+			   [
+			       name
+			   ]
+	    );
+	}else {
+	    res = db.query('SELECT * FROM commandDB;');
+	}
 	return res;
     }
     
     updateCommand(owner, name, code) {
-	const res = this.searchCommand(owner, name);
+	const res = this.searchCommand({owner, name});
 	if (res.length == 1) {
 	    const now = Date.now();
 	    db.query('UPDATE commandDB SET (modified, code) = (?, ?) WHERE owner = (?) AND name = (?);'
@@ -67,9 +85,9 @@ CREATE TABLE IF NOT EXISTS commandDB(
 	return false;
     }
 
-    async runCommand(owner, name) {
+    async runCommand(name) {
 	const dec = new TextDecoder();
-	const command = this.searchCommand(owner, name)[0];
+	const command = this.searchCommand({name})[0];
 	const code = command[command.length-1];
 	const tmpCodeDir = await Deno.makeTempDir();
 
@@ -113,10 +131,3 @@ CREATE TABLE IF NOT EXISTS commandDB(
 }
 
 export const usergameDB = new CommandDB();
-
-export function runGame(owner, name) {
-    /*
-       timeout 30s bwrap --unshare-all --ro-bind /nix /nix python3 -Iq -c 'print(sum(range(100)))
-     */
-    const _command = usergameDB.searchCommand(owner, name);
-}
