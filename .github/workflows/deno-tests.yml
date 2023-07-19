@@ -54,4 +54,4 @@ jobs:
           podman run --rm -v ./:/wd:Z -w /wd starbot:$tag lints
       - name: Run tests
         run: |
-          podman run --rm -v ./:/wd:Z -w /wd starbot:$tag tests
+          podman run --rm -e "TMPDIR=/wd" -v ./:/wd:Z -w /wd starbot:$tag tests
