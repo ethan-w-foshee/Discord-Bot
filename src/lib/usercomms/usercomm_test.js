@@ -48,7 +48,6 @@ Deno.test("User Command Testing", async (t) => {
 
     await t.step("Run a Command", async () => {
 	const res = await usergameDB.runCommand(
-	    "TestUser",
 	    "printHello"
 	);
 	console.log(res);
