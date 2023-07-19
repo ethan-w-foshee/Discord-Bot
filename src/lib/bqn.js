@@ -11,7 +11,7 @@ export async function runBQN(code) {
     });
     const bqn = bqnCommand.spawn();
 
-    /* logger.info(`Received code: ${code}`,"libBQN"); */
+    logger.info(`Received code: ${code}`,"libBQN");
 
     const bqnin = await bqn.stdin.getWriter();
     const bytes = enc.encode(code);
