@@ -6,7 +6,16 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
-      
+
+      py = pkgs.python3;
+
+      pyenv = py.withPackages (p: with p; [
+        matplotlib
+        numpy
+        scipy
+        pillow
+      ]);      
+
       deps = with pkgs; [
         deno
         # Graphs
@@ -18,7 +27,9 @@
         # Funny WingDing Language
         cbqn
         # Python
-        pypy3
+        pyenv
+        # Sandboxing tool, for safety executing... well, Arbitrary code.
+        bubblewrap
         # Chess
         gnuchess
       ];
@@ -81,7 +92,9 @@
       
       devShells.default = pkgs.mkShell {
         nativeBuildInputs = [ pkgs.bashInteractive ];
-        buildInputs = deps;
+        buildInputs = deps ++ (with pkgs; [
+          sqlite          
+        ]);
       };
     });
 }
