@@ -10,11 +10,11 @@ export function createCommand(bot, interaction) {
 	o => o.name == "create"
     )[0].options;
 
-    bot.logger.debug(`Creating command from... ${JSON.stringify(createOptions)}`);
-    
     const commandId = createOptions.filter(
 	o => o.name == "command"
     )[0]["value"];
+
+    bot.logger.debug(`Creating command for ${commandId}`);
 
     // Check if command name exists, if it does, complain
     // Otherwise present the modal
