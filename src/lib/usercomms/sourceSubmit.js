@@ -7,6 +7,6 @@ export function sourceCommand(bot, interaction) {
 	content: "Updated command."
     });
     // Using Command Name, create/update the command in the DB
-    bot.logger.debug(`Creating command for : ${interaction}`);
+    bot.logger.debug(`Creating command for : ${JSON.stringify(interaction)}`);
     return
 }
