@@ -3,7 +3,7 @@ import {
     MessageComponentTypes,
     TextStyles,
 } from "../../../deps.js";
-import usergameDB from "./commandDB.js";
+import { usergameDB } from "./commandDB.js";
 
 export function createCommand(bot, interaction) {
     const createOptions = interaction.data.options.filter(
