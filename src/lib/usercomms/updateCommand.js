@@ -31,7 +31,7 @@ export function updateCommand(bot, interaction) {
 	    }
 	);
     }else {
-	const commandUserId = exists[1];
+	const commandUserId = exists[0][1];
 	let userId;
 	if (interaction.member) {
 	    userId = `${interaction.member.id}`;
