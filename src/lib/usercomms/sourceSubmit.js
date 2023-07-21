@@ -6,10 +6,11 @@ import { usergameDB } from "./commandDB.js";
 export function sourceCommand(bot, interaction) {
     const sourceData = interaction.data;
     const sourceId = sourceData.customId;
-    const commandName = sourceId.slice(9,-11)
-    const commandSource = sourceData.components[0].components[0].value;
+    const userId = sourceId.split('_')[1];
+    const commandComponent = sourceData.components[0].components[0]
+    const commandName = commandComponent.customId;
+    const commandSource = commandComponent.value;
     bot.logger.debug(`Interaction Data: ${JSON.stringify(sourceData)}`);
-    const userId = sourceData.member.id;
 
     if (sourceId.endsWith("create")) {
 	const success = usergameDB.createCommand(
