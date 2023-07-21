@@ -2,11 +2,23 @@ import ackInteraction from "../../util/ackInteraction.js";
 import {
 } from "../../../deps.js";
 
-export function sourceCommand(bot, interaction) {
+export function sourceCommand(_bot, interaction) {
+    const sourceData = interaction.data.options.filter(
+	o => o.customId.endsWith("src",o.customId.length-"_create".length)
+    )[0];
+    const sourceId = sourceData.customId;
+    const commandName = sourceId.slice(9,-11)
+    const commandSource = sourceData.components[0].components.value;
+
+    if (sourceId.endsWith("create")) {
+	continue;
+    }else if (sourceId.endsWith("update")) {
+	continue;
+    }
+
     ackInteraction(interaction, "message", {ephemeral: true}, {
-	content: "Updated command."
+	content: `Created Command "${commandName}":\`\`\`${commandSource}\`\`\``
     });
-    // Using Command Name, create/update the command in the DB
-    bot.logger.debug(`Creating command for : ${JSON.stringify(interaction)}`);
+
     return
 }
