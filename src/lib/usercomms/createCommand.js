@@ -31,19 +31,26 @@ export function createCommand(bot, interaction) {
 	    }
 	);
     }else {
+	let userId;
+	if (interaction.member) {
+	    userId = `${interaction.member.id}`;
+	}else {
+	    userId = `${interaction.user.id}`;
+	}
+
 	ackInteraction(
 	    interaction,
 	    "modal",
 	    {},
 	    {
 		// TODO: Actually get ID
-		customId: `usergame_${commandId}_src_create`,
+		customId: `usergame_${userId}_src_create`,
 		title: `${commandId}: Code Creation`,
 		components: [{
 		    type: MessageComponentTypes.ActionRow,
 		    components: [{
 			type: MessageComponentTypes.InputText,
-			customId: `usergame_${commandId}_source`,
+			customId: `${commandId}`,
 			style: TextStyles.Paragraph,
 			label: "Source Code"
 		    }]	

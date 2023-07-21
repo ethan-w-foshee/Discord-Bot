@@ -37,13 +37,13 @@ export function updateCommand(_bot, _interaction) {
 		"modal",
 		{},
 		{
-		    customId: `usergame_${commandId}_src_Update`,
+		    customId: `usergame_${userId}_src_update`,
 		    title: `${commandId}: Code Update`,
 		    components: [{
 			type: MessageComponentTypes.ActionRow,
 			components: [{
 			    type: MessageComponentTypes.InputText,
-			    customId: `usergame_${commandId}_source`,
+			    customId: `${commandId}`,
 			    style: TextStyles.Paragraph,
 			    label: "Source Code",
 			    value: exists[6]
