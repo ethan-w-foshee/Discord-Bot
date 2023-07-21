@@ -59,6 +59,8 @@ export function updateCommand(bot, interaction) {
 		}
 	    );
 	}else {
+	    bot.logger.debug(`User ${userId} tried to modify ${commandUserId}'s command`);
+
 	    ackInteraction(
 		interaction,
 		"message",
