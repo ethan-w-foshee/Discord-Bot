@@ -43,10 +43,10 @@ export async function runCommand(bot, interaction) {
 	);
 	let output = await usergameDB.runCommand(commandId, input);
 	if (output === undefined || output.length == 0) {
-	    output = "Command Done Did.";
+	    output = "Command Done Did."
 	}
 	editOriginalInteractionResponse(bot, interaction.token, {
-	    content: "${output.slice(0,2000)}"
+	    content: output.slice(0,2000)
 	});
     }
     return
