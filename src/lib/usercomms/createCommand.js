@@ -25,7 +25,7 @@ export function createCommand(bot, interaction) {
 	ackInteraction(
 	    interaction,
 	    "message",
-	    {},
+	    {ephemeral: true},
 	    {
 		content: `Command with name ${commandId} already exists`
 	    }
@@ -41,7 +41,7 @@ export function createCommand(bot, interaction) {
 	ackInteraction(
 	    interaction,
 	    "modal",
-	    {},
+	    {ephemeral: true},
 	    {
 		// TODO: Actually get ID
 		customId: `usergame_${userId}_src_create`,

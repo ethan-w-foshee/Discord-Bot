@@ -25,7 +25,7 @@ export function updateCommand(bot, interaction) {
 	ackInteraction(
 	    interaction,
 	    "message",
-	    {},
+	    {ephemeral: true},
 	    {
 		content: `Command with name ${commandId} does not exist!`
 	    }
@@ -42,7 +42,7 @@ export function updateCommand(bot, interaction) {
 	    ackInteraction(
 		interaction,
 		"modal",
-		{},
+		{ephemeral: true},
 		{
 		    customId: `usergame_${userId}_src_update`,
 		    title: `${commandId}: Code Update`,
@@ -62,7 +62,7 @@ export function updateCommand(bot, interaction) {
 	    ackInteraction(
 		interaction,
 		"message",
-		{},
+		{ephemeral: true},
 		{
 		    content: `You did not make ${commandId}`
 		}
