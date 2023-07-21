@@ -11,9 +11,9 @@ export function sourceCommand(_bot, interaction) {
     const commandSource = sourceData.components[0].components.value;
 
     if (sourceId.endsWith("create")) {
-
+	continue;
     }else if (sourceId.endsWith("update")) {
-
+	continue;
     }
 
     ackInteraction(interaction, "message", {ephemeral: true}, {
