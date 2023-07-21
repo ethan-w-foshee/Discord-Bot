@@ -1,3 +1,10 @@
+import ackInteraction from "../../util/ackInteraction.js";
+import {
+    MessageComponentTypes,
+    TextStyles,
+} from "../../../deps.js";
+import { usergameDB } from "./commandDB.js";
+
 export function updateCommand(bot, interaction) {
     const createOptions = interaction.data.options.filter(
 	o => o.name == "update"
