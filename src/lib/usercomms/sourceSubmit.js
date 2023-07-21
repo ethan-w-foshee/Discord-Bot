@@ -8,7 +8,7 @@ export function sourceCommand(bot, interaction) {
     const sourceId = sourceData.customId;
     const commandName = sourceId.slice(9,-11)
     const commandSource = sourceData.components[0].components[0].value;
-    bot.logger.debug(`Interaction Data: ${sourceData}`);
+    bot.logger.debug(`Interaction Data: ${JSON.stringify(sourceData)}`);
     const userId = sourceData.member.id;
 
     if (sourceId.endsWith("create")) {
