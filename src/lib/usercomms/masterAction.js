@@ -5,11 +5,15 @@ import {
 import { createCommand } from "../../lib/usercomms/createCommand.js";
 import { updateCommand } from "../../lib/usercomms/updateCommand.js";
 import { sourceCommand } from "../../lib/usercomms/sourceSubmit.js";
+import { runCommand } from "../../lib/usercomms/runCommand.js";
+import { deleteCommand } from "../../lib/usercomms/deleteCommand.js";
 
 const subcommands = {
     "create": createCommand,
     "update": updateCommand,
     "src": sourceCommand,
+    "run": runCommand,
+    "delete": deleteCommand,
 };
 
 export function masterAction(bot, interaction) {
