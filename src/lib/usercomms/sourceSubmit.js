@@ -15,7 +15,7 @@ export function sourceCommand(_bot, interaction) {
     }
 
     ackInteraction(interaction, "message", {ephemeral: true}, {
-	content: `Created Command "${commandName}":\`\`\`${commandSource}\`\`\``
+	content: `Created Command "${commandName}":\`\`\`${commandSource.slice(0,1500)}\`\`\``
     });
 
     return
