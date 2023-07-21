@@ -53,7 +53,7 @@ export function updateCommand(bot, interaction) {
 			    customId: `${commandId}`,
 			    style: TextStyles.Paragraph,
 			    label: "Source Code",
-			    value: exists[6]
+			    value: exists[0][6]
 			}]	
 		    }]
 		}
