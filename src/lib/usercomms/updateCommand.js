@@ -14,7 +14,7 @@ export function updateCommand(bot, interaction) {
 	o => o.name == "command"
     )[0]["value"];
 
-    bot.logger.debug(`Creating command for ${commandId}`);
+    bot.logger.debug(`Updating command ${commandId}`);
 
     // Check if command name exists, if it does, complain
     // Otherwise present the modal
@@ -53,7 +53,7 @@ export function updateCommand(bot, interaction) {
 			    customId: `${commandId}`,
 			    style: TextStyles.Paragraph,
 			    label: "Source Code",
-			    value: exists[6]
+			    value: exists[0][6]
 			}]	
 		    }]
 		}
