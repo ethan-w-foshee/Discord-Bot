@@ -39,6 +39,37 @@ addBotCommand(bot, {
 		max_length: maxCommandName
 	    },
 	]
+    }, {
+	name: "run",
+	description: "Run an existing command",
+	type: ApplicationCommandOptionTypes.SubCommand,
+	options: [
+	    {
+		name: "command",	    
+		type: ApplicationCommandOptionTypes.String,
+		description: "The name of the command you want to run",
+		required: true,
+		max_length: maxCommandName
+	    }, {
+		name: "input",
+		type: ApplicationCommandOptionTypes.String,
+		description: "Input text for the command",
+		required: false,
+	    }
+	]
+    }, {
+	name: "delete",
+	description: "Delete an existing command *you* made",
+	type: ApplicationCommandOptionTypes.SubCommand,
+	options: [
+	    {
+		name: "command",	    
+		type: ApplicationCommandOptionTypes.String,
+		description: "The name of the command you're deleting",
+		required: true,
+		max_length: maxCommandName
+	    },
+	]
     }],
     type: "slash",
     actions: [
