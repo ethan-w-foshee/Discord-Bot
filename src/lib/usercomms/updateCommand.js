@@ -1,6 +1,6 @@
 export function updateCommand(bot, interaction) {
     const createOptions = interaction.data.options.filter(
-	o => o.name == "create"
+	o => o.name == "update"
     )[0].options;
 
     const commandId = createOptions.filter(
