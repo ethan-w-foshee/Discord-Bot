@@ -14,7 +14,7 @@ export function updateCommand(bot, interaction) {
 	o => o.name == "command"
     )[0]["value"];
 
-    bot.logger.debug(`Creating command for ${commandId}`);
+    bot.logger.debug(`Updating command ${commandId}`);
 
     // Check if command name exists, if it does, complain
     // Otherwise present the modal
