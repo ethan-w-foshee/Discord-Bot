@@ -32,7 +32,7 @@ export async function runCommand(bot, interaction) {
 	    "thinking",
 	    {ephemeral: true}
 	);
-	const output = await usergameDB.runCommand(commandId, `${interaction}`);
+	const output = await usergameDB.runCommand(commandId, `${JSON.stringify(interaction)}`);
 	editOriginalInteractionResponse(bot, interaction.token, {
 	    content: output.slice(0,2000)
 	});
