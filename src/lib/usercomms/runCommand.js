@@ -13,6 +13,15 @@ export async function runCommand(bot, interaction) {
 	o => o.name == "command"
     )[0]["value"];
 
+    const inputMaybe = createOptions.filter(
+	o => o.name == "input"
+    );
+
+    let input;
+    if (inputMaybe.length == 1) {
+	input = inputMaybe[0]["value"];
+    }
+
     bot.logger.debug(`Running command ${commandId}`);
 
     const exists = usergameDB.searchCommand({name: commandId})
@@ -32,7 +41,7 @@ export async function runCommand(bot, interaction) {
 	    "thinking",
 	    {ephemeral: true}
 	);
-	const output = await usergameDB.runCommand(commandId, `${JSON.stringify(interaction)}`);
+	const output = await usergameDB.runCommand(commandId, input);
 	editOriginalInteractionResponse(bot, interaction.token, {
 	    content: output.slice(0,2000)
 	});
