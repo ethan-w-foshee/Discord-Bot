@@ -1,6 +1,7 @@
 import ackInteraction from "../../util/ackInteraction.js";
 import {
     editOriginalInteractionResponse
+    sendFollowupMessage
 } from "../../../deps.js";
 import { usergameDB } from "./commandDB.js";
 
