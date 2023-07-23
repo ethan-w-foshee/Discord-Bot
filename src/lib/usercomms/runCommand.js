@@ -41,7 +41,7 @@ export async function runCommand(bot, interaction) {
 	    "thinking",
 	    {ephemeral: true}
 	);
-	let output = await usergameDB.runCommand(commandId, input);
+	const output = await usergameDB.runCommand(commandId, input);
 	editOriginalInteractionResponse(bot, interaction.token, output);
     }
     return
