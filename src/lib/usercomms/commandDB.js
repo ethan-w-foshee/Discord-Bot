@@ -164,7 +164,7 @@ const COMMAND_EPHEMERAL = 0x8;
 const dec = new TextDecoder();
 
 function formatOutput(commandOut) {
-    const { code, stdout, stderr } = commandOut;
+    const { code, stdout, _stderr } = commandOut;
     const flags = {};
     let content = "";
 
@@ -180,7 +180,7 @@ function formatOutput(commandOut) {
 
     if (content.length == 0) {
 	content = "Command Dun Did Run";
-    };
+    }
 
     // Ensure message isn't too long to send
     content = content.slice(0,2000)
