@@ -46,7 +46,7 @@ export async function runCommand(bot, interaction) {
 	editOriginalInteractionResponse(bot, interaction.token, {
 	    content: "Command Finished Running."
 	});
-	sendFollowupMessage(bot, interaction.token, output);
+	sendFollowupMessage(interaction.token, output);
     }
     return
 }
