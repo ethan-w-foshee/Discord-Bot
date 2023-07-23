@@ -42,12 +42,7 @@ export async function runCommand(bot, interaction) {
 	    {ephemeral: true}
 	);
 	let output = await usergameDB.runCommand(commandId, input);
-	if (output === undefined || output.length == 0) {
-	    output = "Command Done Did."
-	}
-	editOriginalInteractionResponse(bot, interaction.token, {
-	    content: output.slice(0,2000)
-	});
+	editOriginalInteractionResponse(bot, interaction.token, output);
     }
     return
 }

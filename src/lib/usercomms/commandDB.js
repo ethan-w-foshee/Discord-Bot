@@ -90,7 +90,6 @@ CREATE TABLE IF NOT EXISTS commandDB(
 
     async runCommand(name, textInput) {
 	const enc = new TextEncoder();
-	const dec = new TextDecoder();
 	const command = this.searchCommand({name})[0];
 	const code = command[command.length-1];
 	const tmpCodeDir = await Deno.makeTempDir();
@@ -114,6 +113,7 @@ CREATE TABLE IF NOT EXISTS commandDB(
 	    ],
 	    stdin: "piped",
 	    stdout: "piped",
+	    stderr: "piped",
 	});
 
 	const py = await timeoutPythonCommand.spawn();
@@ -131,11 +131,10 @@ CREATE TABLE IF NOT EXISTS commandDB(
 	await pyin.close();
 
 	const pyout = await py.output();
-	const output = dec.decode(pyout.stdout);
 
 	await Deno.remove(tmpCodeDir, {recursive: true});
 
-	return output;
+	return formatOutput(pyout);
     }
     
     deleteCommand(owner, name) {
@@ -152,3 +151,37 @@ CREATE TABLE IF NOT EXISTS commandDB(
 }
 
 export const usergameDB = new CommandDB();
+
+// Command Output (Discord Formatting)
+
+const COMMAND_EPHEMERAL = 0x8;
+
+const dec = new TextDecoder();
+
+function formatOutput(commandOut) {
+    const { code, stdout, stderr } = commandOut;
+    const flags = {};
+    let content = "";
+
+    if (code & COMMAND_EPHEMERAL) {
+	flags["ephemeral"] = true;
+    }
+    // TODO: More Format Options, like attachments and rich etc.
+
+    content = dec.decode(stdout);
+
+    // preTrim Content For Discord
+    content = content.trimEnd();
+
+    if (content.length == 0) {
+	content = "Command Dun Did Run";
+    };
+
+    // Ensure message isn't too long to send
+    content = content.slice(0,2000)
+    
+    return {
+	flags,
+	content
+    }
+}

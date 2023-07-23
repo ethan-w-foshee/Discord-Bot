@@ -51,7 +51,7 @@ Deno.test("User Command Testing", async (t) => {
 	    "printHello"
 	);
 	console.log(res);
-	assert(res == "goodbye\n");
+	assert(res.content == "goodbye");
     });
 
     await t.step("Create a second Command", () => {
@@ -75,7 +75,7 @@ Deno.test("User Command Testing", async (t) => {
 	    "hello"
 	);
 	console.log(res);
-	assert(res == "hello\n");
+	assert(res.content == "hello");
     });
 
     await t.step("Run Command With Input That Doesn't Use It", async () => {
@@ -84,7 +84,7 @@ Deno.test("User Command Testing", async (t) => {
 	    "hello"
 	);
 	console.log(res);
-	assert(res == "goodbye\n");
+	assert(res.content == "goodbye");
     });
     
     await t.step("Delete a Command", () => {
