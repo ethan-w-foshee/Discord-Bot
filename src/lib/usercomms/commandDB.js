@@ -170,7 +170,7 @@ function formatOutput(commandOut) {
     let content = "";
 
     if (code & COMMAND_EPHEMERAL) {
-	flags["ephemeral"] = ApplicationCommandFlags.Ephemeral;;
+	flags["ephemeral"] = ApplicationCommandFlags.Ephemeral;
     }
     // TODO: More Format Options, like attachments and rich etc.
 
