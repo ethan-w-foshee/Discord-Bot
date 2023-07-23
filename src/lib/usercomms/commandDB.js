@@ -166,11 +166,11 @@ const dec = new TextDecoder();
 
 function formatOutput(commandOut) {
     const { code, stdout, _stderr } = commandOut;
-    const flags = {};
+    const flags = 0;
     let content = "";
 
     if (code & COMMAND_EPHEMERAL) {
-	flags["ephemeral"] = ApplicationCommandFlags.Ephemeral;
+	flags |= ApplicationCommandFlags.Ephemeral;
     }
     // TODO: More Format Options, like attachments and rich etc.
 
