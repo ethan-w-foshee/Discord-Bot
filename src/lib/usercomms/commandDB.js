@@ -96,11 +96,16 @@ CREATE TABLE IF NOT EXISTS commandDB(
 
 	Deno.writeTextFileSync(`${tmpCodeDir}/main.py`, code);
 
+	// TODO: Build with Nix so Paths are *clean*
 	const timeoutPythonCommand = new Deno.Command("timeout", {
 	    args: [
 		"30s",
 		"bwrap",
 		"--unshare-all",
+		"--clearenv",
+		"--setenv",
+		"PATH",
+		Deno.env.get("PATH"),
 		"--ro-bind",
 		`${tmpCodeDir}`,
 		"/app",
