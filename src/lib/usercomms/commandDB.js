@@ -166,7 +166,7 @@ const dec = new TextDecoder();
 
 function formatOutput(commandOut) {
     const { code, stdout, _stderr } = commandOut;
-    const flags = 0;
+    let flags = 0;
     let content = "";
 
     if (code & COMMAND_EPHEMERAL) {
