@@ -55,7 +55,12 @@ addBotCommand(bot, {
 		type: ApplicationCommandOptionTypes.String,
 		description: "Input text for the command",
 		required: false,
-	    }
+	    }, {
+		name: "hidden",
+		type: ApplicationCommandOptionTypes.Boolean,
+		description: "Should only you see this?",
+		required: false,
+	    },
 	]
     }, {
 	name: "delete",

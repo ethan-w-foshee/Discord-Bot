@@ -1,7 +1,6 @@
 import ackInteraction from "../../util/ackInteraction.js";
 import {
     editOriginalInteractionResponse,
-    sendFollowupMessage,
 } from "../../../deps.js";
 import { usergameDB } from "./commandDB.js";
 
@@ -23,6 +22,15 @@ export async function runCommand(bot, interaction) {
 	input = inputMaybe[0]["value"];
     }
 
+    const hiddenMaybe = createOptions.filter(
+	o => o.name == "hidden"
+    );
+
+    let hidden = false;
+    if (hiddenMaybe.length == 1) {
+	hidden = hiddenMaybe[0]["value"];
+    }
+
     bot.logger.debug(`Running command ${commandId}`);
 
     const exists = usergameDB.searchCommand({name: commandId})
@@ -40,13 +48,10 @@ export async function runCommand(bot, interaction) {
 	ackInteraction(
 	    interaction,
 	    "thinking",
-	    {ephemeral: true}
+	    {ephemeral: hidden}
 	);
 	const output = await usergameDB.runCommand(commandId, input);
-	await editOriginalInteractionResponse(bot, interaction.token, {
-	    content: "Command Finished Running."
-	});
-	sendFollowupMessage(bot, interaction.token, output);
+	await editOriginalInteractionResponse(bot, interaction.token, output);
     }
     return
 }
