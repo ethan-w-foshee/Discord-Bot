@@ -1,4 +1,5 @@
 import { db } from "../../../sql.js";
+import { ApplicationCommandFlags } from "../../../deps.js";
 
 class CommandDB {
     constructor() {
@@ -169,7 +170,7 @@ function formatOutput(commandOut) {
     let content = "";
 
     if (code & COMMAND_EPHEMERAL) {
-	flags["ephemeral"] = true;
+	flags["ephemeral"] = ApplicationCommandFlags.Ephemeral;
     }
     // TODO: More Format Options, like attachments and rich etc.
 
