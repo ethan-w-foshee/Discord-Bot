@@ -43,10 +43,10 @@ export async function runCommand(bot, interaction) {
 	    {ephemeral: true}
 	);
 	const output = await usergameDB.runCommand(commandId, input);
-	editOriginalInteractionResponse(bot, interaction.token, {
+	await editOriginalInteractionResponse(bot, interaction.token, {
 	    content: "Command Finished Running."
 	});
-	sendFollowupMessage(interaction.token, output);
+	sendFollowupMessage(bot, interaction.token, output);
     }
     return
 }
