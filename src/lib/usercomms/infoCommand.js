@@ -4,7 +4,7 @@ import { usergameDB } from "./commandDB.js";
 
 export function infoCommand(bot, interaction) {
     const createOptions = interaction.data.options.filter(
-	o => o.name == "run"
+	o => o.name == "info"
     )[0].options;
     
     commandId = createOptions.filter(
