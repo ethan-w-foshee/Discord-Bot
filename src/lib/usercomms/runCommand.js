@@ -6,6 +6,8 @@ import {
 import { usergameDB } from "./commandDB.js";
 
 export async function runCommand(bot, interaction) {
+    const sourceData = interaction.data;
+
     let input;
     let hidden = false;
     let commandId;
