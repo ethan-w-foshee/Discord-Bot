@@ -7,7 +7,7 @@ export function infoCommand(bot, interaction) {
 	o => o.name == "info"
     )[0].options;
     
-    commandId = createOptions.filter(
+    const commandId = createOptions.filter(
 	o => o.name == "command"
     )[0]["value"];
     
