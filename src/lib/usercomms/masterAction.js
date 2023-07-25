@@ -3,6 +3,7 @@ import {
     MessageComponentTypes,
     TextStyles,
 } from "../../../deps.js";
+import ackInteraction from "../../util/ackInteraction.js";
 
 import { createCommand } from "../../lib/usercomms/createCommand.js";
 import { updateCommand } from "../../lib/usercomms/updateCommand.js";
