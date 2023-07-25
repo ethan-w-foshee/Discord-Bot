@@ -56,6 +56,7 @@ export function masterAction(bot, interaction) {
 }
 
 export function masterRunAction(bot, interaction) {
+    const data = interaction.data;
     switch(interaction.type) {
 	case InteractionTypes.ModalSubmit:
 	case InteractionTypes.MessageComponent: {
