@@ -1,34 +1,47 @@
 import ackInteraction from "../../util/ackInteraction.js";
 import {
     editOriginalInteractionResponse,
+    InteractionTypes,
 } from "../../../deps.js";
 import { usergameDB } from "./commandDB.js";
 
 export async function runCommand(bot, interaction) {
-    const createOptions = interaction.data.options.filter(
-	o => o.name == "run"
-    )[0].options;
-
-    const commandId = createOptions.filter(
-	o => o.name == "command"
-    )[0]["value"];
-
-    const inputMaybe = createOptions.filter(
-	o => o.name == "input"
-    );
-
     let input;
-    if (inputMaybe.length == 1) {
-	input = inputMaybe[0]["value"];
-    }
-
-    const hiddenMaybe = createOptions.filter(
-	o => o.name == "hidden"
-    );
-
     let hidden = false;
-    if (hiddenMaybe.length == 1) {
-	hidden = hiddenMaybe[0]["value"];
+    let commandId;
+
+    switch(interaction.type) {
+	case InteractionTypes.ModalSubmit: {
+	    input = interaction.data.resolved.messages.values().next().value.content;
+	    const commandComponent = sourceData.components[0].components[0]
+	    commandId = commandComponent.value;
+	    break;
+	}
+	case InteractionTypes.ApplicationCommand: {
+	    const createOptions = interaction.data.options.filter(
+		o => o.name == "run"
+	    )[0].options;
+
+	    commandId = createOptions.filter(
+		o => o.name == "command"
+	    )[0]["value"];
+
+	    const inputMaybe = createOptions.filter(
+		o => o.name == "input"
+	    );
+
+	    if (inputMaybe.length == 1) {
+		input = inputMaybe[0]["value"];
+	    }
+
+	    const hiddenMaybe = createOptions.filter(
+		o => o.name == "hidden"
+	    );
+
+	    if (hiddenMaybe.length == 1) {
+		hidden = hiddenMaybe[0]["value"];
+	    }
+	}
     }
 
     bot.logger.debug(`Running command ${commandId}`);
