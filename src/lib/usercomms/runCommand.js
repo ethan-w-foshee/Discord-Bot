@@ -12,9 +12,10 @@ export async function runCommand(bot, interaction) {
 
     switch(interaction.type) {
 	case InteractionTypes.ModalSubmit: {
-	    input = interaction.data.resolved.messages.values().next().value.content;
-	    const commandComponent = sourceData.components[0].components[0]
+	    const commandComponent = sourceData.components[0].components[0];
 	    commandId = commandComponent.value;
+	    const inputComponent = sourceData.components[1].components[0];
+	    input = inputComponent.value;
 	    break;
 	}
 	case InteractionTypes.ApplicationCommand: {

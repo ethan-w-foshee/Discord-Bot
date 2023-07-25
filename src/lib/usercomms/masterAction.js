@@ -71,6 +71,7 @@ export function masterRunAction(bot, interaction) {
 	    break;
 	}
 	case InteractionTypes.ApplicationCommand: {
+	    const msgText = interaction.data.resolved.messages.values().next().value.content;
 	    ackInteraction(
 		interaction,
 		"modal",
@@ -78,15 +79,26 @@ export function masterRunAction(bot, interaction) {
 		{
 		    customId: `userrun_run`,
 		    title: `Run a Command`,
-		    components: [{
-			type: MessageComponentTypes.ActionRow,
-			components: [{
-			    type: MessageComponentTypes.InputText,
-			    customId: `command`,
-			    style: TextStyles.Short,
-			    label: "Command Name"
-			}]	
-		    }]
+		    components: [
+			{
+			    type: MessageComponentTypes.ActionRow,
+			    components: [{
+				type: MessageComponentTypes.InputText,
+				customId: `command`,
+				style: TextStyles.Short,
+				label: "Command Name"
+			    }]
+			}, {
+			    type: MessageComponentTypes.ActionRow,
+			    components: [{
+				type: MessageComponentTypes.InputText,
+				customId: `input`,
+				style: TextStyles.Paragraph,
+				label: "Command Name",
+				value: msgText
+			    }]
+			}
+		    ]
 		}
 	    );
 	    break;
