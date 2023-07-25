@@ -6,7 +6,7 @@ import { addBotCommand } from "../../lib/commands.js";
 
 import { } from "../../lib/usercomms/commandDB.js";
 
-import { masterAction } from "../../lib/usercomms/masterAction.js";
+import { masterAction, masterRunAction } from "../../lib/usercomms/masterAction.js";
 
 const maxCommandName = 30;
 
@@ -80,4 +80,13 @@ addBotCommand(bot, {
     actions: [
 	masterAction
     ]
-})
+});
+
+addBotCommand(bot, {
+    description: "Run a User Command on a Message",
+    name: "userrun",
+    type: "message",
+    actions: [
+	masterRunAction
+    ]
+});
