@@ -1,5 +1,5 @@
 import { db } from "../../../sql.js";
-import { ApplicationCommandFlags } from "../../../deps.js";
+import { } from "../../../deps.js";
 
 class CommandDB {
     constructor() {
@@ -160,18 +160,12 @@ export const usergameDB = new CommandDB();
 
 // Command Output (Discord Formatting)
 
-const COMMAND_EPHEMERAL = 0x8;
-
 const dec = new TextDecoder();
 
 function formatOutput(commandOut) {
-    const { code, stdout, _stderr } = commandOut;
-    let flags = 0;
+    const { _code, stdout, _stderr } = commandOut;
     let content = "";
 
-    if (code & COMMAND_EPHEMERAL) {
-	flags |= ApplicationCommandFlags.Ephemeral;
-    }
     // TODO: More Format Options, like attachments and rich etc.
 
     content = dec.decode(stdout);
@@ -187,7 +181,6 @@ function formatOutput(commandOut) {
     content = content.slice(0,2000)
     
     return {
-	flags,
 	content
     }
 }
