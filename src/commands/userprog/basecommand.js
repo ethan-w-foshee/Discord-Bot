@@ -75,6 +75,19 @@ addBotCommand(bot, {
 		max_length: maxCommandName
 	    },
 	]
+    }, {
+	name: "info",
+	description: "Get info about a command",
+	type: ApplicationCommandOptionTypes.SubCommand,
+	options: [
+	    {
+		name: "command",	    
+		type: ApplicationCommandOptionTypes.String,
+		description: "The name of the command you want info on",
+		required: true,
+		max_length: maxCommandName
+	    },
+	]
     }],
     type: "slash",
     actions: [
