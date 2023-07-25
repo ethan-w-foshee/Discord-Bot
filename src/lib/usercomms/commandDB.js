@@ -1,5 +1,5 @@
 import { db } from "../../../sql.js";
-import { ApplicationCommandFlags } from "../../../deps.js";
+import { } from "../../../deps.js";
 
 class CommandDB {
     constructor() {
@@ -163,7 +163,7 @@ export const usergameDB = new CommandDB();
 const dec = new TextDecoder();
 
 function formatOutput(commandOut) {
-    const { code, stdout, _stderr } = commandOut;
+    const { _code, stdout, _stderr } = commandOut;
     let content = "";
 
     // TODO: More Format Options, like attachments and rich etc.
