@@ -1,30 +1,29 @@
 // Get a word's definition from Urban Dictionary
 
 import { logger } from "../../../logger.js";
-import { editOriginalInteractionResponse } from "../../../deps.js";
+import { editOriginalInteractionResponse, MessageComponentTypes, ButtonStyles } from "../../../deps.js";
 
 export function sendDefinition(bot, interaction, result, dictUsed) {
-    logger.debug("Sending a definition") // This should be parameterized but I don't want to right now
+    logger.debug("Sending a definition"); // This should be parameterized but I don't want to right now
     editOriginalInteractionResponse(
 	bot,
 	interaction.token,
 	formatDefinition(result, dictUsed),
-    )
+    );
 }
 
-function formatDefinition(result, dictionary) {
+export function formatDefinition(result, dictionary) {
     let data
     switch(dictionary) {
     case 0: {// If freedict dictionary was used
 	data = {
 	    embeds: [{
-		title: "Define " + result["word"],
+		title: "Define " + result.word,
+		description: result.partOfSpeech ? result.partOfSpeech : "unknown",
 		color: 0xe03b2c,
-		fields: [{
-		    name: "Definition",
-		    value: "Not implemented"
-		}]
-	    }]
+		fields: parseDefinitions(result.definitions)
+	    }],
+	    components: parseParts(result.word, result.availableParts, result.partOfSpeech)
 	};
 	break;
     } case 1: {// If urban dictionary was used
@@ -38,11 +37,9 @@ function formatDefinition(result, dictionary) {
 		},
 		url: result["permalink"],
 		fields: [{
-		    name: "Definition",
-		    value: result["definition"].replaceAll("[", "").replaceAll("]", "")
-		},{
-		    name: "Example usage",
-		    value: result["example"].replaceAll("[", "").replaceAll("]", "")
+		    name: "1",
+		    value: result["definition"].replaceAll("[", "").replaceAll("]", "") +
+			"\n\nExample usage: "+result["example"].replaceAll("[", "").replaceAll("]", "")
 		}]
 	    }]
 	};
@@ -50,4 +47,32 @@ function formatDefinition(result, dictionary) {
     }}
     console.log(data);
     return data;
+}
+
+function parseDefinitions(fields) {
+    const ret = [];
+    for (let i=0; i<fields.length; i++) {
+	ret.push({
+	    name: (i+1).toString(),
+	    value: fields[i].definition + "\n\nExample usage: " + fields[i]?.example
+	});
+    }
+    return ret;
+}
+
+function parseParts(word, types, currentPart) {
+    const ret = [];
+    for (let i in types) {
+	ret.push({
+	    type: MessageComponentTypes.ActionRow,
+	    components: [{
+		type: MessageComponentTypes.Button,
+		customId: "define_"+word+"_"+types[i],
+		style: ButtonStyles.Secondary,
+		label: types[i],
+		disabled: (currentPart == types[i])
+	    }]
+	})
+    }
+    return ret;
 }

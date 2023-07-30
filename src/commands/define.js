@@ -2,7 +2,7 @@ import { ApplicationCommandOptionTypes } from "../../deps.js";
 import { bot } from "../../bot.js";
 import { addBotCommand } from "../lib/commands.js";
 import { sendDefinition } from "../util/define/send_definition.js";
-import { collinsDefine } from "../util/define/collins.js";
+import { freedictDefine } from "../util/define/freedictionary.js";
 import { urbanDictDefine } from "../util/define/urbandict.js";
 import ackInteraction from "../util/ackInteraction.js";
 
@@ -41,7 +41,7 @@ addBotCommand(bot, {
 		result = await urbanDictDefine(word);
 		dictUsed = 1
 	    } else {
-		result = collinsDefine(word);
+		result = await freedictDefine(word);
 		dictUsed = 0
 	    }
 
