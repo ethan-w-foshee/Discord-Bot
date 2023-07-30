@@ -45,7 +45,7 @@ export async function freedictDefine(word, part) {
 	    return {
 		"word": word,
 		"partOfSpeech": part,
-		"definitions": definitions[0],
+		"definitions": definitions[0].definitions,
 		"link": results[0].sourceUrls[0],
 		"availableParts": availableParts
 	    };
