@@ -15,7 +15,7 @@ export function sendDefinition(bot, interaction, result, dictUsed) {
 function formatDefinition(result, dictionary) {
     let data
     switch(dictionary) {
-    case 0: {// If collins dictionary was used
+    case 0: {// If freedict dictionary was used
 	data = {
 	    embeds: [{
 		title: "Define " + result["word"],
