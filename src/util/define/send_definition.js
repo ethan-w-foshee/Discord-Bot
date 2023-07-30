@@ -21,6 +21,11 @@ export function formatDefinition(result, dictionary) {
 		title: "Define " + result.word,
 		description: result.partOfSpeech ? result.partOfSpeech : "unknown",
 		color: 0xe03b2c,
+		author: {
+		    name: "Dictionary",
+		    icon_rul: "https://webstockreview.net/images/dictionary-clipart-cartoon-1.jpg"
+		},
+		url: result.link,
 		fields: parseDefinitions(result.definitions)
 	    }],
 	    components: parseParts(result.word, result.availableParts, result.partOfSpeech)
@@ -29,17 +34,17 @@ export function formatDefinition(result, dictionary) {
     } case 1: {// If urban dictionary was used
 	data = {
 	    embeds: [{
-		title: "Define " + result["word"],
+		title: "Define " + result.word,
 		color: 0xe03b2c,
 		author: {
 		    name: "Dictionary",
 		    icon_url: "https://webstockreview.net/images/dictionary-clipart-cartoon-1.jpg"
 		},
-		url: result["permalink"],
+		url: result.permalink,
 		fields: [{
 		    name: "1",
-		    value: result["definition"].replaceAll("[", "").replaceAll("]", "") +
-			"\n\nExample usage: "+result["example"].replaceAll("[", "").replaceAll("]", "")
+		    value: (result["definition"].replaceAll("[", "").replaceAll("]", "") +
+			    "\n\nExample usage: "+result["example"].replaceAll("[", "").replaceAll("]", "")).slice(0,4000)
 		}]
 	    }]
 	};
@@ -50,10 +55,15 @@ export function formatDefinition(result, dictionary) {
 
 function parseDefinitions(fields) {
     const ret = [];
+    let charSum = 0;
     for (let i=0; i<fields.length; i++) {
+	if (charSum > 4000) {
+	    break;
+	}
+	charSum += (fields[i].definition + fields[i].example).length
 	ret.push({
 	    name: (i+1).toString(),
-	    value: fields[i].definition + "\n\nExample usage: " + fields[i]?.example
+	    value: fields[i].definition + "\n\nExample usage: " + fields[i].example
 	});
     }
     return ret;
