@@ -27,15 +27,17 @@ addBotCommand(bot, {
 });
 
 async function commandHandler(bot, interaction) {
-    ackInteraction(interaction);
-
     let result, dictUsed;
 
     if (interaction.type == InteractionTypes.MessageComponent) {
+	/* If is button interaction */
+	ackInteraction(interaction, "deferred");
 	dictUsed = 0;
 	const options = interaction.data.customId.split("_");
 	result = await freedictDefine(options[1], options[2]);
     } else {
+	/* If is slash command */
+	ackInteraction(interaction);
 	/* Get options */
 	const options = interaction.data.options;
 	const word = options.filter((option) =>

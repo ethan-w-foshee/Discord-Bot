@@ -69,7 +69,7 @@ function parseParts(word, types, currentPart) {
 		label: types[i],
 		disabled: (currentPart == types[i])
 	    })
-    };
+    }
     return {
 	type: MessageComponentTypes.ActionRow,
 	components: ret
