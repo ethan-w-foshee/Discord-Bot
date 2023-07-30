@@ -43,8 +43,8 @@ export function formatDefinition(result, dictionary) {
 		url: result.permalink,
 		fields: [{
 		    name: "1",
-		    value: result["definition"].replaceAll("[", "").replaceAll("]", "") +
-			"\n\nExample usage: "+result["example"].replaceAll("[", "").replaceAll("]", "")
+		    value: (result["definition"].replaceAll("[", "").replaceAll("]", "") +
+			    "\n\nExample usage: "+result["example"].replaceAll("[", "").replaceAll("]", "")).slice(0,4000)
 		}]
 	    }]
 	};
@@ -55,10 +55,15 @@ export function formatDefinition(result, dictionary) {
 
 function parseDefinitions(fields) {
     const ret = [];
+    let charSum = 0;
     for (let i=0; i<fields.length; i++) {
+	if (charSum > 4000) {
+	    break;
+	}
+	charSum += (fields[i].definition + fields[i].example).length
 	ret.push({
 	    name: (i+1).toString(),
-	    value: fields[i].definition + "\n\nExample usage: " + fields[i]?.example
+	    value: fields[i].definition + "\n\nExample usage: " + fields[i].example
 	});
     }
     return ret;
