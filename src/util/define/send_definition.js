@@ -64,15 +64,15 @@ function parseParts(word, types, currentPart) {
     const ret = [];
     for (const i in types) {
 	ret.push({
-	    type: MessageComponentTypes.ActionRow,
-	    components: [{
 		type: MessageComponentTypes.Button,
 		customId: "define_"+word+"_"+types[i],
 		style: ButtonStyles.Secondary,
 		label: types[i],
 		disabled: (currentPart == types[i])
-	    }]
-	})
-    }
-    return ret;
+	    })
+    };
+    return {
+	type: MessageComponentTypes.ActionRow,
+	components: ret
+    };
 }
