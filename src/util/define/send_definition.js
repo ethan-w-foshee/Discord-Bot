@@ -62,7 +62,7 @@ function parseDefinitions(fields) {
 
 function parseParts(word, types, currentPart) {
     const ret = [];
-    for (let i in types) {
+    for (const i in types) {
 	ret.push({
 	    type: MessageComponentTypes.ActionRow,
 	    components: [{

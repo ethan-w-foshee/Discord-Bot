@@ -48,6 +48,6 @@ export async function freedictDefine(word, part) {
 		"link": results[0].sourceUrls[0],
 		"availableParts": availableParts
 	    };
-	};
-    };
-};
+	}
+    }
+}
