@@ -44,7 +44,7 @@ export function formatDefinition(result, dictionary) {
 		fields: [{
 		    name: "1",
 		    value: (result["definition"].replaceAll("[", "").replaceAll("]", "") +
-			    "\n\nExample usage: "+result["example"].replaceAll("[", "").replaceAll("]", "")).slice(0,4000)
+			    "\n\nExample usage: "+result["example"].replaceAll("[", "").replaceAll("]", "")).slice(0,1024)
 		}]
 	    }]
 	};
