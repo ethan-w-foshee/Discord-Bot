@@ -70,8 +70,8 @@ function parseParts(word, types, currentPart) {
 		disabled: (currentPart == types[i])
 	    })
     }
-    return {
+    return [{
 	type: MessageComponentTypes.ActionRow,
 	components: ret
-    };
+    }];
 }
