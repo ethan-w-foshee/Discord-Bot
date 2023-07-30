@@ -8,7 +8,8 @@ export const PartOfSpeech = {
     adjective: "adjective",
     verb: "verb",
     adverb: "adverb",
-    preposition: "preposition"
+    preposition: "preposition",
+    interjection: "interjection"
 }
 
 export async function freedictDefine(word, part) {
@@ -21,7 +22,7 @@ export async function freedictDefine(word, part) {
 	"link": ""
     };
 
-    logger.debug("Looking up "+word+" from freedictionary");
+    logger.debug("Looking up "+word+" (type: "+part+") from freedictionary");
     const results = (await (await fetch(host + path)).json());
 
     if (results?.title == "No Definitions Found") {
