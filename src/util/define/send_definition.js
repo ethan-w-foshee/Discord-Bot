@@ -23,7 +23,7 @@ export function formatDefinition(result, dictionary) {
 		color: 0xe03b2c,
 		author: {
 		    name: "Dictionary",
-		    icon_rul: "https://webstockreview.net/images/dictionary-clipart-cartoon-1.jpg"
+		    icon_url: "https://webstockreview.net/images/dictionary-clipart-cartoon-1.jpg"
 		},
 		url: result.link,
 		fields: parseDefinitions(result.definitions)
