@@ -19,7 +19,8 @@ export async function freedictDefine(word, part) {
 	"word": word,
 	"partOfSpeech": part,
 	"definitions": [{"definition": "No definitions found", "example": "No examples available"}],
-	"link": ""
+	"link": "",
+	"availableParts": "Unknown"
     };
 
     logger.debug("Looking up "+word+" (type: "+part+") from freedictionary");
