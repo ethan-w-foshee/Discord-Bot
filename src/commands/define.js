@@ -27,9 +27,9 @@ addBotCommand(bot, {
 });
 
 async function commandHandler(bot, interaction) {
-    ackInteraction(interaction)
+    ackInteraction(interaction);
 
-    let result, dictUsed
+    let result, dictUsed;
 
     if (interaction.type == InteractionTypes.MessageComponent) {
 	dictUsed = 0;

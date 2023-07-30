@@ -45,7 +45,6 @@ export function formatDefinition(result, dictionary) {
 	};
 	break;
     }}
-    console.log(data);
     return data;
 }
 
