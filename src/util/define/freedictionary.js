@@ -14,28 +14,36 @@ export const PartOfSpeech = {
 export async function freedictDefine(word, part) {
     const host = "https://api.dictionaryapi.dev/";
     const path = "api/v2/entries/en/" + word;
+    const notFoundObj = {
+	"word": word,
+	"partOfSpeech": part,
+	"definitions": [{"definition": "No definitions found", "example": "No examples available"}],
+	"link": ""
+    };
 
     logger.debug("Looking up "+word+" from freedictionary");
     const results = (await (await fetch(host + path)).json())
 
     if (results?.title == "No Definitions Found") {
-	return {
-	    "word": word,
-	    "partOfSpeech": undefined,
-	    "definitions": [{"definition": "No definitions found", "example": "No examples available"}]
-	};
+	return notFoundObj;
     } else {
 	if (part == undefined) {
 	    return {
 		"word": word,
 		"partOfSpeech": results[0].meanings[0].partOfSpeech,
-		"definitions": results[0].meanings[0].definitions
+		"definitions": results[0].meanings[0].definitions,
+		"link": results[0].sourceUrls[0]
 	    }
 	} else {
+	    const definitions = results[0].meanings.filter((meaning) => meaning.partOfSpeech == part)
+	    if (definitions.length == 0) {
+		return notFoundObj;
+	    }
 	    return {
 		"word": word,
 		"partOfSpeech": part,
-		"definitions": results[0].meanings.filter((meaning) => meaning.partOfSpeech == part)[0].definitions
+		"definitions": definitions[0],
+		"link": results[0].sourceUrls[0]
 	    }
 	}
     }
