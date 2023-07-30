@@ -42,7 +42,7 @@ export function formatDefinition(result, dictionary) {
 		},
 		url: result.permalink,
 		fields: [{
-		    name: "1",
+		    name: "Definition 1",
 		    value: (result["definition"].replaceAll("[", "").replaceAll("]", "") +
 			    "\n\nExample usage: "+result["example"].replaceAll("[", "").replaceAll("]", "")).slice(0,1024)
 		}]
@@ -62,7 +62,7 @@ function parseDefinitions(fields) {
 	}
 	charSum += (fields[i].definition + fields[i].example).length
 	ret.push({
-	    name: (i+1).toString(),
+	    name: "Definition "+(i+1),
 	    value: fields[i].definition + "\n\nExample usage: " + fields[i].example
 	});
     }
