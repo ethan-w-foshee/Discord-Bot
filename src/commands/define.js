@@ -19,6 +19,9 @@ addBotCommand(bot, {
 	description: "Whether or not to use urban dictionary",
 	type: ApplicationCommandOptionTypes.Boolean,
 	required: false,
+    },{
+	name: "partofspeech",
+	description: "Which ",
     }],
     type: "slash",
     actions: [
