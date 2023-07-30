@@ -21,6 +21,11 @@ export function formatDefinition(result, dictionary) {
 		title: "Define " + result.word,
 		description: result.partOfSpeech ? result.partOfSpeech : "unknown",
 		color: 0xe03b2c,
+		author: {
+		    name: "Dictionary",
+		    icon_rul: "https://webstockreview.net/images/dictionary-clipart-cartoon-1.jpg"
+		},
+		url: result.link,
 		fields: parseDefinitions(result.definitions)
 	    }],
 	    components: parseParts(result.word, result.availableParts, result.partOfSpeech)
@@ -29,13 +34,13 @@ export function formatDefinition(result, dictionary) {
     } case 1: {// If urban dictionary was used
 	data = {
 	    embeds: [{
-		title: "Define " + result["word"],
+		title: "Define " + result.word,
 		color: 0xe03b2c,
 		author: {
 		    name: "Dictionary",
 		    icon_url: "https://webstockreview.net/images/dictionary-clipart-cartoon-1.jpg"
 		},
-		url: result["permalink"],
+		url: result.permalink,
 		fields: [{
 		    name: "1",
 		    value: result["definition"].replaceAll("[", "").replaceAll("]", "") +
