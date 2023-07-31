@@ -1,6 +1,8 @@
 import { db } from "../../../sql.js";
 import { } from "../../../deps.js";
 
+const max_attachment_size = 25 * 1024*1024;
+
 class CommandDB {
     constructor() {
 	db.execute(`
@@ -96,6 +98,25 @@ CREATE TABLE IF NOT EXISTS commandDB(
 	const tmpCodeDir = await Deno.makeTempDir();
 
 	Deno.writeTextFileSync(`${tmpCodeDir}/main.py`, code);
+	Deno.mkdirSync(`${tmpCodeDir}/out`);
+
+	const tmpfsCommand = new Deno.Command("FlatTMPFUSE", {
+	    args: [
+		`--size=${max_attachment_size}`,
+		"--max-inodes=5",
+		`--max-filesize=${max_attachment_size*2}`,
+		`${tmpCodeDir}/out`
+	    ]
+	});
+
+	tmpfsCommand.outputSync()
+	
+	const utmpfsCommand = new Deno.Command("fusermount", {
+	    args: [
+		"-u",
+		`${tmpCodeDir}/out`
+	    ]
+	});
 
 	// TODO: Build with Nix so Paths are *clean*
 	const timeoutPythonCommand = new Deno.Command("timeout", {
@@ -113,6 +134,11 @@ CREATE TABLE IF NOT EXISTS commandDB(
 		"--ro-bind",
 		"/nix",
 		"/nix",
+		"--bind",
+		`${tmpCodeDir}/out`,
+		"/out",
+		"--remount-ro",
+		"/",
 		"python3",
 		"-Iq",
 		"/app/main.py"
@@ -138,9 +164,21 @@ CREATE TABLE IF NOT EXISTS commandDB(
 
 	const pyout = await py.output();
 
+	const file = [];
+	
+	/* Collect Output Files*/
+	for (const outFile of Deno.readDirSync(`${tmpCodeDir}/out`)) {
+	    file.push({
+		filename: outFile.name,
+		blob: new Blob([Deno.readFileSync(`${tmpCodeDir}/out/${outFile.name}`)])
+	    });
+	}
+	/* Clear Tmpfs*/
+	utmpfsCommand.outputSync();
+	
 	await Deno.remove(tmpCodeDir, {recursive: true});
 
-	return formatOutput(pyout);
+	return formatOutput(pyout, file);
     }
     
     deleteCommand(owner, name) {
@@ -162,7 +200,7 @@ export const usergameDB = new CommandDB();
 
 const dec = new TextDecoder();
 
-function formatOutput(commandOut) {
+function formatOutput(commandOut, file) {
     const { _code, stdout, _stderr } = commandOut;
     let content = "";
 
@@ -181,6 +219,7 @@ function formatOutput(commandOut) {
     content = content.slice(0,2000)
     
     return {
-	content
+	content,
+	file: file.length == 0 ? undefined: file
     }
 }

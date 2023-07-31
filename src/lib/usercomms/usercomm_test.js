@@ -95,4 +95,17 @@ Deno.test("User Command Testing", async (t) => {
 	const res = usergameDB.searchCommand("TestUser", "printHello")
 	assert(res.length == 1);
     });
+
+    await t.step("Create and run Command With Files", async () => {
+	usergameDB.createCommand(
+	    "TestUser",
+	    "file",
+	    `with open("/out/test.txt","w") as f:
+	      f.write("aaaa")`
+	);
+	const res = await usergameDB.runCommand("file");
+	console.log(res);
+	assert(res.file[0].blob.size == 4);
+    });
+
 });
