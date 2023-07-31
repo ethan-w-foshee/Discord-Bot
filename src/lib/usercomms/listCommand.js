@@ -57,11 +57,13 @@ export function listCommand(bot, interaction) {
 	else if (action.startsWith("prg_next"))
 	    page +=1;
 	ackInteraction(interaction, "deferred", {ephemeral: true});
+    }else {
+	ackInteraction(interaction, "thinking", {ephemeral: true});
     }
 
-    const fields = prgList(page);
+	const fields = prgList(page);
 
-    bot.logger.debug(`${JSON.stringify(fields)}`);
+	bot.logger.debug(`${JSON.stringify(fields)}`);
     
     editOriginalInteractionResponse(bot, interaction.token, {
 	customId: `${page}`,
