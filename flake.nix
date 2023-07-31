@@ -34,6 +34,7 @@
         bubblewrap
         # Directory Userspace TMPFS w/ limits
         tmpfsFlat
+        fuse3
         # timeout
         coreutils
         # Chess
