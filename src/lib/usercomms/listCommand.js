@@ -67,9 +67,6 @@ export function listCommand(bot, interaction) {
 	    {
 		title: "Log Preview",
 		type: "rich",
-		description: `\`\`\`ansi
-${msg}
-\`\`\``,
 		fields
 	    }
 	],
