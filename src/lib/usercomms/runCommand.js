@@ -67,6 +67,7 @@ export async function runCommand(bot, interaction) {
 	    {ephemeral: hidden}
 	);
 	const output = await usergameDB.runCommand(commandId, input);
+	bot.logger.debug(`Command output:\n ${JSON.stringify(output)}`)
 	await editOriginalInteractionResponse(bot, interaction.token, output);
     }
     return
