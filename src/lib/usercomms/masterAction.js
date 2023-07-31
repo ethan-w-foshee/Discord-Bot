@@ -11,6 +11,7 @@ import { sourceCommand } from "../../lib/usercomms/sourceSubmit.js";
 import { runCommand } from "../../lib/usercomms/runCommand.js";
 import { deleteCommand } from "../../lib/usercomms/deleteCommand.js";
 import { infoCommand } from "../../lib/usercomms/infoCommand.js";
+import { listCommand } from "../../lib/usercomms/listCommand.js";
 
 const subcommands = {
     "create": createCommand,
