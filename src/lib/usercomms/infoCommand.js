@@ -31,7 +31,7 @@ export function infoCommand(bot, interaction) {
 	const source = commandData[6];
 	const created = commandData[3].slice(0,-3);
 	let modified = commandData[4];
-	if (modified != null) {
+	if (modified == null) {
 	    modified = "";
 	}else {
 	    modified = `, last modified <t:${modified.slice(0,-3)}>`;
