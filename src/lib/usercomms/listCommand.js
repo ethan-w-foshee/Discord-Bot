@@ -43,6 +43,8 @@ function prgList(page) {
 	    value: `Made by: <@${command[1]}>`
 	});
     }
+    if (fields.length == 0)
+	return undefined;
     return fields;
 }
 
@@ -61,9 +63,9 @@ export function listCommand(bot, interaction) {
 	ackInteraction(interaction, "thinking", {ephemeral: true});
     }
 
-	const fields = prgList(page);
+    const fields = prgList(page);
 
-	bot.logger.debug(`${JSON.stringify(fields)}`);
+    bot.logger.debug(`${JSON.stringify(fields)}`);
     
     editOriginalInteractionResponse(bot, interaction.token, {
 	customId: `${page}`,
