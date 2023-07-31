@@ -88,6 +88,12 @@ addBotCommand(bot, {
 		max_length: maxCommandName
 	    },
 	]
+    }, {
+	name: "list",
+	description: "List all commands!",
+	type: ApplicationCommandOptionTypes.SubCommand,
+	options: [
+	]
     }],
     type: "slash",
     actions: [
