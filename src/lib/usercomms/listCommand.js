@@ -60,14 +60,15 @@ export function listCommand(bot, interaction) {
     }
 
     const fields = prgList(page);
+
+    bot.logger.debug("${JSON.stringify(fields)}");
     
     editOriginalInteractionResponse(bot, interaction.token, {
 	customId: `${page}`,
 	embeds: [
 	    {
 		title: "Log Preview",
-		type: "rich",
-		fields
+		fields: fields
 	    }
 	],
 	components: makeComponents(page)
