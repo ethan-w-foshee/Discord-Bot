@@ -42,15 +42,12 @@ export function infoCommand(bot, interaction) {
 	    "message",
 	    {}, {
 		embeds: [{
-		    title: `Command "${commandName}" Info`,
+		    title: `"${commandName}" Command`,
 		    color: 0x9400d3,
-		    author: {
-			name: `<@${creatorId}>`,
-		    },
-		    footer: {
-			text: `Command created <t:${created}>${modified}`,
-		    },
-		    description: `\`\`\`python\n${source}\`\`\``,
+		    description: `Made By: <@${creatorId}>
+\`\`\`python
+${source.slice(0,3900)}\`\`\`
+Command created <t:${created}>${modified}`,
 		}]
 	    }
 	);

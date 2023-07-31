@@ -2,11 +2,13 @@
   description = "Denocord Discord Bot";
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   inputs.flake-utils.url = "github:numtide/flake-utils";
+  inputs.flatTmpFuse.url = "github:CyborgPotato/FuseFlatTmpfs";
+  inputs.flatTmpFuse.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils, flatTmpFuse }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
-
+      tmpfsFlat = flatTmpFuse.packages.${system}.default;
       py = pkgs.python3;
 
       pyenv = py.withPackages (p: with p; [
@@ -30,6 +32,8 @@
         pyenv
         # Sandboxing tool, for safety executing... well, Arbitrary code.
         bubblewrap
+        # Directory Userspace TMPFS w/ limits
+        tmpfsFlat
         # timeout
         coreutils
         # Chess
