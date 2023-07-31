@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS commandDB(
 	/* Collect Output Files*/
 	for (const outFile of Deno.readDirSync(`${tmpCodeDir}/out`)) {
 	    files.push({
-		filename: outFile.name,
+		name: outFile.name,
 		blob: new Blob([Deno.readFileSync(`${tmpCodeDir}/out/${outFile.name}`)])
 	    });
 	}
