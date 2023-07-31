@@ -164,21 +164,21 @@ CREATE TABLE IF NOT EXISTS commandDB(
 
 	const pyout = await py.output();
 
-	const file = [];
+	const files = [];
 	
 	/* Collect Output Files*/
 	for (const outFile of Deno.readDirSync(`${tmpCodeDir}/out`)) {
-	    file.push({
+	    files.push({
 		filename: outFile.name,
 		blob: new Blob([Deno.readFileSync(`${tmpCodeDir}/out/${outFile.name}`)])
 	    });
 	}
-	/* Clear Tmpfs*/
+	/* Clear Tmpfs */
 	utmpfsCommand.outputSync();
 	
 	await Deno.remove(tmpCodeDir, {recursive: true});
 
-	return formatOutput(pyout, file);
+	return formatOutput(pyout, files);
     }
     
     deleteCommand(owner, name) {
@@ -200,7 +200,7 @@ export const usergameDB = new CommandDB();
 
 const dec = new TextDecoder();
 
-function formatOutput(commandOut, file) {
+function formatOutput(commandOut, files) {
     const { _code, stdout, _stderr } = commandOut;
     let content = "";
 
@@ -220,6 +220,6 @@ function formatOutput(commandOut, file) {
     
     return {
 	content,
-	file: file.length == 0 ? undefined: file
+	files: files.length == 0 ? undefined: files
     }
 }
