@@ -61,7 +61,7 @@ export function listCommand(bot, interaction) {
 
     const fields = prgList(page);
 
-    bot.logger.debug("${JSON.stringify(fields)}");
+    bot.logger.debug(`${JSON.stringify(fields)}`);
     
     editOriginalInteractionResponse(bot, interaction.token, {
 	customId: `${page}`,
