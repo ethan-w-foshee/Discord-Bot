@@ -19,6 +19,7 @@ const subcommands = {
     "run": runCommand,
     "delete": deleteCommand,
     "info": infoCommand,
+    "list": listCommand,
 };
 
 export function masterAction(bot, interaction) {
