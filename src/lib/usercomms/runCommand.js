@@ -1,6 +1,5 @@
 import ackInteraction from "../../util/ackInteraction.js";
 import {
-    editOriginalInteractionResponse,
     InteractionTypes,
 } from "../../../deps.js";
 import { usergameDB } from "./commandDB.js";
@@ -68,7 +67,7 @@ export async function runCommand(bot, interaction) {
 	);
 	const output = await usergameDB.runCommand(commandId, input);
 	bot.logger.debug(`Command output:\n ${JSON.stringify(output)}`)
-	await editOriginalInteractionResponse(bot, interaction.token, output);
+	bot.helpers.editOriginalInteractionResponse(interaction.token, output);
     }
     return
 }
