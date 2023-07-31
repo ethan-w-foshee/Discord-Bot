@@ -1,21 +1,78 @@
 import ackInteraction from "../../util/ackInteraction.js";
-import {} from "../../../deps.js";
 import { usergameDB } from "./commandDB.js";
+import {
+    editOriginalInteractionResponse,
+} from "../../../deps.js";
 
-export function listCommand(_bot, interaction) {
-    const _createOptions = interaction.data.options.filter(
-	o => o.name == "list"
-    )[0].options;
- 
-    const allCommands = usergameDB.searchCommand()
-
-    ackInteraction(
-	interaction,
-	"message",
-	{ephemeral: true},
+function makeComponents(page) {
+    return [
 	{
-	    content: `${allCommands.length} Commands exist!`
+	    type: 1,
+	    components: [
+		{
+		    type: 2,
+		    label: "Prev",
+		    style: 1,
+		    customId: `prg_prev${page}`,
+		    disabled: page==1
+		},
+		{
+		    type: 2,
+		    label: `${page}`,
+		    style: 2,
+		    customId: "prg_page",
+		    disabled: true
+		},
+		{
+		    type: 2,
+		    label: "Next",
+		    style: 1,
+		    customId: `prg_next${page}`
+		}
+	    ]
 	}
-    );
-    return
+    ]
+}
+
+function prgList(page) {
+    const fields = [];
+    const commands = usergameDB.searchCommand();
+    for (const command of commands.slice((page-1)*10,page*10)) {
+	fields.push({
+	    name: command[2],
+	    value: `Made by: <@${command[1]}>`
+	});
+    }
+    return fields;
+}
+
+export function listCommand(bot, interaction) {
+    let page = 1;
+
+    if (interaction.data.customId) {
+	const action = interaction.data.customId;
+	page = parseInt(action.match(/[\d]+/));
+	if (action.startsWith("prg_prev"))
+	    page -=1;
+	else if (action.startsWith("prg_next"))
+	    page +=1;
+	ackInteraction(interaction, "deferred", {ephemeral: true});
+    }
+
+    const fields = prgList(page);
+    
+    editOriginalInteractionResponse(bot, interaction.token, {
+	customId: `${page}`,
+	embeds: [
+	    {
+		title: "Log Preview",
+		type: "rich",
+		description: `\`\`\`ansi
+${msg}
+\`\`\``,
+		fields
+	    }
+	],
+	components: makeComponents(page)
+    });
 }
