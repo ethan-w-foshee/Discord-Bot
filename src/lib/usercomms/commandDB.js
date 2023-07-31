@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS commandDB(
 
 	tmpfsCommand.outputSync()
 	
-	const utmpfsCommand = new Deno.Command("fusermount", {
+	const utmpfsCommand = new Deno.Command("fusermount3", {
 	    args: [
 		"-u",
 		`${tmpCodeDir}/out`
