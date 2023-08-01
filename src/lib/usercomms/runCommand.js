@@ -71,7 +71,7 @@ export async function runCommand(bot, interaction) {
 	    ...output,
 	    file: output.files,
 	    attachments: output.files,
-	);
+	});
 	bot.logger.debug(`Message:\n${JSON.stringify(msg)}`);
     }
     return
