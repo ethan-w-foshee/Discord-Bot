@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS commandDB(
 	const tmpfsCommand = new Deno.Command("FlatTMPFUSE", {
 	    args: [
 		`--size=${max_attachment_size}`,
-		"--max-inodes=5",
+		"--max-inodes=50",
 		`--max-filesize=${max_attachment_size*2}`,
 		`${tmpCodeDir}/out`
 	    ]
