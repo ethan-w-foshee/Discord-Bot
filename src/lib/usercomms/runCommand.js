@@ -67,8 +67,8 @@ export async function runCommand(bot, interaction) {
 	);
 	const output = await usergameDB.runCommand(commandId, input);
 	bot.logger.debug(`Command output:\n ${JSON.stringify(output)}`)
-	await bot.helpers.editOriginalInteractionResponse(interaction.token, output);
-	bot.helpers.sendFollowupMessage(interaction.token, output);
+	const msg = await bot.helpers.editOriginalInteractionResponse(interaction.token, output);
+	bot.logger.debug(`Message:\n${msg}`);
     }
     return
 }
