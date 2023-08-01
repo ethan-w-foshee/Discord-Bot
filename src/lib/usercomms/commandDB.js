@@ -220,6 +220,6 @@ function formatOutput(commandOut, files) {
     
     return {
 	content,
-	files: files.length == 0 ? undefined: files
+	file: files.length == 0 ? undefined: files
     }
 }
