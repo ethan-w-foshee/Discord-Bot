@@ -105,7 +105,7 @@ Deno.test("User Command Testing", async (t) => {
 	);
 	const res = await usergameDB.runCommand("file");
 	console.log(res);
-	assert(res.files[0].blob.size == 4);
+	assert(res.file[0].blob.size == 4);
     });
 
 });
