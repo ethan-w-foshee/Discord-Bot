@@ -1,107 +1,83 @@
 {
-  description = "Denocord Discord Bot";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+  description = "StarBot, but Smaller";
+
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.flatTmpFuse.url = "github:CyborgPotato/FuseFlatTmpfs";
-  inputs.flatTmpFuse.inputs.nixpkgs.follows = "nixpkgs";
 
-  outputs = { self, nixpkgs, flake-utils, flatTmpFuse }:
+  outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
-      tmpfsFlat = flatTmpFuse.packages.${system}.default;
-      py = pkgs.python3;
+      version = "0.0.1";
 
-      pyenv = py.withPackages (p: with p; [
-        matplotlib
-        numpy
-        scipy
-        pillow
-      ]);      
+      name = "starbot";
+      
+      pkgs = import nixpkgs {
+        inherit system;
+      };
 
-      deps = with pkgs; [
-        deno
-        # Graphs
-        d2
-        # Convert SVG to PNG on the fly D2 when parsing outputing
-        # via stdout only does SVG, hence to send over Discord we
-        # cheat and convert to PNG.
-        librsvg
-        # Funny WingDing Language
-        cbqn
-        # Python
-        pyenv
-        # Sandboxing tool, for safety executing... well, Arbitrary code.
-        bubblewrap
-        # Directory Userspace TMPFS w/ limits
-        tmpfsFlat
-        fuse3
-        # timeout
-        coreutils
-        # Chess
-        gnuchess
+      pkgs-windows = pkgs.pkgsCross.mingwW64;
+
+      # For Linux Specific Dependencies
+      linux' = pkgs.lib.optional pkgs.stdenv.isLinux;
+      # For MacOS Specific Dependencies
+      darwin' = pkgs.lib.optional pkgs.stdenv.isDarwin;
+
+      nativeBuildInputs = with pkgs; [
+        meson
+        ninja
+        pkg-config
+      ];      
+
+      bDeps = p: with p; [
+        curl
+      ] ++ (linux' [
+      ]) ++ (darwin' ([
+      ] ++ (with darwin.apple_sdk.frameworks; [
+      ])));
+      
+      pbDeps = p: with p; [
       ];
-      
-      # The thing that runs starbot
-      starBot = pkgs.writeShellApplication {
-        name = "starbot";
-        runtimeInputs = deps;
-        text = ''
-          deno run -A main.js
-        '';
+
+      starbot = pkgs.stdenv.mkDerivation {
+        pname = name;
+        inherit version;
+        src = self;
+
+        inherit nativeBuildInputs;
+        
+        buildInputs = bDeps pkgs;
+
+        propagatedBuildInputs = pbDeps pkgs;
       };
 
-      tests = pkgs.writeShellApplication {
-        name = "tests";
-        runtimeInputs = deps;
-        text = ''
-          deno test -A
-        '';
-      };
+      starbot-exe = pkgs-windows.stdenv.mkDerivation {
+        pname = name;
+        inherit version;
+        src = self;
 
-      lints = pkgs.writeShellApplication {
-        name = "lints";
-        runtimeInputs = deps;
-        text = ''
-          deno lint
-        '';
-      };
+        inherit nativeBuildInputs;
 
-      mkImage = (tag: pkgs.dockerTools.buildImage {
-        name = "starbot";
-        tag = "${tag}";
-        copyToRoot = pkgs.buildEnv {
-          name = "starbot-root";
-          paths = [
-            starBot
-            tests
-            lints
-            pkgs.bashInteractive
-          ] ++ deps;
-          pathsToLink = [
-            "/bin"
-          ];
-        };
-      });
+        buildInputs = bDeps pkgs-windows;
+        
+        propagatedBuildInputs = pbDeps pkgs-windows;
+      };
     in {
-      apps.default = {
-        type = "app";
-        program = "${starBot}/bin/starbot";
-      };
+        packages = {
+          default = starbot;
+          inherit starbot starbot-exe;
+        };
+        
+        apps = rec {
+          default = flake-utils.lib.mkApp { drv = self.packages.${system}.default; };
+        };
 
-      apps.tests = {
-        type = "app";
-        program = "${tests}/bin/tests";
-      };
-      
-      packages.StarBot = mkImage "latest";
-
-      packages.StarBot-Test = mkImage "dev";
-      
-      devShells.default = pkgs.mkShell {
-        nativeBuildInputs = [ pkgs.bashInteractive ];
-        buildInputs = deps ++ (with pkgs; [
-          sqlite          
-        ]);
-      };
-    });
+        devShells = {
+          default = pkgs.mkShell {
+            inputsFrom = [ starbot ];
+            packages = (with pkgs; [
+              clang-tools
+            ]);
+          };
+          inherit starbot;
+        };
+      }
+    );
 }
