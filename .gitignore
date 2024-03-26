@@ -10,9 +10,6 @@ db
 result
 ./data/training
 /data/training/
-
-/subprojects/*
-!/subprojects/*.wrap
-!/subprojects/packagefiles
-
-/build*
+subprojects/*
+!subprojects/*.wrap
+!subprojects/packagefiles
