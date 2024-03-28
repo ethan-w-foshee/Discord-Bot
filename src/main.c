@@ -1,13 +1,13 @@
 #include "discord_codecs.h"
 #include <assert.h>
 #include <string.h>
+#include <stdlib.h>
 #include <discord.h>
-// We want this: need to find a way to generate the include directory properly...
-/* #include <concord/discord.h> */
 
 #ifndef BOT_TOKEN
-#error "BOT_TOKEN Not Defined"
-#define BOT_TOKEN (assert(0), "No Bot Token Defined")
+#define GET_BOT_TOKEN() getenv("BOT_TOKEN")
+#else
+#define GET_BOT_TOKEN() (BOT_TOKEN)
 #endif
 
 void on_ready(struct discord *client, const struct discord_ready *event) {
@@ -39,7 +39,7 @@ void on_interaction(struct discord *client, const struct discord_interaction *ev
 }
 
 int main(void) {
-  struct discord *client = discord_init(BOT_TOKEN);
+  struct discord *client = discord_init(GET_BOT_TOKEN());
   discord_set_on_ready(client, &on_ready);
   discord_set_on_interaction_create(client, &on_interaction);
   discord_run(client);
