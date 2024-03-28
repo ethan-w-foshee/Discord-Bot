@@ -12,6 +12,11 @@ for wrap in glob(f"{sys.argv[1]}/subprojects/*.wrap"):
     url = "{wrap.values['source_url']}";
     sha256 = "{wrap.values['source_hash']}";
   }};""")
-        
+
+    if 'patch_url' in wrap.values:
+        print(f"""  "{wrap.values['patch_filename']}" = pkgs.fetchurl {{
+    url = "{wrap.values['patch_url']}";
+    sha256 = "{wrap.values['patch_hash']}";
+  }};""")
 
 print("}")
