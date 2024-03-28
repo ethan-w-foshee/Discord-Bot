@@ -1,3 +1,6 @@
+#ifndef STARBOT_COMMANDS_H
+#define STARBOT_COMMANDS_H
+
 #include "discord.h"
 #include "discord_codecs.h"
 #include <string.h>
@@ -22,3 +25,4 @@
 
 void command_pong(struct discord *, const struct discord_interaction *event);
 
+#endif
