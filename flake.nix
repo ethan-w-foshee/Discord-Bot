@@ -37,12 +37,23 @@
       pbDeps = p: with p; [
       ];
 
-      starbot = pkgs.stdenv.mkDerivation {
+      starbot = let
+        mesonWrapCache = let
+          mesonPy = pkgs.python3.withPackages (p: [p.meson]); 
+          in import (pkgs.runCommand "meson-wrap-${name}-${version}" {} ''
+          ${mesonPy}/bin/${mesonPy.executable} ${./mesonWrapFetch.py} ${./.} > $out
+        '') { inherit pkgs; };
+      in pkgs.stdenv.mkDerivation {
         pname = name;
         inherit version;
         src = self;
 
         inherit nativeBuildInputs;
+
+        preConfigure = ''
+          mkdir subprojects/packagecache
+          ${builtins.concatStringsSep ";" (builtins.attrValues (builtins.mapAttrs (n: v: "cp ${v} subprojects/packagecache/${n}") mesonWrapCache))}
+        '';
         
         buildInputs = bDeps pkgs;
 
@@ -75,6 +86,7 @@
             inputsFrom = [ starbot ];
             packages = (with pkgs; [
               clang-tools
+              (python3.withPackages (p: [p.meson p.ipython]))
             ]);
           };
           inherit starbot;
