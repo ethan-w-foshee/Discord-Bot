@@ -1,4 +1,6 @@
+#include "logging.h"
 #include "commands.h"
+#include "src/logging.h"
 
 void on_ready(struct discord *client, const struct discord_ready *event) {
   INTERACTION_CREATE(ping, "Ping Pong Time!", DISCORD_APPLICATION_CHAT_INPUT, NULL);
@@ -15,6 +17,7 @@ void on_interaction(struct discord *client, const struct discord_interaction *ev
 }
 
 int main(void) {
+  starbot_configure_logging();
   struct discord *client = discord_init(GET_DISCORD_TOKEN());
   discord_set_on_ready(client, &on_ready);
   discord_set_on_interaction_create(client, &on_interaction);

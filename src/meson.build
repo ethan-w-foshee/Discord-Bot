@@ -1,5 +1,6 @@
 subdir('./commands')
 
 starbot_src += files(
-  './main.c'
+  './main.c',
+  './logging.c',
 )
