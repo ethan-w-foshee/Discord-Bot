@@ -2,10 +2,10 @@
 #include "discord_codecs.h"
 #include <string.h>
 
-#ifndef BOT_TOKEN
-#define GET_BOT_TOKEN() getenv("BOT_TOKEN")
+#ifndef DISCORD_TOKEN
+#define GET_DISCORD_TOKEN() getenv("DISCORD_TOKEN")
 #else
-#define GET_BOT_TOKEN() BOT_TOKEN
+#define GET_DISCORD_TOKEN() DISCORD_TOKEN
 #endif
 
 #define INTERACTION_CREATE(str, int_description, int_type, int_options) struct discord_create_global_application_command params_##str##_##int_type = { \

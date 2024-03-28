@@ -1,1 +1,1 @@
-option('BOT_TOKEN', type : 'string', description : 'The Bot\'s Token')
+option('DISCORD_TOKEN', type : 'string', description : 'The Bot\'s Token')
