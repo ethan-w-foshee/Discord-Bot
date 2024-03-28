@@ -24,6 +24,7 @@ concord_lib = library('concord',
                       c_args: [
                         '-D_XOPEN_SOURCE=600',
                         '-DLOG_USE_COLOR',
+                        '-DCCORD_SIGINTCATCH',
                       ],
                       include_directories : [
                         core_inc,
