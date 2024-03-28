@@ -40,7 +40,7 @@
       starbot = let
         mesonWrapCache = let
           mesonPy = pkgs.python3.withPackages (p: [p.meson]); 
-          in import (pkgs.runCommand "meson-wrap-${name}-${version}" {} ''
+        in import (pkgs.runCommand "meson-wrap-${name}-${version}" {} ''
           ${mesonPy}/bin/${mesonPy.executable} ${./mesonWrapFetch.py} ${./.} > $out
         '') { inherit pkgs; };
       in pkgs.stdenv.mkDerivation {
@@ -72,25 +72,24 @@
         propagatedBuildInputs = pbDeps pkgs-windows;
       };
     in {
-        packages = {
-          default = starbot;
-          inherit starbot starbot-exe;
-        };
-        
-        apps = rec {
-          default = flake-utils.lib.mkApp { drv = self.packages.${system}.default; };
-        };
+      packages = {
+        default = starbot;
+        inherit starbot starbot-exe;
+      };
+      
+      apps = rec {
+        default = flake-utils.lib.mkApp { drv = self.packages.${system}.default; };
+      };
 
-        devShells = {
-          default = pkgs.mkShell {
-            inputsFrom = [ starbot ];
-            packages = (with pkgs; [
-              clang-tools
-              (python3.withPackages (p: [p.meson p.ipython]))
-            ]);
-          };
-          inherit starbot;
+      devShells = {
+        default = pkgs.mkShell {
+          inputsFrom = [ starbot ];
+          packages = (with pkgs; [
+            clang-tools
+            (python3.withPackages (p: [p.meson p.ipython]))
+          ]);
         };
-      }
-    );
+        inherit starbot;
+      };
+    });
 }
