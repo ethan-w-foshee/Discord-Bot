@@ -13,6 +13,7 @@ subdir('./src')
 executable('starbot',
            starbot_src,
            dependencies : [
-              dependency('concord')
+             dependency('concord'),
+             dependency('sqlite3'),
            ],
            install : true)
