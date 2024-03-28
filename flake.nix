@@ -37,40 +37,36 @@
       pbDeps = p: with p; [
       ];
 
-      starbot = let
+      sharedEnv = let
         mesonWrapCache = let
           mesonPy = pkgs.python3.withPackages (p: [p.meson]); 
         in import (pkgs.runCommand "meson-wrap-${name}-${version}" {} ''
           ${mesonPy}/bin/${mesonPy.executable} ${./mesonWrapFetch.py} ${./.} > $out
         '') { inherit pkgs; };
-      in pkgs.stdenv.mkDerivation {
+      in  {
         pname = name;
         inherit version;
         src = self;
-
+        
         inherit nativeBuildInputs;
-
+        
         preConfigure = ''
           mkdir subprojects/packagecache
           ${builtins.concatStringsSep ";" (builtins.attrValues (builtins.mapAttrs (n: v: "cp ${v} subprojects/packagecache/${n}") mesonWrapCache))}
         '';
-        
+      };
+
+      starbot = pkgs.stdenv.mkDerivation (sharedEnv // {
         buildInputs = bDeps pkgs;
 
         propagatedBuildInputs = pbDeps pkgs;
-      };
+      });
 
-      starbot-exe = pkgs-windows.stdenv.mkDerivation {
-        pname = name;
-        inherit version;
-        src = self;
-
-        inherit nativeBuildInputs;
-
+      starbot-exe = pkgs-windows.stdenv.mkDerivation ( sharedEnv // {        
         buildInputs = bDeps pkgs-windows;
         
         propagatedBuildInputs = pbDeps pkgs-windows;
-      };
+      });
     in {
       packages = {
         default = starbot;
