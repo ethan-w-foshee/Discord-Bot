@@ -1,10 +1,11 @@
 #include "logging.h"
 #include "commands.h"
-#include "src/logging.h"
 
 void on_ready(struct discord *client, const struct discord_ready *event) {
   log_debug("I'm ready!!");
-  INTERACTION_CREATE(ping, "Ping Pong Time!", DISCORD_APPLICATION_CHAT_INPUT, NULL);
+  INTERACTION_CREATE_START
+  INTERACTION_CREATE(ping, "Ping Pong Time!", DISCORD_APPLICATION_CHAT_INPUT, NULL)
+  INTERACTION_CREATE_END;
 }
 
 void on_interaction(struct discord *client, const struct discord_interaction *event) {
