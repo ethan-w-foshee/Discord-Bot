@@ -9,13 +9,7 @@ void on_ready(struct discord *client, const struct discord_ready *event) {
 }
 
 void on_interaction(struct discord *client, const struct discord_interaction *event) {
-  switch (event->type) {
-  case DISCORD_INTERACTION_APPLICATION_COMMAND:
-    INTERACTION_CALL("ping", command_pong);
-    break;
-  default:
-    break;
-  }
+  INTERACTION_CALL("ping", command_pong);
 }
 
 int main(void) {
