@@ -49,5 +49,6 @@ CCORDcode interactions_upsert(struct discord *client, const struct discord_ready
 #define INTERACTION_CALL(str, command) log_debug("Calling command: " #str " -> " #command); if (strcmp(event->data->name, str)==0) command(client, event)
 
 void command_pong(struct discord *, const struct discord_interaction *event);
+void command_quote(struct discord *, const struct discord_interaction *event);
 
 #endif

@@ -1,3 +1,4 @@
 starbot_src += files(
-  './ping.c'
+  './ping.c',
+  './quote.c',
 )
