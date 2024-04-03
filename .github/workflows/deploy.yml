@@ -31,7 +31,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: image
-          key: starbot_container-${{ hashFiles('flake.*','deps.js') }}
+          key: starbot_container-${{ hashFiles('flake.*','**.c','**.h') }}
       - name: SSH Key Creation
         run: |
           echo "${{ secrets.ssh-key}}" > .key

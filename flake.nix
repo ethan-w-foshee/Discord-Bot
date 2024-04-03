@@ -67,10 +67,28 @@
         
         propagatedBuildInputs = pbDeps pkgs-windows;
       });
+      
+      mkImage = (tag: pkgs.dockerTools.buildImage {
+        name = "starbot";
+        tag = "${tag}";
+        copyToRoot = pkgs.buildEnv {
+          name = "starbot-root";
+          paths = [
+            starbot
+            pkgs.bashInteractive
+          ] ++ deps;
+          pathsToLink = [
+            "/bin"
+          ];
+        };
+      });
     in {
       packages = {
         default = starbot;
         inherit starbot starbot-exe;
+
+        StarBot = mkImage "latest";
+        StarBot-Test = mkImage "dev";
       };
       
       apps = rec {
