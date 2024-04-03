@@ -41,6 +41,7 @@ size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata) {
 void command_quote(struct discord *client, const struct discord_interaction *event) {
   char* author;
   char* quote;
+  
   switch (event->type) {
   case DISCORD_INTERACTION_APPLICATION_COMMAND:
     for (int i=0; i<event->data->options->size; i++) {
@@ -58,71 +59,80 @@ void command_quote(struct discord *client, const struct discord_interaction *eve
     break;
   }
 
-  char request[1024];
-
+  CURL* curl_handle;
+  struct curl_slist *slist = NULL;
+  
   char* host = "https://quozio.com";
   char* path = "api/v1/quotes";
+  
+  char request[1024];
 
-  snprintf(&request[0], sizeof(request), "%s/%s", host, path);
+  // Buffer to receive data from POST/GET
+  struct buff recv = {0};
+  jsmn_parser parser;
+  jsmntok_t *toks = NULL;
+  unsigned n_toks;
+  jsmnf_loader loader;
+  jsmnf_pair *pairs = NULL;
+  unsigned n_pairs;
 
-  CURL* curl_handle = curl_easy_init();
+  snprintf(request, sizeof(request), "%s/%s", host, path);
+
+  curl_handle = curl_easy_init();
   curl_easy_setopt(curl_handle, CURLOPT_URL, request);
 
-  struct curl_slist *list = NULL;
-  list = curl_slist_append(list, "Content-Type: application/json");
-  list = curl_slist_append(list, "Accept: application/json");
-  curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, list);
+  slist = curl_slist_append(slist, "Content-Type: application/json");
+  slist = curl_slist_append(slist, "Accept: application/json");
+  curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, slist);
 
-
+  log_trace("Forming POST query to %s...", request);
   jsonb req;
   char buf[4096];
-  log_trace("Forming POST query to %s...", request);
   jsonb_init(&req);
-  jsonb_object(&req, buf, sizeof(buf));
-  jsonb_key(&req, buf, sizeof(buf), "author", sizeof("author")-1);
-  jsonb_string(&req, buf, sizeof(buf), author, strlen(author));
-  jsonb_key(&req, buf, sizeof(buf), "quote", sizeof("quote")-1);
-  jsonb_string(&req, buf, sizeof(buf), quote, strlen(quote));
-  jsonb_object_pop(&req, buf, sizeof(buf));
+  jsonb_object(&req, buf, sizeof(buf)); {
+      jsonb_key(&req, buf, sizeof(buf), "author", sizeof("author")-1);
+      jsonb_string(&req, buf, sizeof(buf), author, strlen(author));
+
+      jsonb_key(&req, buf, sizeof(buf), "quote", sizeof("quote")-1);
+      jsonb_string(&req, buf, sizeof(buf), quote, strlen(quote));
+  } jsonb_object_pop(&req, buf, sizeof(buf));
   log_trace(buf);
 
-  struct buff recv = {0};
-  curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, &buf[0]);
+  curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, buf);
   curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, &recv);
   curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_callback);
   curl_easy_perform(curl_handle);
 
-  jsmn_parser parser;
-  jsmntok_t toks[256];
   jsmn_init(&parser);
-  jsmn_parse(&parser, recv.buff, recv.size, &toks[0], sizeof(toks)/sizeof(toks[0]));
+  jsmn_parse_auto(&parser, recv.buff, recv.size, &toks, &n_toks);
 
-  jsmnf_loader loader;
-  jsmnf_pair pairs[256];
   jsmnf_init(&loader);
-  jsmnf_load(&loader, recv.buff, &toks[0], parser.toknext, &pairs[0], sizeof(pairs)/sizeof(pairs[0]));
+  jsmnf_load_auto(&loader, recv.buff, toks, n_toks, &pairs, &n_pairs);
 
   const char quoteid_key[] = "quoteId";
-  jsmnf_pair *quoteid_pair = jsmnf_find(&pairs[0], recv.buff, quoteid_key, sizeof(quoteid_key)-1);
+  jsmnf_pair *quoteid_pair = jsmnf_find(pairs, recv.buff, quoteid_key, sizeof(quoteid_key)-1);
   if (quoteid_pair == NULL) {
     log_error("Error getting quoteid from response: %s", recv.buff);
     return;
   }
+  
   struct jsmnftok quoteid_tok = quoteid_pair->v;
   char *quoteid = malloc(quoteid_tok.len+1);
   memcpy(quoteid, &recv.buff[quoteid_tok.pos], quoteid_tok.len);
   quoteid[quoteid_tok.len] = '\0';
+  
   log_trace("Got quoteid: %s", quoteid);
-  curl_slist_free_all(list);
-  curl_easy_cleanup(curl_handle);
+
   recv.size = 0;
+  free(toks); toks = NULL;
+  free(pairs); pairs = NULL;
+  curl_slist_free_all(slist);
+  curl_easy_cleanup(curl_handle);
 
   path = "api/v1/templates";
-  snprintf(&request[0], sizeof(request), "%s/%s", host, path);
+  snprintf(request, sizeof(request), "%s/%s", host, path);
   log_trace("Forming GET query to %s...", request);
 
-  // We reinitialize as if we try to reuse the handle we get a
-  // permission denied / token auth error
   curl_handle = curl_easy_init();
   curl_easy_setopt(curl_handle, CURLOPT_URL, request);
   curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, &recv);
@@ -131,17 +141,13 @@ void command_quote(struct discord *client, const struct discord_interaction *eve
   log_trace("Templates received in %zu bytes", recv.size);
 
   jsmn_init(&parser);
-  jsmntok_t *template_toks = NULL;
-  unsigned n_toks = 0;
-  jsmn_parse_auto(&parser, recv.buff, recv.size, &template_toks, &n_toks);
+  jsmn_parse_auto(&parser, recv.buff, recv.size, &toks, &n_toks);
 
   jsmnf_init(&loader);
-  jsmnf_pair *template_pairs = NULL;
-  unsigned n_pairs = 0;
-  jsmnf_load_auto(&loader, recv.buff, template_toks, n_toks, &template_pairs, &n_pairs);
+  jsmnf_load_auto(&loader, recv.buff, toks, n_toks, &pairs, &n_pairs);
 
   const char template_key[] = "data";
-  jsmnf_pair *template_pair = jsmnf_find(template_pairs, recv.buff, template_key, sizeof(template_key)-1);
+  jsmnf_pair *template_pair = jsmnf_find(pairs, recv.buff, template_key, sizeof(template_key)-1);
   int n_templates = template_pair->size;
   int template_idx = n_templates * ((double) rand() / (double) RAND_MAX);
 
@@ -157,9 +163,13 @@ void command_quote(struct discord *client, const struct discord_interaction *eve
   templateid[templateid_pair->v.len] = '\0';
   
   log_trace("Chose templateid: %s", templateid);
+
+  recv.size = 0;
+  free(toks); toks = NULL;
+  free(pairs); pairs = NULL;
   curl_easy_cleanup(curl_handle);
 
-  snprintf(&request[0], sizeof(request), "%s/api/v1/quotes/%s/imageUrls?templateId=%s", host, quoteid, templateid);
+  snprintf(request, sizeof(request), "%s/api/v1/quotes/%s/imageUrls?templateId=%s", host, quoteid, templateid);
   curl_handle = curl_easy_init();
   curl_easy_setopt(curl_handle, CURLOPT_URL, request);
   curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, &recv);
@@ -170,41 +180,35 @@ void command_quote(struct discord *client, const struct discord_interaction *eve
   curl_easy_perform(curl_handle);
   recv.buff[recv.size] = '\0';
 
-  log_trace("Parsing tokens");
   jsmn_init(&parser);
-  jsmntok_t *final_toks = NULL;
-  n_toks = 0;
-  jsmn_parse_auto(&parser, recv.buff, recv.size, &final_toks, &n_toks);
+  jsmn_parse_auto(&parser, recv.buff, recv.size, &toks, &n_toks);
 
-  log_trace("Parsing pairs");
   jsmnf_init(&loader);
-  jsmnf_pair *final_pairs = NULL;
-  n_pairs = 0;
-  jsmnf_load_auto(&loader, recv.buff, final_toks, n_toks, &final_pairs, &n_pairs);
+  jsmnf_load_auto(&loader, recv.buff, toks, n_toks, &pairs, &n_pairs);
 
   const char size_key[] = "medium";
 
-  log_trace("Getting medium image");
-  jsmnf_pair *size_pair = jsmnf_find(final_pairs, recv.buff, size_key, sizeof(size_key)-1);
+  jsmnf_pair *size_pair = jsmnf_find(pairs, recv.buff, size_key, sizeof(size_key)-1);
 
   char response[2000];
   snprintf(response, sizeof(response), "%.*s", (int)size_pair->v.len, &recv.buff[size_pair->v.pos]);
 
+  log_trace("Got %s image: %s", size_key, response);
+
   struct discord_interaction_response params = {
     .type = DISCORD_INTERACTION_CHANNEL_MESSAGE_WITH_SOURCE,
     .data = &(struct discord_interaction_callback_data){
-      .content = &response[0]
+      .content = response
     }
   };
   discord_create_interaction_response(client, event->id,
 				      event->token, &params, NULL);
-  
-  free(final_toks);
-  free(final_pairs);
+
+  recv.size = 0;
+  free(toks); toks = NULL;
+  free(pairs); pairs = NULL;
+  curl_easy_cleanup(curl_handle);
   free(templateid);
-  free(template_pairs);
-  free(template_toks);
   free(quoteid);
   free(recv.buff);
-  curl_easy_cleanup(curl_handle);
 }
