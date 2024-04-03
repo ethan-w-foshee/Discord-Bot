@@ -76,7 +76,7 @@
           paths = [
             starbot
             pkgs.bashInteractive
-          ] ++ deps;
+          ];
           pathsToLink = [
             "/bin"
           ];
