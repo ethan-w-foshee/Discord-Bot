@@ -17,4 +17,7 @@ core_src = files(
 )
 
 core_lib = static_library('concord_core', core_src,
+                          dependencies: [
+                            dependency('threads'),
+                          ],
                           include_directories: core_inc)
