@@ -53,6 +53,8 @@ void command_quote(struct discord *client, const struct discord_interaction *eve
     }
     break;
   case DISCORD_INTERACTION_MESSAGE_COMPONENT:
+    author = event->message->author->username;
+    quote = event->message->content;
     break;
   default:
     log_error("Type of interaction not supported");

@@ -24,12 +24,14 @@ void on_ready(struct discord *client, const struct discord_ready *event) {
   INTERACTION_CREATE_START
     INTERACTION_CREATE(ping, "Ping Pong Time!", DISCORD_APPLICATION_CHAT_INPUT)
     INTERACTION_CREATE_W_OPT(quote, "Create a very inspirational quote", DISCORD_APPLICATION_CHAT_INPUT, quote_opts)
+    INTERACTION_CREATE(quoth, "Turn a message into an inspriational quote", DISCORD_APPLICATION_MESSAGE)
     INTERACTION_CREATE_END;
 }
 
 void on_interaction(struct discord *client, const struct discord_interaction *event) {
   INTERACTION_CALL("ping", command_pong);
   INTERACTION_CALL("quote", command_quote);
+  INTERACTION_CALL("quoth", command_quote);
 }
 
 int main(void) {
