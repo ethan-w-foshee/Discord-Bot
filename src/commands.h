@@ -50,5 +50,6 @@ CCORDcode interactions_upsert(struct discord *client, const struct discord_ready
 
 void command_pong(struct discord *, const struct discord_interaction *event);
 void command_quote(struct discord *, const struct discord_interaction *event);
+void command_stupify(struct discord *, const struct discord_interaction *event);
 
 #endif

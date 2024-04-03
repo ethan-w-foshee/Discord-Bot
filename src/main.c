@@ -20,11 +20,22 @@ void on_ready(struct discord *client, const struct discord_ready *event) {
       .required = true,
     },
   };
+
+  struct discord_application_command_option stupify_opts[] = {
+    (struct discord_application_command_option) {
+        .name = "content",
+        .description = "The original message to be \"corrected\"",
+        .type = DISCORD_APPLICATION_OPTION_STRING,
+	.required = true,
+    }
+  };  
   
   INTERACTION_CREATE_START
     INTERACTION_CREATE(ping, "Ping Pong Time!", DISCORD_APPLICATION_CHAT_INPUT)
     INTERACTION_CREATE_W_OPT(quote, "Create a very inspirational quote", DISCORD_APPLICATION_CHAT_INPUT, quote_opts)
     INTERACTION_CREATE(quoth, "Turn a message into an inspriational quote", DISCORD_APPLICATION_MESSAGE)
+    INTERACTION_CREATE_W_OPT(stupify-my-words, "Send a message but without a few letters", DISCORD_APPLICATION_CHAT_INPUT, stupify_opts)
+    INTERACTION_CREATE(stupify, "Stupify a message", DISCORD_APPLICATION_MESSAGE)
     INTERACTION_CREATE_END;
 }
 
@@ -32,6 +43,8 @@ void on_interaction(struct discord *client, const struct discord_interaction *ev
   INTERACTION_CALL("ping", command_pong);
   INTERACTION_CALL("quote", command_quote);
   INTERACTION_CALL("quoth", command_quote);
+  INTERACTION_CALL("stupify-my-words", command_stupify);
+  INTERACTION_CALL("stupify", command_stupify);
 }
 
 int main(void) {
