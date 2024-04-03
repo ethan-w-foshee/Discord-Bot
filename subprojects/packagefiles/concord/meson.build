@@ -1,7 +1,7 @@
 project('concord', 'c',
   version : '2.2.1',
   default_options : [
-    'c_std=c99',
+    'c_std=gnu99',
     'warning_level=3',
     'prefer_static=true'
   ])
