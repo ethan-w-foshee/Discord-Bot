@@ -18,7 +18,7 @@ addBotCommand(bot, {
     }],
     type: "slash",
     actions: [
-	function (bot, interaction) {
+	async function (bot, interaction) {
 	    ackInteraction(interaction);
 
 	    /* Get options */
@@ -48,7 +48,7 @@ addBotCommand(bot, {
     name: "gifize",
     type: "message",
     actions: [
-	function (bot, interaction) {
+	async function (bot, interaction) {
 	    ackInteraction(interaction);
 	    const messageObject =
 		interaction.data.resolved.messages.values().next().value;
