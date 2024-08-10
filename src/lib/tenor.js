@@ -12,8 +12,7 @@ function ratelimit(fun, iri=1000, nper=1, poll=10) {
 		resolve(ret)
 	    },poll)
 	})
-	let n = await check()
-	while ((await check()) >= nper) {}
+	while ((await check()) >= nper) {// We're just here to wait}
     }
     async function call_fun(...args) {
 	let n = Atomics.load(queue_dat, 0);
@@ -33,8 +32,6 @@ function ratelimit(fun, iri=1000, nper=1, poll=10) {
 }
 
 async function _fetchTenor(message) {
-    const encMessage = encodeURI(message);
-
     const search = new URLSearchParams({
 	q: message,
 	key: API_KEY,
