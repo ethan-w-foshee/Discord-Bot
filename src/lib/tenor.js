@@ -5,16 +5,14 @@ function ratelimit(fun, iri=1000, nper=1, poll=10) {
     const queue_dat = new Int32Array(buf);
     queue_dat[0] = 0; // number of calls in queue
     queue_dat[1] = 0; // Whether a call can be made
-    function wait() {
+    async function wait() {
 	const check = () => new Promise(resolve => {
 	    setTimeout(()=>{
 		const ret = Atomics.load(queue_dat,1)
 		resolve(ret)
 	    },poll)
 	})
-	return check
-    }
-    while ((await check()) >= nper) {// We're just here to wait}
+	while ((await check()) >= nper) {/*This just waits*/}
     }
     async function call_fun(...args) {
 	let n = Atomics.load(queue_dat, 0);
@@ -45,7 +43,7 @@ async function _fetchTenor(message) {
 	limit: 1,
     });
     const resp = await fetch(`https://tenor.googleapis.com/v2/search?${search}`)
-    
+
     return resp
 }
 
