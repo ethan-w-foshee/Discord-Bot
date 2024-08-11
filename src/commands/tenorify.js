@@ -44,7 +44,7 @@ addBotCommand(bot, {
 });
 
 addBotCommand(bot, {
-    description: "Turn a message into an inspriational quote",
+    description: "Send a GIF inspired by the message",
     name: "gifize",
     type: "message",
     actions: [
